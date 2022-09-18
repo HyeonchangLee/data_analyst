@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+  {% block content-block %}
+  <head>
+    <style>
+      table {
+      width: 96%;
+      margin-top: 70px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 40px;
+    }
+    padding: 20px 0 20px 20px;
+  }
+  
+  .separator {
+    padding: 0 20px 0 20px;
+    color: #e0e0e0;
+  }
+  
+    table {
+      border-collapse: collapse;
+    }
+    
+    th {
+      padding: 10px 0 10px 20px;
+      border: 1px solid silver;
+      border-top: 2px solid black;
+    }
+    
+    td {
+      padding: 5px 0 5px 20px;
+      border: 1px solid silver;
+    }
+    
+    th,td {
+      text-align: left;
+      border-left: hidden;
+      border-right: hidden;
+    }
+    .list {
+      width: 120px;
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+      margin: 30px 15px 10px 0;
+      border: 2px black solid;
+      float:right;
+    }
+    .list:after{display:block; clear: both; content:"";}
+  
+</style>
+    <link rel="stylesheet" href="{% static 'css/read.css' %}">
+  </head>
+
+  <script>
+    function deleteBtn(){
+      if(confirm("데이터를 삭제하시겠습니까?")){
+        
+        location.href="{% url 'qnaboard:fDelete' nowpage category searchword board.f_no %}"
+      }else{
+        return false
+      }
+    }
+  </script>
+    <h1 class="titDep2">Q&A</h1>
+    <table>
+      <tr>
+        <th>{{board.f_title}}</th>
+      </tr>
+      <tr>
+        <td>{{board.member.NAME}}</td>
+      </tr>
+      <tr>
+        <td>{{board.f_updatedate|date:'Y-m-d H:i'}}</td>
+      </tr>
+      <tr>
+        <td>{{board.f_content}}</td>
+      </tr>
+      <tr>
+        <td>파일이름 | {{board.f_file}}</td>
+      </tr>
+      <tr>
+        <td>
+          {% if board.f_file %}
+          <img src="{{board.f_file.url}}">
+          {% else %}
+          <h4>이미지 없음</h4>
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td><strong>다음글</strong> <span class="separator">|</span><a href="{% url 'qnaboard:fView' nowpage category searchword boardPrev.f_no %}"> {{boardPrev.f_title}}</a></td>
+      </tr>
+      <tr>
+        <td><strong>이전글</strong> <span class="separator">|</span><a href="{% url 'qnaboard:fView' nowpage category searchword boardNext.f_no %}"> {{boardNext.f_title}}</a></td>
+      </tr>
+    </table>
+
+    <a href="{% url 'qnaboard:fList'  nowpage category searchword  %}"><div class="list">목록</div></a>
+    
+    {% if  request.session.session_ID == "반갑습니다"  %}
+    <div class="list" onclick="deleteBtn()">삭제</div>
+    <div class="list"><a href="{% url 'qnaboard:fReply' nowpage category searchword board.f_no %}">답글</a></div>
+    {% elif request.session.session_ID == board.member.ID %}
+    <div class="list"><a href="{% url 'qnaboard:fUpdate' nowpage category searchword board.f_no %}">수정</a></div>
+    <div class="list" onclick="deleteBtn()">삭제</div>
+    {% else %}
+    {% endif %}
+    <br>
+  {% endblock content-block %}

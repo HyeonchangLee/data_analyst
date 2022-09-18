@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게시판</title>
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,500,700,900&display=swap&subset=korean" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'cssdqwdqwdqdqd/style.css' %}">
+  <link rel="stylesheet" href="{% static 'cssdqwdqwdqdqd/notice_list.css' %}">
+  <script>
+   
+
+    function searchBtn(){
+      if($("#searchword").val().length<=1){
+        alert('2글자 이상 입력하셔야 검색이 가능합니다.')
+        $("#searchword").focus()
+        return false
+      }
+      document.search.submit()
+    }
+  </script>
+</head>
+<body>
+<section>
+    <h1>회원리스트</h1>
+    <div class="wrapper">
+      <form action="{% url 'adminpage:list' nowpage=1 category=category searchword=searchword  %}" id="search" name="search" method="post">
+        {% csrf_token %}
+        <select name="category" id="category">
+          <option value="ID">아이디</option>
+          <option value="NAME">이름</option>
+          <option value="LEGION">지역</option>
+          <option value="CuriousLEGION">관심지역</option>
+          <option value="CuriousSECTOR">관심업종</option>
+        </select>
+        
+        <div class="title">
+          <input type="text" name="searchword" id="searchword" size="16">
+        </div>
+        <button type="button" onclick='searchBtn()'><i class="fas fa-search"></i></button>
+      </form>
+    </div>
+    <table>
+      <colgroup>
+        <col width="8%">
+        <col width="3%">
+        <col width="13%">
+        <col width="13%">
+        <col width="13%">
+        <col width="13%">
+      </colgroup>
+      <!-- 제목부분 -->
+      <tr>
+        <th></th>
+        <th>아이디</th>
+        <th>이름</th>
+        <th>지역</th>
+        <th>관심지역</th>
+        <th>관심업종</th>
+        
+      </tr>
+      <!-- 내용부분 -->
+      <tbody id="tbody">
+        {% if memberList %}
+          {% for member in memberList %}
+            <tr>
+              <td></td>
+              <td class='table-title' id='pInput'><a href="{% url 'adminpage:memberView' member.ID %}">{{member.ID}}</a></td>
+              <td>{{member.NAME}}</td>
+              {% comment %} date:'Y-m-d H:i 날짜 형식 {% endcomment %}
+              
+              <td>{{member.LEGION}}</td>
+              <td>{{member.CuriousLEGION}}</td>
+              <td>{{member.CuriousSECTOR}}</td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan='6'>데이터가 없습니다.</td>
+          </tr>
+        {% endif %}
+      </tbody>
+      
+    </table>
+
+    <ul class="page-num">
+      <li class="first"></li>
+      <li class="prev"></li>
+      <li class="num"><div>1</div></li>
+      <li class="next"></li>
+      <li class="last"></li>
+    </ul>
+
+    
+    <a href="/adminpage/web_admin"><div class="write">메인페이지</div></a>
+    
+  </section>
+
+</body>
+</html>

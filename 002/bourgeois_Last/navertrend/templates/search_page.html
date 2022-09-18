@@ -1,0 +1,841 @@
+{% load static %}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+
+<!--제이쿼리 클라우드-->
+<link rel="stylesheet" type="text/css" href="{% static 'jqCloud/jqcloud.css' %}" />
+<script type="text/javascript" src="{% static 'jqCloud/jqcloud-1.0.4.js' %}"></script>
+ 
+
+<!doctype html>
+<html lang="ko">
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+<head>
+
+<script>
+  
+    $(function(){
+      $('#searchBtn').click(function(){
+        
+        $('#msg_1').remove()
+        $('#msg_2').remove()
+
+        $('#relKeyword_chart').empty()
+
+        document.getElementById("direction_box01").style.display = 'block';
+        document.getElementById("direction_box02").style.display = 'block';
+        document.getElementById("direction_box03").style.display = 'block';
+        
+
+        var area_inputed = document.getElementById('area').value;
+        
+        $.ajax({
+                  url:"/navertrend/search_kwd/", //서버저장주소
+                  data:{'area':area_inputed},
+                  type:'GET',
+                  dataType:"json",
+                  success:function(data){
+                    /*
+                    console.log('success')
+                    console.log(typeof(data))
+                    console.log(data.body_json)
+                    console.log(data.body_json.json_data)
+                    console.log(data.body_json.json_data.date)  //검색 기간 x축
+                    console.log(data.body_json.json_data.keyword1) //검색어 상대값 y축
+                    console.log(data.body_json.json_data.keyword1[0]) //검색어 상대값 y축
+                    */
+                    //console.log(area) //검색어 상대값 y축
+                    const xdata = [];
+                    const ydata = [];
+                    const maxValueIndex = [];
+
+                    for(var i=0;i<12;i++){
+                      xdata.push(data.body_json.json_data.date[i])
+                      ydata.push(data.body_json.json_data.keyword1[i])
+                    }
+
+                    
+                    for(var i=0;i<12;i++){
+                      if(ydata[i]==100){
+                        maxValueIndex.push(xdata[i])
+                      }
+                    }
+                    console.log(maxValueIndex)
+                    console.log(maxValueIndex[0])
+                    //console.log(max_month_value)
+                    //console.log(xdata)
+                    //console.log(ydata)
+
+                    document.getElementById('loc05').innerHTML=maxValueIndex[0]+'월'
+                      
+                    //console.log(maxValueIndex)
+ 
+
+                    const ctx = document.getElementById('myChart1').getContext('2d');
+
+                    myChart1 = new Chart(ctx, {
+                        type: 'line',
+
+                        data: {
+                            labels: xdata,
+                            datasets: [{
+                                label: area_inputed+'맛집 키워드 검색 월별 추이',
+                                data: ydata,
+                                borderColor: "#47E7A8",
+                                backgroundColor:"#47E7A8",
+                                fill: false,
+                                lineTension: 0
+                            }]
+                        },//data
+                        options: {
+                            responsive: true,
+   
+                            scales: {
+                              yAxes: [{
+                              ticks: {
+                                beginAtZero: true,
+                              },
+                            }]
+                          },
+                          
+                        }//options
+                          
+                    });//chart
+
+                    
+                    //광고 api시작
+
+                    /*
+                    console.log(data.ad_json)
+                    console.log(data.ad_json.ad.compIdx)
+                    console.log(data.ad_json.ad.relKeyword)
+                    console.log(data.ad_json.ad.monthlyMobileQcCnt)
+                    */
+
+                    //데이터 가져오기 성공
+                    // 0번째 30일간 pc조회수에 찍음
+                    //$('#txt1').text(data.ad_json.ad.monthlyMobileQcCnt[0])
+
+
+
+                    let str = ''                
+                    
+                    str +='<thead>'
+                    str +='<tr>'
+                    str +='<th>연관키워드</th>'
+                    str +='<th>월간검색수 PC</th>'
+                    str +='<th>월간검색수 모바일</th>'
+                    str +='<th>월평균클릭수 PC</th>'
+                    str +='<th>월평균클릭수 모바일</th>'
+                    str +='<th>월평균클릭률 PC</th>'
+                    str +='<th>월평균클릭률 모바일</th>'
+                    str +='<th>경쟁정도</th>'
+                    str +='<th>월평균노출광고수</th>'
+                    str +='</tr>'
+                    str +='</thead>' 
+                    const relKeyword_x =[]; //연관 키워드
+                    const monthlyQcCnt_y =[]; //PC, MO월 검색수의 합
+                    //비중 계산을 위한 총점
+                    for(i=0;i<30;i++){
+                      relKeyword_x.push(data.ad_json.ad.relKeyword[i])
+                      monthlyQcCnt_y.push(data.ad_json.ad.monthlyPcQcCnt[i] + data.ad_json.ad.monthlyMobileQcCnt[i])
+                    }
+
+                    const sum_all_QcCnt = monthlyQcCnt_y.reduce((a,b) => (a+b));
+                    console.log(relKeyword_x) 
+                    console.log(monthlyQcCnt_y)
+                    console.log(sum_all_QcCnt)
+
+
+                    const m01 = Math.max.apply(null, monthlyQcCnt_y); 
+                    const m02 = Math.min.apply(null, monthlyQcCnt_y); 
+                    //console.log(m01)
+                    //console.log(m02)
+
+                    var i1 = monthlyQcCnt_y.indexOf(m01)
+                    var i2 = monthlyQcCnt_y.indexOf(m02)
+                    console.log(i1) //가장 검색량이 많은 값의 인덱스
+                    console.log(i2) //가장 검색량이 적은 값의 인덱스
+                    console.log(relKeyword_x[i1]) //가장 검색량이 많은 키워드
+                    console.log(relKeyword_x[i2]) //가장 검색량이 많은 키워드
+
+                    document.getElementById('loc06').innerHTML=relKeyword_x[i1]
+                    document.getElementById('loc07').innerHTML=relKeyword_x[i2]
+
+
+                    str += '<tbody>'
+                    for(i=0;i<30;i++){
+                        if(i==i1){
+                          str +='<tr><td style="color: #FC766AFF;">'+data.ad_json.ad.relKeyword[i]
+  
+                          str +='</td><td style="color: #FC766AFF;">'+data.ad_json.ad.monthlyPcQcCnt[i]
+                          str +='</td><td style="color: #FC766AFF;">'+data.ad_json.ad.monthlyMobileQcCnt[i]
+  
+                          str +='</td><td style="color: #FC766AFF;">'+data.ad_json.ad.monthlyAvePcClkCnt[i]
+                          str +='</td><td style="color: #FC766AFF;">'+data.ad_json.ad.monthlyAveMobileClkCnt[i]
+                            
+                          str +='</td><td style="color: #FC766AFF;">'+data.ad_json.ad.monthlyAvePcCtr[i]
+                          str +='</td><td style="color: #FC766AFF;">'+data.ad_json.ad.monthlyAveMobileCtr[i]
+  
+                          str +='</td><td style="color: #FC766AFF;">'+data.ad_json.ad.plAvgDepth[i]
+                          str +='</td><td style="color: #FC766AFF;">'+data.ad_json.ad.compIdx[i]
+       
+                          str +='</td></tr>'                          
+                        }else if(i==i2){
+                          str +='<tr><td style="color: #0055FF;">'+data.ad_json.ad.relKeyword[i]
+    
+                            str +='</td><td style="color: #0055FF;">'+data.ad_json.ad.monthlyPcQcCnt[i]
+                            str +='</td><td style="color: #0055FF;">'+data.ad_json.ad.monthlyMobileQcCnt[i]
+    
+                            str +='</td><td style="color: #0055FF;">'+data.ad_json.ad.monthlyAvePcClkCnt[i]
+                            str +='</td><td style="color: #0055FF;">'+data.ad_json.ad.monthlyAveMobileClkCnt[i]
+                              
+                            str +='</td><td style="color: #0055FF;">'+data.ad_json.ad.monthlyAvePcCtr[i]
+                            str +='</td><td style="color: #0055FF;">'+data.ad_json.ad.monthlyAveMobileCtr[i]
+    
+                            str +='</td><td style="color: #0055FF;">'+data.ad_json.ad.plAvgDepth[i]
+                            str +='</td><td style="color: #0055FF;">'+data.ad_json.ad.compIdx[i]
+         
+                            str +='</td></tr>'
+                        }else{
+                          str +='<tr><td>'+data.ad_json.ad.relKeyword[i]
+  
+                          str +='</td><td>'+data.ad_json.ad.monthlyPcQcCnt[i]
+                          str +='</td><td>'+data.ad_json.ad.monthlyMobileQcCnt[i]
+  
+                          str +='</td><td>'+data.ad_json.ad.monthlyAvePcClkCnt[i]
+                          str +='</td><td>'+data.ad_json.ad.monthlyAveMobileClkCnt[i]
+                            
+                          str +='</td><td>'+data.ad_json.ad.monthlyAvePcCtr[i]
+                          str +='</td><td>'+data.ad_json.ad.monthlyAveMobileCtr[i]
+  
+                          str +='</td><td>'+data.ad_json.ad.plAvgDepth[i]
+                          str +='</td><td>'+data.ad_json.ad.compIdx[i]
+       
+                          str +='</td></tr>'
+                        }
+                        
+                    }
+                    str += '</tbody>'
+
+                    $('#ad_table').html(str)
+                    /*
+                    const sum_all_QcCnt = monthlyQcCnt_y.reduce((a,b) => (a+b));
+                    console.log(relKeyword_x) 
+                    console.log(monthlyQcCnt_y)
+                    console.log(sum_all_QcCnt)
+
+
+                    const m01 = Math.max.apply(null, monthlyQcCnt_y); 
+                    const m02 = Math.min.apply(null, monthlyQcCnt_y); 
+                    //console.log(m01)
+                    //console.log(m02)
+
+                    var i1 = monthlyQcCnt_y.indexOf(m01)
+                    var i2 = monthlyQcCnt_y.indexOf(m02)
+                    console.log(i1) //가장 검색량이 많은 값의 인덱스
+                    console.log(i2) //가장 검색량이 적은 값의 인덱스
+                    console.log(relKeyword_x[i1]) //가장 검색량이 많은 키워드
+                    console.log(relKeyword_x[i2]) //가장 검색량이 많은 키워드
+
+                    document.getElementById('loc06').innerHTML=relKeyword_x[i1]
+                    document.getElementById('loc07').innerHTML=relKeyword_x[i2]
+                    */
+
+
+                    //클라우드워드 시작
+  
+                      var word_array = [];
+                      
+                      for(var p=0;p<relKeyword_x.length;p++){
+                        var tmp = {text: relKeyword_x[p], weight: monthlyQcCnt_y[p]/sum_all_QcCnt}
+                        word_array.push(tmp)
+                      }
+                      
+                      console.log(word_array)
+
+                  
+
+
+                      $(function() {
+                      $("#relKeyword_chart").jQCloud(word_array);
+                      });
+
+                      document.getElementById('loc01').innerHTML=area_inputed+'맛집'
+                      document.getElementById('loc02').innerHTML=area_inputed+'맛집'
+                      document.getElementById('loc03').innerHTML=area_inputed+'맛집'
+                      document.getElementById('loc04').innerHTML=area_inputed+'맛집'
+                      //document.getElementById('loc05').innerHTML=maxValueIndex[0]+'월'
+                      
+                      //console.log(maxValueIndex)
+                     // document.getElementById('loc06').innerHTML=relKeyword_x[i1]
+                      //document.getElementById('loc07').innerHTML=relKeyword_x[i2]
+
+
+                      
+                  },//SUCCESS
+                  error:function(){
+
+                  }//error
+
+            })//ajax
+
+      })//searchBtn
+
+     
+    })//function
+
+</script> 
+
+
+
+<title>상권에 진심, 부루주아</title>
+
+<meta name="viewport" content="width=device-width, user-scalable=no, width=1366">
+
+<link rel="shortcut icon" href="{% static 'resource/PC/images/favicon/favicon6654.ico?v1' %}">
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/favicon-32x326654.png?v1' %}" sizes="32x32">
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/favicon-16x166654.png?v1' %}"  sizes="16x16">
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/favicon-96x966654.png?v1' %}" sizes="96x96">
+<link rel="apple-touch-icon-precomposed" href="{% static 'resource/PC/images/favicon/apple-icon-120x1206654.png?v1' %}" sizes="120x120">
+<link rel="apple-touch-icon-precomposed" href="{% static 'resource/PC/images/favicon/apple-icon-180x1806654.png?v1' %}" sizes="180x180">
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/android-icon-192x1926654.png?v1' %}" sizes="192x192">
+<link rel="shortcut icon" type="image/x-icon" href="{% static 'resource/PC/images/favicon/favicon.ico' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'resource/PC/css/p_common.min.css' %}" >
+<link rel="stylesheet" type="text/css" href="{% static 'resource/PC/css/p_contents.min.css' %}">
+
+<style>
+  .k1_flight_panel{width: 480%;}
+  #tit_area,#area{border: none; height: 27px;}
+  .content_box{ border-radius: 0.7em;  box-shadow: 0 8px 16px 0 rgba(35, 0, 104, 0.16)}
+  td{text-align:center;}
+  #msg_1{text-align:center; height: 7;}
+  th{color: rgba(124, 159, 224); height: 40; font-weight: 700;}
+  .direction_box{margin-bottom: 20px; display: none; padding: 30;}
+  .bottom_h4 {color: gray; text-align: right;}
+</style>
+
+</head>
+
+<body class="wrapper mainWrapper">
+<p class="skip"><a href="#container">본문 바로가기</a></p>
+
+<section id="wrapper">
+
+  <header>
+    <h1 class="topLogo"><a href="{% url 'web'%}">bourgeois</a></h1>
+  <nav>
+    <div class="navList">
+      <h2><a href="{% url 'analytics:inner' %}">지역별 분석</a></h2>
+      <h2><a href="{% url 'navertrend:search_page' %}">네이버 트렌드</a></h2>
+      <h2><a href="{% url 'adminpage:fList' nowpage=1  category='first' searchword='first' %}">Q&A게시판</a></h2>
+      {% if request.session.session_ID %}
+      <h2><a href="{% url 'membership:myApageopen' %}">MY분석</a></h2>
+      {% else %}
+      <h2><a href="{% url 'membership:signup' %}">가입하여 MY분석보기</a></h2>
+      {% endif %}
+    </div>
+
+  </nav>
+  <div class="topUtil">
+    {% if request.session.session_ID %}
+        <a href="{% url 'membership:logout' %}" class="logout">로그아웃</a>
+        <a href="{% url 'membership:mypage' %}" class="mypage">마이페이지</a>
+    {% else %}
+        <a href="{% url 'membership:login' %}" class="login">로그인</a>
+    {% endif %}
+    <ul class="navEtc">
+    </ul>
+  </div>
+</header>
+    
+  <div id="container_box" class="container">
+		<div class="quickSearchList k1_main_search_area">
+            <!-- 검색 섹션 시작 -->
+
+            <div id="main_rentSearch" class="k1_section_multi section_rent sectionON">
+              <form name="search" method="post" id="search"> 
+              {% csrf_token %}
+
+                  <div class="kf_innergray">
+                      <div class="kf_flightInner kf_rentcarCondition">
+                          <ul class="k1_flight_panel">
+                              <li class="k1_area">
+                                  <p class="tit" id="tit_area">지역구별 맛집키워드의 온라인 트렌드를 분석합니다. 분석을 원하시는 지역을 선택하세요.</p>
+                                  <select name="area" id="area" >
+                                    <option value="강남구">강남구</option>
+                                    <option value="강동구">강동구</option>
+                                    <option value="강북구">강북구</option>
+                                    <option value="강서구">강서구</option>
+                                    <option value="관악구">관악구</option>
+                                    <option value="광진구">광진구</option>
+                                    <option value="구로구">구로구</option>
+                                    <option value="금천구">금천구</option>
+                                    <option value="노원구">노원구</option>
+                                    <option value="도봉구">도봉구</option>
+                                    <option value="동대문구">동대문구</option>
+                                    <option value="동작구">동작구</option>
+                                    <option value="마포구">마포구</option>
+                                    <option value="서대문구">서대문구</option>
+                                    <option value="서초구">서초구</option>
+                                    <option value="성동구">성동구</option>
+                                    <option value="성북구">성북구</option>
+                                    <option value="송파구">송파구</option>
+                                    <option value="양천구">양천구</option>
+                                    <option value="영등포구">영등포구</option>
+                                    <option value="용산구">용산구</option>
+                                    <option value="은평구">은평구</option>
+                                    <option value="종로구">종로구</option>
+                                    <option value="중구">중구</option>
+                                    <option value="중랑구">중랑구</option>
+                                 </select>
+
+                              </li>
+                          </ul>
+                    </div><!--kf_flightInner-->
+                
+                      <style>#searchBtn:hover{font-size: 2rem; background:rgb(51, 51, 52);} </style>
+                      <button type="button" class="k1_btn_price_search" id='searchBtn'  >검색</button>
+                  </div>
+
+              </form> <!--search-->
+            </div> <!--main_rentSearch-->
+            <!-- 검색 섹션 끝 -->
+		</div>
+
+
+         
+		<div id="contents" class="contents rentcarMainContests">
+            <br>
+            <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@여기부터 주요 기능 섹션을 넣어주세요@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+            <!-- 메인의 차트 들어갈 곳 (서울 전체의 분석 등) -->
+            
+            <h3 class="titDep2">지역별 맛집 네이버 검색어 트렌드</h3>
+            <div class="content_box">
+              <div id="direction_box01" class="direction_box">
+                  <h2>
+                    네이버에 <span id="loc01" style="color: #47E7A8;"></span>을 검색했을때, 2021년 1년간 해당 검색어의 추이를 나타냅니다. <br>
+                    그래프를 통해 해당 지역의 온라인 검색 월별 트렌드를 확인할 수 있습니다. <br>
+                    <span id="loc02" style="color: #47E7A8; "></span>은 <span id="loc05" style="color: #47E7A8; "></span>에 가장 검색량이 많습니다. 
+                    온라인 고객은 해당월에 관심이 많습니다. 검색광고비 증대 및 프로모션 투자를 고려하세요. <br>
+                  </h2>
+                </div>
+            </div>
+            <div class="content_box">
+              <br>
+                <div id="msg_1">지역을 선택 후 검색을 눌러주세요</div>
+                <canvas id="myChart1" >
+                </canvas>
+            </div>
+            <h4 class="bottom_h4">2021년 1년 기준, 월별분석, 네이버 데이터랩</h4>
+            <h4 class="bottom_h4" >*그래프는 네이버에서 해당 검색어가 검색된 횟수를 일별/주별/월별 각각 합산하여 조회기간 내 최다 검색량을 100으로 설정하여 상대적인 변화를 나타냅니다.</h4>
+            
+            
+            <!-- 차트 끝 -->
+            <!-- 워드 클라우드 -->
+            <h3 class="titDep2">맛집 연관 태그트리</h3>
+            <div class="content_box">
+              <div id="direction_box02" class="direction_box">
+                <h2>
+                  <span id="loc03" style="color: rgba(124, 159, 224);"></span>을 네이버에 검색했을때 같이 검색하는 연관 검색어의 검색량을 기준으로 워드 클라우드의 크기로 나타냅니다.<br>
+                  그래프를 통해 연관 검색어와 검색량을 한눈에 확인할 수 있습니다. <br>
+                  <span id="loc06" style="color: #FC766AFF;"></span>이 가장 검색량이 많으므로 브랜드 노출을 위해 해당 키워드로 광고 확장을 고려해보세요. <br>
+                  <span id="loc07" style="color: #FC766AFF;"></span>이 가장 검색량이 적으므로 소자본의 경우, 자본을 집중시켜 최적화 키워드로 고려해보세요. <br>
+                </h2>
+              </div>
+          </div>
+            <div class="content_box">
+              <div id="msg_2" style="text-align:center;">지역을 선택 후 검색을 눌러주세요</div>
+              <div id="relKeyword_chart" style="width: 100%; height: 40%;"></div>
+            </div>
+            <h4 class="bottom_h4" >*연관 키워드의 PC/MO 월간검색수 합을 바탕으로 클라우드의 크기가 작성됩니다.</h4>
+            
+            <!--  워드 클라우드 끝 -->
+
+            {% comment %}             
+            <h3 class="titDep2">지역별 맛집 네이버 검색어 트렌드</h3>
+            <div class="content_box">
+              <br>
+                <div id="msg_3">지역을 선택 후 검색을 눌러주세요</div>
+                <canvas id="myChart2" >
+                </canvas>
+            </div>
+            <h4 class="bottom_h4" >2021년 1년 기준, 월별분석, 네이버 데이터랩</h4>
+            <h4 class="bottom_h4" >*그래프는 네이버에서 해당 검색어가 검색된 횟수를 일별/주별/월별 각각 합산하여 조회기간 내 최다 검색량을 100으로 설정하여 상대적인 변화를 나타냅니다.</h4> 
+            {% endcomment %}
+
+            <!-- 메인의 차트 들어갈 곳 (서울 전체의 분석 등) -->
+          
+            <h3 class="titDep2">맛집 연관키워드 분석상세</h3>
+            <div class="content_box">
+              <div id="direction_box03" class="direction_box" >
+                <h2>
+                  월간 검색수가 가장 많은 검색어는 <span style="color: red;">빨강</span>, 가장 적은 검색어는 <span style="color: blue;">파랑</span>으로 표시됩니다. 입찰을 원하는 키워드와 비교해보세요. <br><br>
+                  
+                  연관 키워드 :  <br>
+                  선택한 기준과 연관도가 높은 키워드입니다. <br><br>
+
+                  월간검색수 : <br>
+                  최근 한 달간 네이버를 이용한 사용자가 PC 및 모바일 에서 해당 키워드를 검색한 횟수입니다. <br><br>
+
+                  월평균클릭수 : <br>
+                  최근 한 달 간 사용자가 해당 키워드를 검색했을 때, 통합검색 영역에 노출된 광고가 받은 평균 클릭수 입니다. <br><br>
+
+                  월평균클릭률 : <br>
+                  최근 한 달간 해당 키워드로 통합검색 영역에 노출된 광고가 받은 평균 클릭률을 의미합니다. <br>
+
+                  클릭률의 의미: 광고가 노출되었을때 노출된 광고가 검색사용자로부터 클릭을 받는 비율을 말합니다.
+                  예: 광고노출수가 1,000회이고, 노출된 광고를 클릭한 횟수가 5회라면, 클릭률은 0.5%입니다. (클릭수÷노출수=클릭률(%)) <br><br>
+
+                  경쟁정도 : <br>
+                  최근 한달간 해당 키워드에 대한 경쟁정도를 PC통합검색영역 기준으로 높음/중간/낮음으로 구분한 지표입니다. 다수의 광고주가 추가한 광고일수록 경쟁정도는 높을 수 있습니다. <br><br>
+
+                  월평균노출광고수 : <br>
+                  최근 한 달 간 사용자가 해당 키워드를 검색했을 때, PC통합검색 영역에 노출된 평균 광고 개수입니다. "경쟁정도"지표와 함께 키워드의 경쟁정도를 가늠해볼 수 있습니다. <br><br>
+                </h2>
+              </div>
+          </div>
+            <div class="content_box">
+                <!-- #    'monthlyAveMobileClkCnt':'월평균클릭수_모바일',
+                #         'monthlyAveMobileCtr':'월평균클릭률_모바일',
+                #         'monthlyAvePcClkCnt':'월평균클릭수_PC',
+                #         'monthlyAvePcCtr':'월평균클릭률_PC', 
+                #         'monthlyMobileQcCnt':'월간검색수_모바일',
+                #         'monthlyPcQcCnt': '월간검색수_PC',
+                #         'plAvgDepth':'월평균노출광고수', 
+                #         'relKeyword':'연관키워드'},axis=1,inplace=True)-->
+          
+              <table id='ad_table' >
+                <thead>
+                  <tr>
+                    <th>연관키워드</th>
+                    <th>월간검색수 PC</th>
+                    <th>월간검색수 모바일</th>
+                    <th>월평균클릭수 PC</th>
+                    <th>월평균클릭수 모바일</th>
+                    <th>월평균클릭률 PC</th>
+                    <th>월평균클릭률 모바일</th>
+                    <th>경쟁정도</th>
+                    <th>월평균노출광고수</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+                <!--
+                <tr>
+                  <td>relKeyword</td>
+                  <td>monthlyAveMobileClkCnt</td>
+                  <td>monthlyAveMobileCtr</td>
+                  <td>monthlyAvePcClkCnt</td>
+                  <td>monthlyAvePcCtr</td>
+                  <td>monthlyMobileQcCnt</td>
+                  <td>monthlyPcQcCnt</td>
+                  <td>plAvgDepth</td>
+                </tr>
+                -->
+
+                <tr>
+                  <td style="text-align:center; height:50;" colspan="8">지역을 선택 후 검색을 눌러주세요</td>
+                </tr>
+              </table>
+              <br>
+            </div>
+            <h4 class="bottom_h4" >검색 30일 기준, 네이버 검색광고</h4>
+            
+            <!-- 차트 끝 -->
+            <h3 class="titDep2"  style="margin-bottom: 80px; ">🧐멤버십 회원에게는 더 고도화된 데이터, 다양한 부가 기능, 더 쾌적한 서비스 환경 등의 혜택이 제공됩니다.</h3>
+            <div class="container"  style="margin-bottom: -500px; ">
+                <style>
+
+                    .box_l{    
+                        font-size: 10px;
+                        font-family: "Noto Sans KR", sans-serif;
+                        line-height: normal;
+                        word-break: keep-all;
+                        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                        touch-action: manipulation;
+                        text-align: ceneter;
+                    
+                        margin-bottom: 6rem;
+                        display: flex;
+                        flex-wrap: wrap;
+                        position: relative;
+                        padding-bottom: 20px;
+                    }
+
+                    .inner_l{
+                    
+                        width: 100%;
+                        max-width: 120rem;
+                        margin: auto;
+                        display: flex;
+                        flex-wrap: wrap;
+                        }
+
+                    .pricecard_1,.pricecard_2,.pricecard_3{
+                        margin: 0% 1.5%;
+                        padding: 3rem;
+                        box-sizing: border-box;
+                        background-color: rgb(255, 255, 255);
+                        border-radius: 1.6rem;
+                        box-shadow: rgb(0 0 0 / 15%) 0rem 0.8rem 2rem 0rem;
+                        transition: all 0.3s ease 0s;
+                        position: relative;
+                        overflow: hidden;
+                        max-width: 30.333%;
+                        flex: 0 0 30.333%;
+                    }
+                    .ribbon {
+                        width: 10rem;
+                        height: 2.5rem;
+                        padding-bottom: 0.2rem;
+                        background-color: rgb(54, 149, 255);
+                        color: rgb(255, 255, 255);
+                        font-size: 1.4rem;
+                        font-weight: 600;
+                        cursor: default;
+                        display: flex;
+                        -webkit-box-pack: center;
+                        justify-content: center;
+                        -webkit-box-align: center;
+                        align-items: center;
+                        position: absolute;
+                        top: 0px;
+                        right: 0px;
+                        transform: translateY(-100%) rotate(90deg) translateX(70.7107%) rotate(-45deg);
+                        transform-origin: right bottom;
+                    }
+
+                    .top_section{ margin-bottom: 2rem; text-align: center;}
+                    .word_1 {
+                        width: 0.6rem;
+                        height: 0.6rem;
+                        display: inline-block;
+                        border-radius: 0.8rem;
+                    }
+                    
+                    #word_1_dot1{background-color: rgb(51, 51, 52);}
+                    #word_1_dot2{background-color: rgb(0, 198, 133);}
+                    #word_1_dot3{background-color: rgb(255, 109, 110);}
+
+                    .word_2 {
+                        font-size: 1.8rem;
+                        font-weight: 500;
+                        margin-bottom: 2rem;
+                        text-align: center;
+                    }
+
+                    .mid_section {
+                        margin-bottom: 2.5rem;
+                        text-align: center;
+                    }
+
+                    .price_word {
+                        position: relative;
+                        font-weight: 600;
+                        font-size: 3.6rem;
+                        box-sizing: border-box;
+                        font-family: sans-serif;
+                        color: rgb(51, 51, 52);
+                    }
+
+                    .date_word {
+                        font-size: 1.6rem;
+                        font-weight: 300;
+                        color: rgb(134, 134, 136);
+                    }
+
+                    .bot_section {
+                        margin-bottom: 1rem;
+                        text-align: center;
+                    }
+
+                    .action_btn_1{
+                        padding: 1rem 2.4rem;
+                        font-size: 1.4rem;
+                        font-weight: 400;
+                        color: rgb(255, 255, 255);
+                        background-color: rgb(54, 149, 255);
+                        border: 0.1rem solid rgb(54, 149, 255);
+                        border-radius: 0.6rem;
+                        white-space: nowrap;
+                        transition: all 0.3s ease 0s;
+                    }
+
+                    .action_btn_1:hover{font-size: 1.8rem; font-weight: 500;}
+
+                    .action_btn_2{
+                        padding: 1rem 2.4rem;
+                        font-size: 1.4rem;
+                        font-weight: 400;
+                        color: rgb(84, 84, 86);
+                        background-color: rgb(255, 255, 255);
+                        border: 0.1rem solid rgb(134, 134, 136);
+                        border-radius: 0.6rem;
+                        white-space: nowrap;
+                        transition: all 0.3s ease 0s;
+                    }
+                    .action_btn_2:hover{background-color: rgb(51, 51, 52); color: rgb(255, 255, 255); font-size: 1.8rem; font-weight: 500;}
+
+                    #plan_link{
+                        margin-bottom: 8rem;
+                        display: flex;
+                        -webkit-box-pack: center;
+                        justify-content: center;
+                    }
+                    #plan_link_btn{
+                        margin: 0rem 0.6rem;
+                        padding: 1.4rem 3.2rem;
+                        font-size: 1.8rem;
+                        font-weight: 600;
+                        white-space: nowrap;
+                        border-radius: 1rem;
+                        cursor: pointer;
+                        transition: all 0.5s ease 0s;
+                    }
+                            
+                    #plan_link_btn:hover{ font-size: 2rem; font-weight: 700;}
+                </style>
+
+                <!--플랜 섹션 시작-->
+                <div class="box_l">
+                    <div class="inner_l">
+                        <div class="pricecard_1">
+                            <div class="ribbon">FREE</div>
+                            <div class="top_section">
+                                <div class="word_1" id="word_1_dot1" ></div>
+                                <div class="word_2">베이직</div>
+                            </div>
+                            <div class="mid_section">
+                                <span class="price_word">₩ 12,000</span>
+                                <br>
+                                <span class="date_word" >/ 30일</span>
+                            </div>
+                            <div class="bot_section">
+                                <button class="action_btn_1">14일 무료체험</button>
+                            </div>
+                        </div>
+                        <div class="pricecard_2">
+                            <div class="top_section">
+                                <div class="word_1" id="word_1_dot2"></div>
+                                <div class="word_2">스탠다드</div>
+                            </div>
+                            <div class="mid_section">
+                                <span class="price_word">₩ 27,000</span>
+                                <br>
+                                <span class="date_word" >/ 30일</span>
+                            </div>
+                            <div class="bot_section">
+                                <button class="action_btn_2">구독하기</button>
+                            </div>
+                        </div>
+                        <div class="pricecard_3">
+                            <div class="top_section">
+                                <div class="word_1" id="word_1_dot3"></div>
+                                <div class="word_2">프리미엄</div>
+                            </div>
+                            <div class="mid_section">
+                                <span class="price_word">₩ 81,000</span>
+                                <br>
+                                <span class="date_word" >/ 30일</span>
+                            </div>
+                            <div class="bot_section">
+                                <button class="action_btn_2">구독하기</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                </div>
+                <div id="plan_link">
+                    <button id="plan_link_btn" style="color: rgb(247, 247, 248); background-color: rgb(35, 35, 36); border: 0.2rem solid rgb(35, 35, 36);">플랜별 기능 비교하기</button>
+                </div>
+            </div>
+            <!--플랜 섹션 끝-->
+
+		</div>
+	</div>
+
+</section><!-- //wrapper -->
+
+<footer>
+  <div class="footTop">
+    <div class="footInner">
+      <ul class="footMenu">
+        <li><strong class="tit">부르주아</strong><a href="web/introduce/company.html" role="button">회사소개</a><a href="../help.jejupass.com/web/help/benefits.html" role="button">회원혜택 안내</a></li>
+        <li><strong class="tit">고객센터</strong><a href="../help.jejupass.com/web/help/notice.html" role="button">공지사항</a><a href="../help.jejupass.com/web/help/faq.html" role="button">자주찾는질문</a><a href="../auth.jejupass.com/web/login.html#tabContents02" role="button">예약확인</a></li>
+        <li><strong class="tit">ESG</strong><a href="../esg.jejupass.com/web/ambassador.html" role="button">그린 앰버서더</a><a href="../esg.jejupass.com/web/campaigns1c7b.html?status=IN_PROGRESS" role="button">캠페인 기부</a></li>
+      </ul>
+      <div class="footAppDown">
+        <h5>App 다운로드</h5>
+        <span class="txt">부르주아 앱 설치하고 <br>더 편리하게 이용하세요.</span>
+        <ul class="appLink">
+          <li><button type="button" class="google" onclick="location.href='../play.google.com/store/apps/details8eb0.html?id=com.kaflix.jejupass&amp;rdid=com.kaflix.jejupass&amp;feature=md&amp;offerId';">구글플레이</button></li>
+          <li><button type="button" class="ios" onclick="location.href='../apps.apple.com/us/app/%ec%a0%9c%ec%a3%bc%ed%8c%a8%ec%8a%a4-%ec%a7%80%ec%86%8d%ea%b0%80%eb%8a%a5%ed%95%9c-%ec%a0%9c%ec%a3%bc-%ec%97%ac%ed%96%89%ec%9d%98-%ec%8a%88%ed%8d%bc%ec%95%b1/id1615900097.html';">앱스토어</button></li>
+        </ul>
+      </div>
+      <div class="footCenter">
+        <h5>전화예약 / 고객상담</h5>
+        <span class="txt">이용에 궁금하신 점이 <br>있으신가요?</span>
+        <div class="callInfo">
+          <p class="callNum">1544-0445</p>
+          <ul class="callTime">
+            <li><span class="tit">평일</span>09:00 ~ 18:00</li>
+            <li><span class="tit">점심시간</span>12:00 ~ 13:00</li>
+          </ul>
+        </div>
+        <div class="snsList">
+<!--          <a href="https://www.facebook.com/jejumatzipcafe" role="button" target="_blank" class="fb">페이스북</a>-->
+          <a href="../www.instagram.com/jejupass.official/index.html" role="button" target="_blank" class="insta">인스타그램</a>
+<!--          <a href="https://www.youtube.com/channel/UC1iUUuL6_SIKPeiifdABygw/about" role="button" target="_blank" class="youTube">유투브</a>-->
+          <a href="../blog.naver.com/jejubnf.html" role="button" target="_blank" class="blog">네이버 블로그</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footBtm">
+    <div class="footInner">
+      <ul class="footMenu">
+        <li><a href="web/policy/privacy.html" role="button">개인정보처리방침</a></li>
+        <li><a href="web/policy/use.html" role="button">이용약관</a></li>
+      </ul>
+      <p class="txtFoot">
+        <span>(주)부르주아 대표이사 : 이현창</span>
+        <span>사업자등록번호 : 105-87-76000 <a class="btns" href="../www.ftc.go.kr/bizCommPop64eb.html?wrkr_no=1058776000" target="_blank">사업자정보조회</a>
+				</span>
+        <span>
+					통신판매신고 제2015-제주연동-43호
+				</span>
+        <span>관광사업자 등록번호 : 제2021-08호</span>
+      </p>
+      <p class="txtFoot" style="margin:0">
+        <span>제주특별자치도 제주시 신광로 21, 4층 (우)63125</span>
+      </p>
+      <p class="txtFoot02">
+        (주)부르주아는 개별 항공권 및 숙박 상품에 대하여 통신판매중개자로서 통신판매의 당사자가 아니며 해당상품의 거래정보 및 거래 등에 대해 책임을 지지 않습니다.
+        <br/>
+        (주)부르주아는 정보제공 파트너사가 제공하는 일부 렌터카에 대하여 통신판매중개자의 지위를 가지며, 해당 상품, 상품정보, 거래에 관한 의무와 책임은 판매자에게 있습니다.
+      </p>
+
+      <p class="txtCopy">
+        <span>Copyright ⓒ KAFLIX All Rights Reserved</span>
+      </p>
+      <div class="footEtc">
+        <span>SECURED BY RapidSSL</span>
+        <span>WEB AWARD 수상</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<div class="dimmed"></div>
+
+
+</body>
+
+<!-- Mirrored from www.jejupass.com/web by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 28 May 2022 06:29:41 GMT -->
+</html>

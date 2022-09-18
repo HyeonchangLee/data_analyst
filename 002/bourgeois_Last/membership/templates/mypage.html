@@ -1,0 +1,401 @@
+{% load static %}
+<!doctype html>
+<html lang="ko">
+
+<!-- Mirrored from member.jejupass.com/web/mypage by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 28 May 2022 06:30:29 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+  <title>마이페이지 서브메인 | 브루주아</title>
+  <!-- Google Tag Manager -->
+<script>
+{% comment %} var gtmId = location.href.startsWith('../../d/index.html') ? 'GTM-P9NT8ML' : 'GTM-KXVKM3C';
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'../../www.googletagmanager.com/gtm5445.html?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer', gtmId); {% endcomment %}
+</script>
+<script>
+window.dataLayer = window.dataLayer || [];
+</script>
+<!-- End Google Tag Manager -->
+<meta name="viewport" content="width=device-width, user-scalable=no, width=1366"><!-- 10.29 추가 -->
+<meta property="og:type" content="website">
+<meta property="og:image" ogImage content="https://static/resource/MO/images/jejupass_new-logo_og.png">
+<meta property="og:site_name" siteName content="제주패스">
+<meta property="og:locale" content="ko_KR">
+
+<link rel="shortcut icon" href="{% static 'resource/PC/images/favicon/favicon6654.ico?v1' %}">
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/favicon-32x326654.png?v1' %}" sizes='32x32'>
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/favicon-16x166654.png?v1'%}" sizes="16x16">
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/favicon-96x966654.png?v1' %}" sizes="96x96">
+<link rel="apple-touch-icon-precomposed" href="{% static 'resource/PC/images/favicon/apple-icon-120x1206654.png?v1' %}" sizes="120x120">
+<link rel="apple-touch-icon-precomposed" href="{% static 'resource/PC/images/favicon/apple-icon-180x1806654.png?v1' %}" sizes="180x180">
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/android-icon-192x1926654.png?v1' %}" sizes="192x192">
+
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<link rel="shortcut icon" type="image/x-icon" href="../../static/resource/PC/images/favicon/favicon.ico">
+<link href="../../static/resource/PC/css/p_common.min.css" rel="stylesheet" type="text/css">
+<link href="../../static/resource/PC/css/p_contents.min.css" rel="stylesheet" type="text/css">
+
+  <!-- 컨텐츠페이지의 CSS 영역이 들어감 -->
+
+  <!-- 컨텐츠페이지의 스크립트 영역이 들어감 -->
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+
+
+
+<!--@@@@@@@@@@@@@@@@@@@@@@@@@ 결제 관련 스크립트 시작-->
+<!-- iamport.payment.js -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-{SDK-최신버전}.js"></script>
+<script>
+    var IMP = window.IMP; // 생략가능
+    var IMP.init('imp45922647'); // <-- 본인 가맹점 식별코드 삽입
+    function requestPay() {
+    IMP.init('imp45922647'); //iamport 대신 자신의 "가맹점 식별코드"를 사용
+    IMP.request_pay({
+    pg: "html5_inicis",
+    pay_method: "card",
+    merchant_uid : 'point_'+new Date().getTime(),
+    name : '포인트결제테스트',
+    amount : 1,
+    buyer_email : 'iamport@siot.do',
+    buyer_name : '구매자',
+    buyer_tel : '010-1234-5678',
+    buyer_addr : '서울특별시 강남구 삼성동',
+    buyer_postcode : '123-456'
+    }, function (rsp) { // callback
+        console.log(rsp);
+        if (rsp.success) {
+        var msg = '결제가 완료되었습니다.';
+        alert(msg);
+        location.href = "{% url 'membership:mypage' %}"
+        } else {
+        var msg = '결제에 실패하였습니다.';
+        msg += '에러내용 : ' + rsp.error_msg;
+        alert(msg);
+        }
+
+    });
+    }
+
+</script>
+      <!--@@@@@@@@@@@@@@@@@@@@@@@@@ 결제 관련 스크립트 끝-->
+
+
+{% csrf_token %}
+</head>
+
+<body class="wrapper lnbWrapper">
+<p class="skip"><a href="#container">본문 바로가기</a></p>
+
+<section id="wrapper">
+
+  <header>
+    <h1 class="topLogo"><a href="{% url 'web'%}">bourgeois</a></h1>
+  <nav>
+    <div class="navList">
+      <h2><a href="{% url 'analytics:inner' %}">지역별 분석</a></h2>
+      <h2><a href="{% url 'navertrend:search_page' %}">네이버 트렌드</a></h2>
+      <h2><a href="{% url 'adminpage:fList' nowpage=1  category='first' searchword='first' %}">Q&A게시판</a></h2>
+      {% if request.session.session_ID %}
+      <h2><a href="{% url 'membership:myApageopen' %}">MY분석</a></h2>
+      {% else %}
+      <h2><a href="{% url 'membership:signup' %}">가입하여 MY분석보기</a></h2>
+      {% endif %}
+    </div>
+
+  </nav>
+  <div class="topUtil">
+    {% if request.session.session_ID %}
+        <a href="{% url 'membership:logout' %}" class="logout">로그아웃</a>
+        <a href="{% url 'membership:mypage' %}" class="mypage">마이페이지</a>
+    {% else %}
+        <a href="{% url 'membership:login' %}" class="login">로그인</a>
+    {% endif %}
+    <ul class="navEtc">
+    </ul>
+  </div>
+</header>
+<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+
+
+
+
+<!--탈퇴 클릭시 탈퇴 할 것인지 물어는 form-->
+<form action="{% url 'membership:memberDelete' %}" onsubmit="return confirm('탈퇴하시겠습니까? \n탈퇴시 복구가 불가능합니다.')" name="write" method="get" enctype='multipart/form-data'>
+<!--탈퇴 클릭시 탈퇴 할 것인지 물어는 form-->
+
+<div id="container" class="container" style="overflow: hidden; padding-bottom: 164px; text-align: center; min-height: 10vh;">
+    <div id="snb" class="snb">
+    <h2 class="titSnb">마이페이지</h2>
+    <nav id="snbList">
+        <ul class="snbListDep1">
+            <li>
+                <a href="javascript:;" class="snbDep1" aria-expanded="false" aria-selected="false">회원정보관리</a>
+                <ul class="snbListDep2">
+                    <li><a href="{% url 'membership:signupModify' %}" class="snbDep2" aria-selected="false">회원정보변경</a></li>
+                    <li><button type="submit" class="write" style="height: 56px; position: relative;padding: 0 34px 0 24px; color: #404040; font-weight: 700; line-height: 54px;">회원탈퇴</button></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    </nav>
+
+
+    <div id="contents" class="contents">
+            <!-- 컨텐츠 영역  -->
+            <div class="mainTop" profileMemberInfoArea>
+                {% comment %} <a href="https://member.jejupass.com/web/signup/pass/usermodify" class="imgArea">
+                    <div><img src="https://member.jejupass.com/resource/PC/images/mypage/img_profile_big.png" alt=""></div>
+                </a> {% endcomment %}
+                <div class="txtArea">
+                        <h2 class="titDep2 name" profileLinkArea>{{request.session.session_NAME}} 님은 <span>일반회원</span> 입니다.</h2>
+                </div>
+                {% comment %} <div class="btnArea">
+                    <button type="button" class="btnDefault btnS btnLineG" onclick="jppJs.go('/web/mypage/point')">포인트 충전</button>
+                    <button type="button" class="btnDefault btnS btnLineG layPopBtn" data-id="pop_notice">알림함</button>
+                </div> {% endcomment %}
+            </div>
+
+            <div class="contArea myPage">
+                <div class="blueBox">
+                    <div class="pointList">
+                        <p><span class="txt">충전포인트 충전</span><a class="num" onclick="#">1000p</a></p>
+                        <p><span class="txt">적립포인트</span><a href="#" class="num" saveSum>1000p</a></p>
+                        <p><span class="txt">기부포인트</span><a href="#" class="num" donateSum>500p</a></p>
+                        <!--<p><span class="txt">렌터카이용권</span><a th:href="|javascript:jppJs.go('/web/mypage/rentcarPoint');|" class="num" rentcarTotalSum>0p</a></p>-->
+                    </div>
+                    <div class="innerBox">
+                        <div class="ticket">
+                            <p>부루주아 이용권</p>
+                            <a href="#" class="btLink btLine" >이용 시작하기</a>
+
+                        </div>
+
+                        <div class="ticket">
+                            <p>스페셜 이용권</p>
+                            <a href="#" class="btLink btLine" >0P</a>
+                        </div>
+                    </div>
+                </div>
+                {% comment %} <div class="boxType03">
+                    <a href="https://member.jejupass.com/web/mypage/bookmarks" class="inner"><p class="txt bookMark">북마크<span class="num" bookMark>0</span></p></a>
+                    <a href="https://member.jejupass.com/web/mypage/reviews?reviewWriteYn=true" class="inner"><p class="txt opinion">이용후기<span class="num id=" id="review_count">0</span></p></a>
+                    <a href="https://member.jejupass.com/web/mypage/coupons" class="inner"><p class="txt coupon">보유쿠폰<span class="num" id="have_coupon_count">0</span></p></a>
+                </div> {% endcomment %}
+                <a href="#" class="bannerType">
+                </a>
+                <div class="tripPlan">
+                    <p class="topTit">나의 일반정보</p>
+                    <div class="noticeHis">
+                        <ul>
+                            <li class="noticeBox" airArea>
+                                <p class="subTit">MY생활권</p>
+                                <a href="{% url 'membership:myApageopen' %}" role="button" class="btLink icArr light" LEGIONLink>{{request.session.session_LEGION}}</a>
+                                <div airListArea>
+
+                                </div>
+                            </li>
+                            <li class="noticeBox" stayArea>
+                                <p class="subTit">관심지역</p>
+                                <a href="{% url 'membership:myApageopen' %}" role="button" class="btLink icArr light" CuriousLEGIONLink>{{request.session.session_CuriousLEGION}}</a>
+                                <div stayListArea>
+
+                                </div>
+                            </li>
+                            <li class="noticeBox" CuriousSECTORArea>
+                                <p class="subTit">관심업종</p>
+                                <a href="{% url 'membership:myApageopen' %}" role="button" class="btLink icArr light" CuriousSECTORLink>{{request.session.session_CuriousSECTOR}}</a>
+                                <div rentcarListArea>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bannerArea">
+<!--                    <figure><img th:src="${@environment.getProperty('display.static.resource-url')}+'/resource/PC/images/mypage/banner.png'"></figure>-->
+<!--                    <div class="txt">-->
+<!--                        <p>렌터카 할인쿠폰이 발행되었어요.</p>-->
+<!--                        <button type="button" class="btLink btLine light">렌터카 조회하기</button>-->
+<!--                    </div>-->
+<!--                    <button type="button" class="btDel"></button>-->
+                </div>
+                <div class="lstWrapper">
+                    <strong class="bigTit">서비스 이용안내</strong>
+                    <ul class="roundList">
+                        <li>
+                            <button type="button" class="btnDefault btnM btnLineG service01" onclick="#">부루주아는</button>
+                        </li>
+                        <li>
+                            <button type="button" class="btnDefault btnM btnLineG service02" onclick="#">분석</button>
+                        </li>
+                        <li>
+                            <button type="button" class="btnDefault btnM btnLineG service03" onclick="#">분석법</button>
+                        </li>
+                        {% comment %} <li>
+                            <button type="button" class="btnDefault btnM btnLineG service04" onclick="jppJs.go('/web/help/notice/RENTCAR/3?tabCode=RENTCAR', 'help')">렌터카 인수반납</button>
+                        </li>
+                        <li>
+                            <button type="button" class="btnDefault btnM btnLineG service05" onclick="jppJs.go('/web/help/notice/CAFE/24?tabCode=CAFE', 'help')">카페패스 이용안내</button>
+                        </li>
+                        <li>
+                            <button type="button" class="btnDefault btnM btnLineG service06" onclick="jppJs.go('/web/help/notice/COMMON/26?tabCode=ALL', 'help')">취소/환불 안내</button>
+                        </li> {% endcomment %}
+                    </ul>
+                </div>
+                <div class="lstWrapper">
+                    <strong class="bigTit">고객센터</strong>
+                    <ul class="roundList type02">
+                        <li>
+                            <button type="button" class="btnDefault btnM btnLineG customer01" onclick="#">자주 찾는 질문</button>
+                        </li>
+                        <li>
+                            <button type="button" class="btnDefault btnM btnLineG customer02" onclick="#">1:1 문의</button>
+                        </li>
+                        <li>
+                            <button type="button" class="btnDefault btnM btnLineG customer03" onclick="#">수정제안 내역</button>
+                        </li>
+                        <li>
+                            <button type="button" class="btnDefault btnM btnLineG customer04" onclick="#">결제수단관리</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- //컨텐츠 영역 -->
+        </div>
+  </div>
+
+  
+
+</section><!-- //wrapper -->
+
+
+    {% comment %} <section id="pop_notice" class="layPop layerMType02" tabindex="0">
+        <header>
+            <h2 class="titLay">알림함</h2>
+        </header>
+<!--        <ul class="tabType02 topType">-->
+<!--            <li><a href="#" role="button" aria-selected="true">전체</a></li>-->
+<!--            <li><a href="#" role="button" aria-selected="false">이벤트/혜택</a></li>-->
+<!--            <li><a href="#" role="button" aria-selected="false">최저가항공권</a></li>-->
+<!--        </ul>-->
+        <div class="scroll-wrapper layContainer scriptScroll" style="position: relative;"><div class="scroll-content scroll-scrolly_visible" tabindex="0" style="height: auto; margin-bottom: 0px; margin-right: 0px; overflow: hidden; max-height: 526px;">
+            <div class="noData noticeType" noData>
+                <p class="tit">수신 알림이 없습니다.</p>
+            </div>
+
+            <div class="grayList notice" notificationList>
+
+                <div class="noticeHis">
+                    <ul>
+                    </ul> 
+                </div>
+                <div class="btnMors">
+                    <button type="button" class="icoMore">더보기</button>
+                </div>
+            </div>
+        </div><div class="scroll-element scroll-x scroll-scrolly_visible"><div class="scroll-element_outer"><div class="scroll-element_size"></div><div class="scroll-element_track"></div><div class="scroll-bar" style="width: 0px;"></div></div></div><div class="scroll-element scroll-y scroll-scrolly_visible"><div class="scroll-element_outer"><div class="scroll-element_size"></div><div class="scroll-element_track"></div><div class="scroll-bar" style="height: 244px; top: 0px;"></div></div></div></div><!-- //layContainer-->
+
+        <button type="button" class="closeL">팝업 닫기</button>
+
+    </section> {% endcomment %}
+
+    {% comment %} <div class="toastPopup" id="airToastPopup" style="display:none"><!-- 토스트팝업 띄울때 display:block 시켜줌.-->
+        <!--    <p class="txt"><em>3000p</em>를 획득하였습니다!</p>-->
+        <p class="txt">클립보드에 복사되었습니다.</p>
+    </div> {% endcomment %}
+
+
+    <footer>
+        <div class="footTop">
+          <div class="footInner">
+            <ul class="footMenu">
+              <li><strong class="tit">부르주아</strong><a href="#" role="button">회사소개</a><a href="#" role="button">회원혜택 안내</a></li>
+              <li><strong class="tit">고객센터</strong><a href="#" role="button">공지사항</a><a href="#" role="button">자주찾는질문</a><a href="#" role="button">예약확인</a></li>
+              <li><strong class="tit">ESG</strong><a href="#" role="button">그린 앰버서더</a><a href="#" role="button">캠페인 기부</a></li>
+            </ul>
+            <div class="footAppDown">
+              <h5>App 다운로드</h5>
+              <span class="txt">부르주아 앱 설치하고 <br>더 편리하게 이용하세요.</span>
+              <ul class="appLink">
+                <li><button type="button" class="google" onclick="location.href='#';">구글플레이</button></li>
+                <li><button type="button" class="ios" onclick="location.href='#';">앱스토어</button></li>
+              </ul>
+            </div>
+            <div class="footCenter">
+              <h5>전화예약 / 고객상담</h5>
+              <span class="txt">이용에 궁금하신 점이 <br>있으신가요?</span>
+              <div class="callInfo">
+                <p class="callNum">1544-0445</p>
+                <ul class="callTime">
+                  <li><span class="tit">평일</span>09:00 ~ 18:00</li>
+                  <li><span class="tit">점심시간</span>12:00 ~ 13:00</li>
+                </ul>
+              </div>
+              <div class="snsList">
+                <a href="#" role="button" target="_blank" class="insta">인스타그램</a>
+                <a href="#" role="button" target="_blank" class="blog">네이버 블로그</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footBtm">
+          <div class="footInner">
+            <ul class="footMenu">
+              <li><a href="web/policy/privacy.html" role="button">개인정보처리방침</a></li>
+              <li><a href="web/policy/use.html" role="button">이용약관</a></li>
+            </ul>
+            <p class="txtFoot">
+              <span>(주)부르주아 대표이사 : 이현창</span>
+              <span>사업자등록번호 : 105-87-76000 <a class="btns" href="../www.ftc.go.kr/bizCommPop64eb.html?wrkr_no=1058776000" target="_blank">사업자정보조회</a>
+                      </span>
+              <span>
+                          통신판매신고 제2015-제주연동-43호
+                      </span>
+              <span>관광사업자 등록번호 : 제2021-08호</span>
+            </p>
+            <p class="txtFoot" style="margin:0">
+              <span>제주특별자치도 제주시 신광로 21, 4층 (우)63125</span>
+            </p>
+            <p class="txtFoot02">
+              (주)(주)부르주아는 개별 분석 및 상품에 대하여 정보제공자로서 판매의 당사자가 아니며 해당상품의 거래정보 및 거래 등에 대해 책임을 지지 않습니다.
+              <br/>
+              (주)부르주아는 정보제공 파트너사가 제공하는 정보에 대하여 정보중개자의 지위를 가지며, 해당 상품, 해당 정보, 거래에 관한 의무와 책임은 판매자에게 있습니다.
+            </p>
+      
+            <p class="txtCopy">
+              <span>Copyright ⓒ BOURGEOIS All Rights Reserved</span>
+            </p>
+            <div class="footEtc">
+              <span>SECURED BY RapidSSL</span>
+              <span>WEB AWARD 수상</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+
+
+<div class="dimmed"></div>
+
+
+<script type="text/javascript" src="../../static/resource/PC/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="../../static/resource/PC/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../../static/resource/PC/js/swiper.min.js"></script>
+<script type="text/javascript" src="../../static/resource/PC/js/p_selectbox.js"></script>
+<script type="text/javascript" src="../../static/resource/PC/js/jquery.scrollbar.min.js"></script>
+<script type="text/javascript" src="../../static/resource/PC/js/p_common.js"></script>
+<script type="text/javascript" src="../../static/resource/PC/js/moment.min.js"></script>
+<script type="text/javascript" src="../../static/resource/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../../static/resource/js/store.modern.min.js"></script>
+
+
+</body>
+
+<!-- Mirrored from member.jejupass.com/web/mypage by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 28 May 2022 06:30:30 GMT -->
+</html>

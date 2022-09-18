@@ -1,0 +1,1008 @@
+{% load static %}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" /> <!--아이콘 쉽게 받기-->
+<!doctype html>
+<html lang="ko">
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+
+<!--1번 차트 삽입-->
+<script>
+    $(function(){
+        $.ajax({
+            url:"{% url 'analytics:chart_main' %}", //서버저장주소
+            data:{},
+            type:'GET',
+            dataType:"json",
+            success:function(data){
+                
+                var gu_data = ['종로구','중구','성북구','용산구','성동구','광진구','동대문구','중량구','성북구','강북구','도봉구','노원구','은평구','서대문구','마포구','양천구','강서구','구로구','금천구','영등포구','동작구','관악구','서초구','강남구','송파구','강동구']
+                /*
+                console.log(data)
+                console.log(data.chart_main.length)
+                
+                console.log(data.chart_main[0])
+                console.log(data.chart_main[0]['지역'])
+                */
+                
+                const xdata = [] //x축
+                const ydata = [] //y축
+
+                for(var i=0;i<data.chart_main.length;i++){
+
+                    if(data.chart_main[i]['년도']=='2021' && data.chart_main[i]['분기']=='4'){
+                        ydata.push(data.chart_main[i]['전체'])
+                        xdata.push(data.chart_main[i]['지역'])
+                    }
+                }            
+
+                //최대값 찾기
+                const max =Math.max.apply(null, Object.values(ydata))
+
+                const color_a = 'rgba(54, 162, 235, 0.8)'
+                const color_b = 'rgba(54, 162, 235, 1)'
+                const color_c =[color_a,color_a,color_a,color_a,
+                color_a,color_a,color_a,color_a,color_a,
+                color_a,color_a,color_a,color_a,
+                color_a,color_a,color_a,color_a,
+                color_a,color_a,color_a,color_a,
+                color_a,color_a,color_a,color_a]               
+                const color_d =[color_b,color_b,color_b,color_b,
+                color_b,color_b,color_b,color_b,color_b,
+                color_b,color_b,color_b,color_b,
+                color_b,color_b,color_b,color_b,
+                color_b,color_b,color_b,color_b,
+                color_b,color_b,color_b,color_b]
+                for(var i=0; i< 25;i++)
+                    if (max==ydata[i]){
+                    color_c[i]='rgba(255, 99, 132, 0.8)'
+                    color_d[i]='rgba(255, 99, 132, 1)'
+                }
+
+                const ctx = document.getElementById('myChart').getContext('2d');
+                const myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: xdata,
+                        datasets: [{
+                            label: '전체 지출',
+                            data: ydata,
+                            backgroundColor: color_c,
+                            borderColor: color_d,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                  beginAtZero: true,
+                                  callback: function(value, index) {
+                                    if(value.toString().length > 8) return (Math.floor(value / 100000000)).toLocaleString("ko-KR") + "억";
+                                    else if(value.toString().length > 4) return (Math.floor(value / 10000)).toLocaleString("ko-KR") + "만";
+                                    else return value.toLocaleString("ko-KR"); 
+                                  }
+                                },
+                              }]
+                        }
+                    
+
+                    }//options
+                });//chart
+                
+            },//SUCCESS
+            error:function(){
+  
+            }
+        })//ajax
+     
+    })//function
+  </script>
+
+<!--2번차트 -->
+<script>
+    $(function(){
+        $.ajax({
+            url:"{% url 'analytics:chart_main' %}", //서버저장주소
+            data:{},
+            type:'GET',
+            dataType:"json",
+            success:function(data){
+                /*
+                console.log(data)
+                console.log(data.chart_main.length) //데이터 개수 확인
+                
+                console.log(data.chart_main[0]) //데이터 0번째 확인
+                console.log(data.chart_main[0]['년도']) //0번째 데이터 중 컬럼 확인
+                */
+                
+                const xdata = ['2019_01','2019_02','2019_03','2019_04','2020_01','2020_02','2020_03','2020_04','2021_01','2021_02','2021_03','2021_04'] //x축 
+                const ydata = [] //y축
+
+                const ydata_2019_01 = [] //y축
+                const ydata_2019_02 = [] //y축
+                const ydata_2019_03 = [] //y축
+                const ydata_2019_04 = [] //y축
+
+                const ydata_2020_01 = [] //y축
+                const ydata_2020_02 = [] //y축
+                const ydata_2020_03 = [] //y축
+                const ydata_2020_04 = [] //y축
+
+                const ydata_2021_01 = [] //y축
+                const ydata_2021_02 = [] //y축
+                const ydata_2021_03 = [] //y축
+                const ydata_2021_04 = [] //y축
+  
+
+                for(var i=0;i<data.chart_main.length;i++){
+                    if(data.chart_main[i]['년도']=='2019' && data.chart_main[i]['분기']=='1'){
+                        ydata_2019_01.push(data.chart_main[i]['전체'])
+                    }//2019년 1분기의 25개 구의 전체 매출 데이터를 리스트에 담음
+                    if(data.chart_main[i]['년도']=='2019' && data.chart_main[i]['분기']=='2'){
+                        ydata_2019_02.push(data.chart_main[i]['전체'])
+                    }//2019년 2분기의 25개 구의 전체 매출 데이터를 리스트에 담음
+                    if(data.chart_main[i]['년도']=='2019' && data.chart_main[i]['분기']=='3'){
+                        ydata_2019_03.push(data.chart_main[i]['전체'])
+                    }//2019년 3분기의 25개 구의 전체 매출 데이터를 리스트에 담음
+                    if(data.chart_main[i]['년도']=='2019' && data.chart_main[i]['분기']=='4'){
+                        ydata_2019_04.push(data.chart_main[i]['전체'])
+                    }//2019년 4분기의 25개 구의 전체 매출 데이터를 리스트에 담음
+
+                    if(data.chart_main[i]['년도']=='2020' && data.chart_main[i]['분기']=='1'){
+                        ydata_2020_01.push(data.chart_main[i]['전체'])
+                    }//2020년 1분기의 25개 구의 전체 매출 데이터를 리스트에 담음
+                    if(data.chart_main[i]['년도']=='2020' && data.chart_main[i]['분기']=='2'){
+                        ydata_2020_02.push(data.chart_main[i]['전체'])
+                    }//2020년 2분기의 25개 구의 전체 매출 데이터를 리스트에 담음
+                    if(data.chart_main[i]['년도']=='2020' && data.chart_main[i]['분기']=='3'){
+                        ydata_2020_03.push(data.chart_main[i]['전체'])
+                    }//2020년 3분기의 25개 구의 전체 매출 데이터를 리스트에 담음
+                    if(data.chart_main[i]['년도']=='2020' && data.chart_main[i]['분기']=='4'){
+                        ydata_2020_04.push(data.chart_main[i]['전체'])
+                    }//2020년 4분기의 25개 구의 전체 매출 데이터를 리스트에 담음
+
+                    if(data.chart_main[i]['년도']=='2021' && data.chart_main[i]['분기']=='1'){
+                        ydata_2021_01.push(data.chart_main[i]['전체'])
+                    }//2021년 1분기의 25개 구의 전체 매출 데이터를 리스트에 담음
+                    if(data.chart_main[i]['년도']=='2021' && data.chart_main[i]['분기']=='2'){
+                        ydata_2021_02.push(data.chart_main[i]['전체'])
+                    }//2021년 2분기의 25개 구의 전체 매출 데이터를 리스트에 담음
+                    if(data.chart_main[i]['년도']=='2021' && data.chart_main[i]['분기']=='3'){
+                        ydata_2021_03.push(data.chart_main[i]['전체'])
+                    }//2021년 3분기의 25개 구의 전체 매출 데이터를 리스트에 담음
+                    if(data.chart_main[i]['년도']=='2021' && data.chart_main[i]['분기']=='4'){
+                        ydata_2021_04.push(data.chart_main[i]['전체'])
+                    }//2021년 4분기의 25개 구의 전체 매출 데이터를 리스트에 담음
+
+                }
+                
+                // 넣은 데이터 값 확인
+                
+                /*console.log(ydata_2019_01)
+                console.log(ydata_2019_02)
+                console.log(ydata_2019_03)
+                console.log(ydata_2019_04)
+                console.log(ydata_2020_01)
+                console.log(ydata_2020_02)
+                console.log(ydata_2020_03)
+                console.log(ydata_2020_04)
+                console.log(ydata_2021_01)
+                console.log(ydata_2021_02)
+                console.log(ydata_2021_03)
+                console.log(ydata_2021_04)*/
+
+                //자바 스크립트 함수 중 리스트 내의 값을 모두 더해주는 함수
+                //활용 예
+                //const num10 = [1,2,3,4,5,6,7,8,9,10]
+                //const sum = num10.reduce((a,b) => (a+b));
+                //document.write('reduce : ', sum);
+                //출력값 55
+
+                const sum_ydata_2019_01 = ydata_2019_01.reduce((a,b) => (a+b));
+                const sum_ydata_2019_02 = ydata_2019_02.reduce((a,b) => (a+b));
+                const sum_ydata_2019_03 = ydata_2019_03.reduce((a,b) => (a+b));
+                const sum_ydata_2019_04 = ydata_2019_04.reduce((a,b) => (a+b));
+                const sum_ydata_2020_01 = ydata_2020_01.reduce((a,b) => (a+b));
+                const sum_ydata_2020_02 = ydata_2020_02.reduce((a,b) => (a+b));
+                const sum_ydata_2020_03 = ydata_2020_03.reduce((a,b) => (a+b));
+                const sum_ydata_2020_04 = ydata_2020_04.reduce((a,b) => (a+b));
+                const sum_ydata_2021_01 = ydata_2021_01.reduce((a,b) => (a+b));
+                const sum_ydata_2021_02 = ydata_2021_02.reduce((a,b) => (a+b));
+                const sum_ydata_2021_03 = ydata_2021_03.reduce((a,b) => (a+b));
+                const sum_ydata_2021_04 = ydata_2021_04.reduce((a,b) => (a+b));
+                // 확인 해봄 console.log(sum_ydata_2019_01)
+
+                // 각 년도분기 별 데이터를 다 더한 값을 리스트에 넣음
+                ydata.push(sum_ydata_2019_01)
+                ydata.push(sum_ydata_2019_02)
+                ydata.push(sum_ydata_2019_03)
+                ydata.push(sum_ydata_2019_04)
+                ydata.push(sum_ydata_2020_01)
+                ydata.push(sum_ydata_2020_02)
+                ydata.push(sum_ydata_2020_03)
+                ydata.push(sum_ydata_2020_04)
+                ydata.push(sum_ydata_2021_01)
+                ydata.push(sum_ydata_2021_02)
+                ydata.push(sum_ydata_2021_03)
+                ydata.push(sum_ydata_2021_04)
+
+                const ctx = document.getElementById('myChart2').getContext('2d');
+                const myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: xdata,
+                        datasets: [{
+                            label: '서울시 전체 매출',
+                            data: ydata,
+                            borderColor: "rgba(255, 201, 14, 1)",
+                            backgroundColor: "rgba(255, 201, 14, 0.5)",
+                            fill: false,
+                            lineTension: 0
+                        }]
+                    },//data
+                    options: {
+                        responsive: true,
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false,
+                        }, 
+
+                        hover: {
+                            mode: 'nearest',
+                            intersect: true
+                        },
+
+                        scales: {
+                          yAxes: [{
+                          ticks: {
+                            beginAtZero: true,
+                            callback: function(value, index) {
+                              if(value.toString().length > 8) return (Math.floor(value / 100000000)).toLocaleString("ko-KR") + "억";
+                              else if(value.toString().length > 4) return (Math.floor(value / 10000)).toLocaleString("ko-KR") + "만";
+                              else return value.toLocaleString("ko-KR"); 
+                            }
+                          },
+                        }]
+                      },
+                      
+                    }//options
+                    
+                });//chart
+                
+            },//SUCCESS
+            error:function(){
+  
+            }
+        })//ajax
+     
+    })//function
+  </script>
+
+<!--3번차트 -->
+<script>
+    $(function(){
+        $.ajax({
+            url:"{% url 'analytics:chart_main' %}", //서버저장주소
+            data:{},
+            type:'GET',
+            dataType:"json",
+            success:function(data){
+                /*console.log(data)
+                console.log(data.chart_main.length) //데이터 개수 확인
+                
+                console.log(data.chart_main[0]) //데이터 0번째 확인
+                console.log(data.chart_main[0]['년도']) //0번째 데이터 중 컬럼 확인*/
+                
+                const xdata = ['2021년 04분기 남성 매출총액','2021년 04분기 여성 매출총액'] //x축 
+                const ydata = [] //y축
+
+                const ydata_2021_04_male = [] //y축
+                const ydata_2021_04_female = [] //y축
+  
+
+                for(var i=0;i<data.chart_main.length;i++){
+                    if(data.chart_main[i]['년도']=='2021' && data.chart_main[i]['분기']=='4'){
+                        ydata_2021_04_male.push(data.chart_main[i]['남성'])
+                        ydata_2021_04_female.push(data.chart_main[i]['여성'])
+                    }//2021년 4분기의 25개 구의 전체 매출 데이터를 리스트에 담음
+                }
+                
+                // 넣은 데이터 값 확인
+                /*
+                console.log(ydata_2021_04_male)
+                console.log(ydata_2021_04_female)
+                */
+
+                //자바 스크립트 함수 중 리스트 내의 값을 모두 더해주는 함수
+                //활용 예
+                //const num10 = [1,2,3,4,5,6,7,8,9,10]
+                //const sum = num10.reduce((a,b) => (a+b));
+                //document.write('reduce : ', sum);
+                //출력값 55
+
+                const sum_ydata_2021_04_male = ydata_2021_04_male.reduce((a,b) => (a+b));
+                const sum_ydata_2021_04_female = ydata_2021_04_female.reduce((a,b) => (a+b));
+
+                // 확인 해봄 console.log(sum_ydata_2019_01)
+
+                // 각 년도분기 별 데이터를 다 더한 값을 리스트에 넣음
+                ydata.push(sum_ydata_2021_04_male)
+                ydata.push(sum_ydata_2021_04_female)
+
+                const ctx = document.getElementById('myChart3').getContext('2d');
+                const myChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: xdata,
+                        datasets: [{
+                            label: '2021년 4분기 서울시 남성/여성 매출',
+                            data: ydata,
+                            backgroundColor: ["#5B84B1FF","#FC766AFF"],
+                            fill: false,
+                            lineTension: 0
+                        }]
+                    },
+                    options: {
+                        pieceLabel: {
+                          mode:"label",
+                          position:"default",
+                          fontSize: 11,
+                          fontStyle: 'bold'
+                       }
+                    }//options
+
+                });//chart
+                
+            },//SUCCESS
+            error:function(){
+  
+            }
+        })//ajax
+     
+    })//function
+</script>
+<!--4번차트 -->
+<script>
+    $(function(){
+        $.ajax({
+            url:"{% url 'analytics:chart_main' %}", //서버저장주소
+            data:{},
+            type:'GET',
+            dataType:"json",
+            success:function(data){
+                /*console.log(data)
+                console.log(data.chart_main.length) //데이터 개수 확인
+                
+                console.log(data.chart_main[0]) //데이터 0번째 확인
+                console.log(data.chart_main[0]['년도']) //0번째 데이터 중 컬럼 확인*/
+                
+                const xdata = ['10대 매출','20대 매출','30대 매출','40대 매출','50대 매출','60대이상 매출'] //x축 
+                const ydata = [] //y축
+
+                const ydata_2021_04_10 = [] //y축
+                const ydata_2021_04_20 = [] //y축
+                const ydata_2021_04_30 = [] //y축
+                const ydata_2021_04_40 = [] //y축
+                const ydata_2021_04_50 = [] //y축
+                const ydata_2021_04_60 = [] //y축
+  
+
+                for(var i=0;i<data.chart_main.length;i++){
+                    if(data.chart_main[i]['년도']=='2021' && data.chart_main[i]['분기']=='4'){
+                        ydata_2021_04_10.push(data.chart_main[i]['연령대_10'])
+                        ydata_2021_04_20.push(data.chart_main[i]['연령대_20'])
+                        ydata_2021_04_30.push(data.chart_main[i]['연령대_30'])
+                        ydata_2021_04_40.push(data.chart_main[i]['연령대_40'])
+                        ydata_2021_04_50.push(data.chart_main[i]['연령대_50'])
+                        ydata_2021_04_60.push(data.chart_main[i]['연령대_60_이상'])
+                    }//2021년 4분기의 25개 구의 전체 매출 데이터를 리스트에 담음
+                }
+                
+                // 넣은 데이터 값 확인
+                /*
+                console.log(ydata_2021_04_male)
+                console.log(ydata_2021_04_female)
+                */
+
+                //자바 스크립트 함수 중 리스트 내의 값을 모두 더해주는 함수
+                //활용 예
+                //const num10 = [1,2,3,4,5,6,7,8,9,10]
+                //const sum = num10.reduce((a,b) => (a+b));
+                //document.write('reduce : ', sum);
+                //출력값 55
+
+                const sum_ydata_2021_04_10 = ydata_2021_04_10.reduce((a,b) => (a+b));
+                const sum_ydata_2021_04_20 = ydata_2021_04_20.reduce((a,b) => (a+b));
+                const sum_ydata_2021_04_30 = ydata_2021_04_30.reduce((a,b) => (a+b));
+                const sum_ydata_2021_04_40 = ydata_2021_04_40.reduce((a,b) => (a+b));
+                const sum_ydata_2021_04_50 = ydata_2021_04_50.reduce((a,b) => (a+b));
+                const sum_ydata_2021_04_60 = ydata_2021_04_60.reduce((a,b) => (a+b));
+   
+
+                // 확인 해봄 console.log(sum_ydata_2019_01)
+
+                // 각 년도분기 별 데이터를 다 더한 값을 리스트에 넣음
+                ydata.push(sum_ydata_2021_04_10)
+                ydata.push(sum_ydata_2021_04_20)
+                ydata.push(sum_ydata_2021_04_30)
+                ydata.push(sum_ydata_2021_04_40)
+                ydata.push(sum_ydata_2021_04_50)
+                ydata.push(sum_ydata_2021_04_60)
+
+
+                const ctx = document.getElementById('myChart4').getContext('2d');
+                const myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: xdata,
+                        datasets: [{
+                            label: '연령별 매출 총액',
+                            data: ydata,
+                            backgroundColor: [
+                                '#1a7a4c',
+                                '#1a7a4c',
+                                '#1a7a4c',
+                                '#1a7a4c',
+                                '#1a7a4c',
+                                '#1a7a4c'
+                             
+                            ],
+                            borderColor: [
+                            '#1a7a4c',
+                            '#1a7a4c',
+                            '#1a7a4c',
+                            '#1a7a4c',
+                            '#1a7a4c',
+                            '#1a7a4c'
+                         
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                  beginAtZero: false,
+                                  callback: function(value, index) {
+                                    if(value.toString().length > 8) return (Math.floor(value / 100000000)).toLocaleString("ko-KR") + "억";
+                                    else if(value.toString().length > 4) return (Math.floor(value / 10000)).toLocaleString("ko-KR") + "만";
+                                    else return value.toLocaleString("ko-KR"); 
+                                  }
+                                },
+                              }]
+                        }
+                    
+
+                    }//options
+                });//chart
+                
+            },//SUCCESS
+            error:function(){
+  
+            }
+        })//ajax
+     
+    })//function
+</script>
+<script>
+   var kkeys = [], konami = "38,38,40,40,37,39,37,39,66,65";
+    //var kkeys = [], konami = "38";
+    $(document).keydown(function(e) {
+        kkeys.push( e.keyCode );
+        if ( kkeys.toString().indexOf( konami ) >= 0 ){
+            kkeys = [];
+            window.location.assign("/analytics/hidden_game/");
+        }
+    });
+</script>
+
+<title>상권에 진심, 부루주아</title>
+
+<meta name="viewport" content="width=device-width, user-scalable=no, width=1366">
+
+<link rel="shortcut icon" href="{% static 'resource/PC/images/favicon/favicon6654.ico?v1' %}">
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/favicon-32x326654.png?v1' %}" sizes="32x32">
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/favicon-16x166654.png?v1' %}"  sizes="16x16">
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/favicon-96x966654.png?v1' %}" sizes="96x96">
+<link rel="apple-touch-icon-precomposed" href="{% static 'resource/PC/images/favicon/apple-icon-120x1206654.png?v1' %}" sizes="120x120">
+<link rel="apple-touch-icon-precomposed" href="{% static 'resource/PC/images/favicon/apple-icon-180x1806654.png?v1' %}" sizes="180x180">
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/android-icon-192x1926654.png?v1' %}" sizes="192x192">
+<link rel="shortcut icon" type="image/x-icon" href="{% static 'resource/PC/images/favicon/favicon.ico' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'resource/PC/css/p_common.min.css' %}" >
+<link rel="stylesheet" type="text/css" href="{% static 'resource/PC/css/p_contents.min.css' %}">
+
+
+</head>
+
+<body class="wrapper mainWrapper">
+<p class="skip"><a href="#container">본문 바로가기</a></p>
+
+<section id="wrapper">
+
+  <header>
+    <h1 class="topLogo"><a href="{% url 'web'%}">bourgeois</a></h1>
+  <nav>
+    <div class="navList">
+      <h2><a href="{% url 'analytics:inner' %}">지역별 분석</a></h2>
+      <h2><a href="{% url 'navertrend:search_page' %}">네이버 트렌드</a></h2>
+      <h2><a href="{% url 'adminpage:fList' nowpage=1 nowpage=1 category='first' searchword='first' %}">Q&A게시판</a></h2>
+      {% if request.session.session_ID == "반갑습니다" %}
+      
+      {% elif request.session.session_ID %}
+      <h2><a href="{% url 'membership:myApageopen' %}">MY분석</a></h2>
+      {% else %}
+      <h2><a href="{% url 'membership:signup' %}">가입하여 MY분석보기</a></h2>
+      {% endif %}
+    </div>
+
+  </nav>
+  <div class="topUtil">
+    {% if request.session.session_ID == "반갑습니다" %}
+          <a href="{% url 'membership:logout' %}" class="logout">로그아웃</a>
+          <a href="{% url "adminpage:list"  nowpage=1 category='first' searchword='first'  %}" class="mypage">회원관리</a>
+    {% elif request.session.session_ID %}
+        <a href="{% url 'membership:logout' %}" class="logout">로그아웃</a>
+        <a href="{% url 'membership:mypage' %}" class="mypage">마이페이지</a>
+    {% else %}
+        <a href="{% url 'membership:login' %}" class="login">로그인</a>
+    {% endif %}
+    <ul class="navEtc">
+    </ul>
+  </div>
+</header>
+    
+  <div id="container" class="container" style="margin-top: -55px;">
+
+        <div id="contents" class="contents rentcarMainContests">
+            <!--영상 파트 시작-->
+			<div class="mainCont" style="margin-bottom: 100px;" >
+				<div class="mainSignature">
+					<video muted="muted" autoplay="" loop="" playsinline="" onloadedmetadata="this.muted = true">
+						<source src="{% static 'resource/PC/images/esg/main_home_video03.mp4' %}" type="video/mp4">
+					</video>
+					 <div class="holder">
+						<strong class="titDep2">
+							<img src="{% static 'resource/PC/images/esg_main/ic_play.png' %}" alt="로고이미지"> <!--여기부터 -->
+						</strong>
+						<p class="desc">상권 분석의 기본,<br/>브르주아와 함께해 주세요</p>
+                        {% if not request.session.session_ID %}
+						    <a href="{% url 'membership:login' %}" class="btn">참여하기</a>
+                        {% else %}
+                            <a href="{% url 'membership:mypage' %}" class="btn">MYPAGE</a>
+                        {% endif %}
+					 </div>
+				</div>
+			</div>
+            <!--영상 파트 끝-->
+
+            <br>
+            
+
+            <!-- 1번차트-->
+            
+            <h3 class="titDep2" style="margin-bottom: -50px;">😎브루주아의 강력한 서비스들과 함께하면 사업 시작이 쉬워집니다</h3>
+            <br>
+            <br>
+            <div style="border-radius: 2em; width: 100%; padding-bottom: 100px; margin-bottom: -180px;" class="container">
+                <canvas id="myChart" >
+                </canvas>
+                <h4 style="color: gray; text-align: right;">서울시 구별 지출 분석(2021 4분기)</h4>
+            </div>
+            
+            <!-- 차트 끝 -->
+            <!-- 2번차트-->
+            
+            <div style="border-radius: 2em; width: 100%; padding-bottom: 100px;  margin-bottom: -150px;" class="container">
+                <canvas id="myChart2" >
+                </canvas>
+                <h4 style="color: gray; text-align: right;">서울시 전체 매출 추이 분석(2019 1분기~2021 4분기)</h4>
+            </div>
+            
+            <!-- 차트 끝 -->
+            <!-- 3번차트-->
+            
+            <div style="border-radius: 2em;  float: left; width: 35%; margin: 0 auto;" class="container">
+                <canvas id="myChart3" >
+                </canvas>
+                <h4 style="color: gray; text-align: right;">서울시 남녀 매출 비교분석(2021 4분기)</h4>
+            </div>
+            
+          
+            <br><br><br>
+            <!-- 차트 끝 -->
+            <!-- 4번차트-->
+            
+            <div style="border-radius: 2em; float: left;  width: 65%; height 100%; margin: 0 auto; padding-left: 100px; " class="container">
+                <canvas id="myChart4" >
+                </canvas>
+                <h4 style="color: gray; text-align: right;">서울시 연령별 매출 비교분석(2021 4분기)</h4>
+            </div>
+            <div style="margin-bottom: 500px;"></div>
+            <!-- 차트 끝 -->
+
+            <!--고객 후킹 메세지 시작-->
+            <h3 class="titDep2"  style="margin-bottom: -20px; ">🔥많은 기업들이 이미 부르주아를 사용하고 있습니다. 여러분도 팀 부르주아에 동참하세요.</h3>
+            <div style="border-radius: 2em; width: 100%; margin-bottom: 0px; padding-bottom: 100px; " class="container">
+                <style>
+
+                    .box_l{    
+                        font-size: 10px;
+                        font-family: "Noto Sans KR", sans-serif;
+                        line-height: normal;
+                        word-break: keep-all;
+                        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                        touch-action: manipulation;
+                        text-align: ceneter;
+                    
+                        margin-bottom: 6rem;
+                        display: flex;
+                        flex-wrap: wrap;
+                        position: relative;
+                        padding-bottom: 20px;
+                    }
+
+                    .inner_l{
+                    
+                        width: 100%;
+                        max-width: 120rem;
+                        margin: auto;
+                        display: flex;
+                        flex-wrap: wrap;
+                        }
+
+                    .pricecard_1,.pricecard_2,.pricecard_3{
+                        margin: 0% 1.5%;
+                        padding: 3rem;
+                        box-sizing: border-box;
+                        background-color: rgb(255, 255, 255);
+                        border-radius: 1.6rem;
+                        box-shadow: rgb(0 0 0 / 15%) 0rem 0.8rem 2rem 0rem;
+                        transition: all 0.3s ease 0s;
+                        position: relative;
+                        overflow: hidden;
+                        max-width: 30.333%;
+                        flex: 0 0 30.333%;
+                    }
+                    .ribbon {
+                        width: 10rem;
+                        height: 2.5rem;
+                        padding-bottom: 0.2rem;
+                        background-color: rgb(54, 149, 255);
+                        color: rgb(255, 255, 255);
+                        font-size: 1.4rem;
+                        font-weight: 600;
+                        cursor: default;
+                        display: flex;
+                        -webkit-box-pack: center;
+                        justify-content: center;
+                        -webkit-box-align: center;
+                        align-items: center;
+                        position: absolute;
+                        top: 0px;
+                        right: 0px;
+                        transform: translateY(-100%) rotate(90deg) translateX(70.7107%) rotate(-45deg);
+                        transform-origin: right bottom;
+                    }
+
+                    .top_section{ margin-bottom: 2rem; text-align: center;}
+                    .word_1 {
+                        width: 0.6rem;
+                        height: 0.6rem;
+                        display: inline-block;
+                        border-radius: 0.8rem;
+                    }
+                    
+                    #word_1_dot1{background-color: rgb(51, 51, 52);}
+                    #word_1_dot2{background-color: rgb(0, 198, 133);}
+                    #word_1_dot3{background-color: rgb(255, 109, 110);}
+
+                    .word_2 {
+                        font-size: 1.8rem;
+                        font-weight: 500;
+                        margin-bottom: 2rem;
+                        text-align: center;
+                    }
+
+                    .mid_section {
+                        margin-bottom: 2.5rem;
+                        text-align: center;
+                    }
+
+                    .price_word {
+                        position: relative;
+                        font-weight: 600;
+                        font-size: 3.6rem;
+                        box-sizing: border-box;
+                        font-family: sans-serif;
+                        color: rgb(51, 51, 52);
+                    }
+
+                    .date_word {
+                        font-size: 1.6rem;
+                        font-weight: 300;
+                        color: rgb(134, 134, 136);
+                    }
+
+                    .bot_section {
+                        margin-bottom: 1rem;
+                        text-align: center;
+                    }
+
+                    .action_btn_1{
+                        padding: 1rem 2.4rem;
+                        font-size: 1.4rem;
+                        font-weight: 400;
+                        color: rgb(255, 255, 255);
+                        background-color: rgb(54, 149, 255);
+                        border: 0.1rem solid rgb(54, 149, 255);
+                        border-radius: 0.6rem;
+                        white-space: nowrap;
+                        transition: all 0.3s ease 0s;
+                    }
+
+                    .action_btn_1:hover{font-size: 1.8rem; font-weight: 500;}
+
+                    .action_btn_2{
+                        padding: 1rem 2.4rem;
+                        font-size: 1.4rem;
+                        font-weight: 400;
+                        color: rgb(84, 84, 86);
+                        background-color: rgb(255, 255, 255);
+                        border: 0.1rem solid rgb(134, 134, 136);
+                        border-radius: 0.6rem;
+                        white-space: nowrap;
+                        transition: all 0.3s ease 0s;
+                    }
+                    .action_btn_2:hover{background-color: rgb(51, 51, 52); color: rgb(255, 255, 255); font-size: 1.8rem; font-weight: 500;}
+
+                    #plan_link{
+                        margin-bottom: 8rem;
+                        display: flex;
+                        -webkit-box-pack: center;
+                        justify-content: center;
+                    }
+                    #plan_link_btn{
+                        margin: 0rem 0.6rem;
+                        padding: 1.4rem 3.2rem;
+                        font-size: 1.8rem;
+                        font-weight: 600;
+                        white-space: nowrap;
+                        border-radius: 1rem;
+                        cursor: pointer;
+                        transition: all 0.5s ease 0s;
+                    }
+                            
+                    #plan_link_btn:hover{ font-size: 2rem; font-weight: 700;}
+                </style>
+
+                <!--플랜 섹션 시작-->
+                
+                <div class="box_l" style="margin-bottom: 0;">
+                    <div class="inner_l">
+                        <div class="pricecard_1">
+                            <div class="top_section">
+                                <i class="fa-solid fa-chart-line" style="font-size: 2.3em; color: rgb(52,102,212); "></i>
+                                <br><br>
+                                <div class="word_2">매출</div>
+                            </div>
+                            <div class="mid_section">
+                                <span class="price_word">2.86 <span class="date_word">조원</span></span>
+                            </div>
+
+                        </div>
+                        <div class="pricecard_2">
+                            <div class="top_section">
+                                <i class="fa-solid fa-handshake-simple" style="font-size: 2.3em; color: rgb(52,102,212); "></i>
+                                <br><br>
+                                <div class="word_2">고객사</div>
+                            </div>
+                            <div class="mid_section">
+                                <span class="price_word">1,300 <span class="date_word">여개사</span></span>
+                            </div>
+
+                        </div>
+                        <div class="pricecard_3">
+                            <div class="top_section">
+                                <i class="fa-solid fa-earth-asia" style="font-size: 2.3em; color: rgb(52,102,212); "></i>
+                                <br><br>
+                                <div class="word_2">글로벌 진출 국가</div>
+                            </div>
+                            <div class="mid_section">
+                                <span class="price_word">6<span class="date_word">개 국가</span></span>
+                                <br>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <h4 style="color: gray; text-align: right;">2021년 4분기 기준</h4>
+            </div>
+            <!--고객 후킹 메세지 끝-->
+
+
+            {% comment %} <div style="border-radius: 2em; float: left;  width: 65%; height 100%; margin: 0 auto; padding-left: 100px; " id="container"> {% endcomment %}
+            <h3 class="titDep2"  style="margin-bottom: 0px; ">🧐멤버십 회원에게는 더 고도화된 데이터, 다양한 부가 기능, 더 쾌적한 서비스 환경 등의 혜택이 제공됩니다.</h3>
+            <div class="container"  style="margin-bottom: 0px; " >
+            
+                <!--플랜 섹션 시작-->
+                <div class="box_l">
+                    <div class="inner_l">
+                        <div class="pricecard_1">
+                            <div class="ribbon">FREE</div>
+                            <div class="top_section">
+                                <div class="word_1" id="word_1_dot1" ></div>
+                                <div class="word_2">베이직</div>
+                            </div>
+                            <div class="mid_section">
+                                <span class="price_word">₩ 12,000</span>
+                                <br>
+                                <span class="date_word" >/ 30일</span>
+                            </div>
+                            <div class="bot_section">
+                                <button class="action_btn_1">14일 무료체험</button>
+                            </div>
+                        </div>
+                        <div class="pricecard_2">
+                            <div class="top_section">
+                                <div class="word_1" id="word_1_dot2"></div>
+                                <div class="word_2">스탠다드</div>
+                            </div>
+                            <div class="mid_section">
+                                <span class="price_word">₩ 27,000</span>
+                                <br>
+                                <span class="date_word" >/ 30일</span>
+                            </div>
+                            <div class="bot_section">
+                                <button class="action_btn_2">구독하기</button>
+                            </div>
+                        </div>
+                        <div class="pricecard_3">
+                            <div class="top_section">
+                                <div class="word_1" id="word_1_dot3"></div>
+                                <div class="word_2">프리미엄</div>
+                            </div>
+                            <div class="mid_section">
+                                <span class="price_word">₩ 81,000</span>
+                                <br>
+                                <span class="date_word" >/ 30일</span>
+                            </div>
+                            <div class="bot_section">
+                                <button class="action_btn_2">구독하기</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                </div>
+                <div id="plan_link">
+                    <button id="plan_link_btn" style="color: rgb(247, 247, 248); background-color: rgb(35, 35, 36); border: 0.2rem solid rgb(35, 35, 36);">플랜별 기능 비교하기</button>
+                </div>
+            </div>
+            <!--플랜 섹션 끝-->
+                
+
+			<div class="mainCont">
+
+				<div class="mainCont">
+					<h3 class="titDep2">서비스 이용안내</h3>
+					<ul class="mainIcon">
+						<li class="reservation"><a href="#"><span>회사스케쥴</span></a></li>
+		                <li class="insurance"><a href="#"><span>상권정보</span></a></li>
+		                <li class="return"><a href="#"><span>지역정보</span></a></li>
+		                <li class="info"><a href="#"><span>트랜드정보</span></a></li>
+		                <li class="cancellation"><a href="#"><span>주의사항</span></a></li>
+		                <li class="refund"><a href="#"><span>이용약관</span></a></li>
+					</ul>
+					<div class="mainNews">
+						<div class="txt">
+							<h4 class="titDep3">부르주아 뉴스레터 구독하기</h4>
+							<p class="desc">매주 부르주아의 속 깊은 이야기를 받아보세요!</p>
+						</div>
+						<div class="email">
+							<input type="text" placeholder="구독신청 이메일을 입력해주세요." subscriptionsInp>
+							<button type="button" class="btnDefault btnL action" subscriptionsBtn>신청</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+	</div>
+
+  
+
+</section><!-- //wrapper -->
+
+<footer>
+  <div class="footTop">
+    <div class="footInner">
+      <ul class="footMenu">
+        <li><strong class="tit">부르주아</strong><a href="#" role="button">회사소개</a><a href="#" role="button">회원혜택 안내</a></li>
+        <li><strong class="tit">고객센터</strong><a href="#" role="button">공지사항</a><a href="#" role="button">자주찾는질문</a><a href="#" role="button">예약확인</a></li>
+        <li><strong class="tit">ESG</strong><a href="#" role="button">그린 앰버서더</a><a href="#" role="button">캠페인 기부</a></li>
+      </ul>
+      <div class="footAppDown">
+        <h5>App 다운로드</h5>
+        <span class="txt">부르주아 앱 설치하고 <br>더 편리하게 이용하세요.</span>
+        <ul class="appLink">
+          <li><button type="button" class="google" onclick="location.href='#';">구글플레이</button></li>
+          <li><button type="button" class="ios" onclick="location.href='#';">앱스토어</button></li>
+        </ul>
+      </div>
+      <div class="footCenter">
+        <h5>전화예약 / 고객상담</h5>
+        <span class="txt">이용에 궁금하신 점이 <br>있으신가요?</span>
+        <div class="callInfo">
+          <p class="callNum">1544-0445</p>
+          <ul class="callTime">
+            <li><span class="tit">평일</span>09:00 ~ 18:00</li>
+            <li><span class="tit">점심시간</span>12:00 ~ 13:00</li>
+          </ul>
+        </div>
+        <div class="snsList">
+          <a href="#" role="button" target="_blank" class="insta">인스타그램</a>
+          <a href="#" role="button" target="_blank" class="blog">네이버 블로그</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footBtm">
+    <div class="footInner">
+      <ul class="footMenu">
+        <li><a href="#" role="button">개인정보처리방침</a></li>
+        <li><a href="#" role="button">이용약관</a></li>
+        {% comment %} <li><a href="{% url 'adminpage:login_admin'  %}" >관리자로그인</a></li> {% endcomment %}
+      </ul>
+      <p class="txtFoot">
+        <span>(주)부르주아 대표이사 : 이현창</span>
+        <span>사업자등록번호 : 105-87-76000 <a class="btns" href="#" target="_blank">사업자정보조회</a>
+				</span>
+        <span>
+					통신판매신고 제2015-제주연동-43호
+				</span>
+        <span>관광사업자 등록번호 : 제2021-08호</span>
+      </p>
+      <p class="txtFoot" style="margin:0">
+        <span>제주특별자치도 제주시 신광로 21, 4층 (우)63125</span>
+      </p>
+      <p class="txtFoot02">
+        (주)부르주아는 개별 분석 및 상품에 대하여 정보제공자로서 판매의 당사자가 아니며 해당상품의 거래정보 및 거래 등에 대해 책임을 지지 않습니다.
+        <br/>
+        (주)부르주아는 정보제공 파트너사가 제공하는 정보에 대하여 정보중개자의 지위를 가지며, 해당 상품, 해당 정보, 거래에 관한 의무와 책임은 판매자에게 있습니다.
+      </p>
+
+      <p class="txtCopy">
+        <span>Copyright ⓒ BOURGEOIS All Rights Reserved</span>
+      </p>
+      <div class="footEtc">
+        <span>SECURED BY RapidSSL</span>
+        <span>WEB AWARD 수상</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="dimmed"></div>
+
+
+<script type="text/javascript" src="../static/resource/PC/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="../static/resource/PC/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../static/resource/PC/js/swiper.min.js"></script>
+<script type="text/javascript" src="../static/resource/PC/js/p_selectbox.js"></script>
+<script type="text/javascript" src="../static/resource/PC/js/jquery.scrollbar.min.js"></script>
+<script type="text/javascript" src="../static/resource/PC/js/p_common.js"></script>
+<script type="text/javascript" src="../static/resource/PC/js/moment.min.js"></script>
+<script type="text/javascript" src="../static/resource/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../static/resource/js/store.modern.min.js"></script>
+<script type="text/javascript" src="../api.jejupass.com/display/js/jpp.js"></script>
+<script type="text/javascript" src="../api.jejupass.com/display/js/jpp.extend.js"></script>
+<script type="text/javascript" src="../api.jejupass.com/display/js/jpp.sso.js"></script>
+</body>
+
+</html>

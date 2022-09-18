@@ -1,0 +1,994 @@
+{% load static %}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<!doctype html>
+<html lang="ko">
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+<!--차트 삽입-->
+<script>
+  $(function(){
+      $.ajax({
+          url:"{% url 'analytics:myAPage' %}", //서버저장주소
+          data:{},
+          type:'GET',
+          dataType:"json",
+          success:function(data){
+            console.log(data)
+              
+              /*
+              console.log(data)
+              console.log(data.curiouslegion.length)
+              
+              console.log(data.curiouslegion[0])
+              */
+              
+              const xdata = [] //x축 업종별 매출
+              const ydata = [] //y축 업종별 매출
+              
+              const xdata1 = [] //x축 우리구 업종별 매출
+              const ydata1 = [] //y축 우리구 업종별 매출
+              
+              const x1data = [] // 지역별 매출 x축
+              const y1data = [] // 지역별 매출 y축
+              
+              const x2data = ['2019년1분기','2019년2분기','2019년3분기','2019년4분기','2020년1분기','2020년2분기','2020년3분기','2020년4분기','2021년1분기','2021년2분기','2021년3분기','2021년4분기'] // 점포수 변화 x축
+              const ydata3 = [] // 점포수 변화 y축1 (전체)
+              const ydata3_1 = [] // 점포수 변화 y축2 (점포)
+              const ydata3_2 = [] // 점포수 변화 y축2 (프렌차이즈)
+
+              const ydata4 = [] // 우리구 점포수 변화 y축1 (전체)
+              const ydata4_1 = [] // 우리구 점포수 변화 y축2 (점포)
+              const ydata4_2 = [] // 우리구 점포수 변화 y축2 (프렌차이즈)
+               // 라벨
+
+              // 점포 수 변화 그래프
+              for(var i=0;i<data.curiouslegion_shop.length;i++){
+                {ydata3.push(data.curiouslegion_shop[i].전체)
+                ydata3_1.push(data.curiouslegion_shop[i].점포)
+                ydata3_2.push(data.curiouslegion_shop[i].프렌차이즈)}
+              } 
+
+            const ctx3 = document.getElementById('myChart1').getContext('2d');
+            const myChart3 = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels:x2data,
+                    datasets: [{
+                        label: '{{request.session.session_CuriousLEGION}} 전체',
+                        data: ydata3,
+                        backgroundColor:'#24BEFF',
+                        borderColor:'#24BEFF',
+                        fill:false,
+                        borderWidth: 1,
+                        lineTension: 0
+                    },{
+                      label: '{{request.session.session_CuriousLEGION}} 개인',
+                      data: ydata3_1,
+                      backgroundColor:'#EB77A6',
+                      borderColor:'#EB77A6',
+                      fill:false,
+                      borderWidth: 1,
+                      lineTension: 0
+                  },{
+                    label: '{{request.session.session_CuriousLEGION}} 프렌차이즈',
+                    data: ydata3_2,
+                    borderWidth: 1,
+                    backgroundColor:'#68D89B',
+                    borderColor:'#68D89B',
+                    fill:false,
+                    borderWidth: 1,
+                    lineTension: 0
+
+
+                }]
+                },
+                options: {
+                  responsive: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                              beginAtZero: true,
+                              callback: function(value, index) {
+                                return value.toLocaleString("ko-KR") +"개"; 
+                              }
+                            },
+                            y: {
+                                beginAtZero: true
+                            }
+                          }]
+                      
+                      }
+                    }
+            }); //chart
+
+
+              // 우리구 점포 수 변화 그래프
+              for(var i=0;i<data.curiouslegion_shop_our.length;i++){
+                {ydata4.push(data.curiouslegion_shop_our[i].전체)
+                  ydata4_1.push(data.curiouslegion_shop_our[i].점포)
+                  ydata4_2.push(data.curiouslegion_shop_our[i].프렌차이즈)}
+              } 
+
+
+            const ctx4 = document.getElementById('myChart1_1').getContext('2d');
+            const myChart4 = new Chart(ctx4, {
+                type: 'line',
+                data: {
+                    labels:x2data,
+                    datasets: [{
+                        label: '{{request.session.session_LEGION}} 전체',
+                        data: ydata4,
+                        backgroundColor:'#24BEFF',
+                        borderColor:'#24BEFF',
+                        fill:false,
+                        borderWidth: 1,
+                        lineTension: 0
+                    },{
+                      label: '{{request.session.session_LEGION}} 개인',
+                      data: ydata4_1,
+                      backgroundColor:'#EB77A6',
+                      borderColor:'#EB77A6',
+                      fill:false,
+                      borderWidth: 1,
+                      lineTension: 0
+                  },{
+                    label: '{{request.session.session_LEGION}} 프렌차이즈',
+                    data: ydata4_2,
+                    borderWidth: 1,
+                    backgroundColor:'#68D89B',
+                    borderColor:'#68D89B',
+                    fill:false,
+                    borderWidth: 1,
+                    lineTension: 0
+
+
+                }]
+                },
+                options: {
+                  responsive: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                              beginAtZero: true,
+                              callback: function(value, index) {
+                                return value.toLocaleString("ko-KR") +"개"; 
+                              }
+                            },
+                            y: {
+                                beginAtZero: true
+                            }
+                          }]
+                      
+                      }
+                    }
+            }); //chart
+
+
+
+
+
+
+              //업종별 매출
+              for(var i=0;i<data.curiouslegion.length;i++){
+
+                  if(data.curiouslegion[i]['년도']=='2021' && data.curiouslegion[i]['분기']=='4'){
+                      ydata.push(data.curiouslegion[i]['전체'])
+                      xdata.push(data.curiouslegion[i]['년도'])
+                  }
+              }            
+
+              //최대값 찾기
+              const max =Math.max.apply(null, Object.values(ydata))
+
+              const color_a = 'rgba(54, 162, 235, 0.8)'
+              const color_b = 'rgba(54, 162, 235, 1)'
+              const color_c =[color_a,color_a,color_a,color_a,
+              color_a,color_a,color_a,color_a,color_a,
+              color_a,color_a,color_a,color_a,
+              color_a,color_a,color_a,color_a,
+              color_a,color_a,color_a,color_a,
+              color_a,color_a,color_a,color_a]               
+              const color_d =[color_b,color_b,color_b,color_b,
+              color_b,color_b,color_b,color_b,color_b,
+              color_b,color_b,color_b,color_b,
+              color_b,color_b,color_b,color_b,
+              color_b,color_b,color_b,color_b,
+              color_b,color_b,color_b,color_b]
+              for(var i=0; i< 25;i++)
+                  if (max==ydata[i]){
+                  color_c[i]='rgba(255, 99, 132, 0.8)'
+                  color_d[i]='rgba(255, 99, 132, 1)'
+              }
+
+              const ctx = document.getElementById('myChart2').getContext('2d');
+              const myChart = new Chart(ctx, {
+                  type: 'bar',
+                  data: {
+                      labels: ['한식','중식','일식','양식','제과점','패스트푸드점','치킨','분식','호프-간이주점','커피-음료'],
+                      datasets: [{
+                          label: '{{request.session.session_CuriousLEGION}} 매출',
+                          data: ydata,
+                          backgroundColor: color_c,
+                          borderColor: color_d,
+                          borderWidth: 1
+                      }]
+                  },
+                  options: {
+                      responsive: false,
+                      scales: {
+                          yAxes: [{
+                              ticks: {
+                                beginAtZero: true,
+                                callback: function(value, index) {
+                                  if(value.toString().length > 8) return (Math.floor(value / 100000000)).toLocaleString("ko-KR") + "억";
+                                  else if(value.toString().length > 4) return (Math.floor(value / 10000)).toLocaleString("ko-KR") + "만";
+                                  else return value.toLocaleString("ko-KR"); 
+                                }
+                              },
+                            }]
+                      }
+                  
+                  
+                  }//options
+              });//chart
+              
+              
+              
+              
+              //우리구 업종별 매출
+              for(var i=0;i<data.Ourlegion.length;i++){
+
+                  if(data.Ourlegion[i]['년도']=='2021' && data.Ourlegion[i]['분기']=='4'){
+                      ydata1.push(data.Ourlegion[i]['전체'])
+                      xdata1.push(data.Ourlegion[i]['년도'])
+                  }
+              }            
+
+              //최대값 찾기
+              const max5 =Math.max.apply(null, Object.values(ydata1))
+
+              const color_a2 = 'rgba(54, 162, 235, 0.8)'
+              const color_b2 = 'rgba(54, 162, 235, 1)'
+              const color_c2 =[color_a2,color_a2,color_a2,color_a2,
+              color_a2,color_a2,color_a2,color_a2,color_a2,
+              color_a2,color_a2,color_a2,color_a2,
+              color_a2,color_a2,color_a2,color_a2,
+              color_a2,color_a2,color_a2,color_a2,
+              color_a2,color_a2,color_a2,color_a2]               
+              const color_d2 =[color_b2,color_b2,color_b2,color_b2,
+              color_b2,color_b2,color_b2,color_b2,color_b2,
+              color_b2,color_b2,color_b2,color_b2,
+              color_b2,color_b2,color_b2,color_b2,
+              color_b2,color_b2,color_b2,color_b2,
+              color_b2,color_b2,color_b2,color_b2]
+              for(var i=0; i< 25;i++)
+                  if (max5==ydata1[i]){
+                  color_c2[i]='rgba(255, 99, 132, 0.8)'
+                  color_d2[i]='rgba(255, 99, 132, 1)'
+              }
+
+              const ctx5 = document.getElementById('myChart2_1').getContext('2d');
+              const myChart5 = new Chart(ctx5, {
+                  type: 'bar',
+                  data: {
+                      labels: ['한식','중식','일식','양식','제과점','패스트푸드점','치킨','분식','호프-간이주점','커피-음료'],
+                      datasets: [{
+                          label: '{{request.session.session_LEGION}} 매출',
+                          data: ydata1,
+                          backgroundColor: color_c2,
+                          borderColor: color_d2,
+                          borderWidth: 1
+                      }]
+                  },
+                  options: {
+                      responsive: false,
+                      scales: {
+                          yAxes: [{
+                              ticks: {
+                                beginAtZero: true,
+                                callback: function(value, index) {
+                                  if(value.toString().length > 8) return (Math.floor(value / 100000000)).toLocaleString("ko-KR") + "억";
+                                  else if(value.toString().length > 4) return (Math.floor(value / 10000)).toLocaleString("ko-KR") + "만";
+                                  else return value.toLocaleString("ko-KR"); 
+                                }
+                              },
+                            }]
+                      }
+                  
+
+                  }//options
+              });//chart
+
+
+              // 업종별 각 지역별 매출 비교
+              for(var i=0;i<data.curioussector.length;i++){
+
+                if(data.curioussector[i]['년도']=='2021' && data.curioussector[i]['분기']=='4'){
+                    y1data.push(data.curioussector[i]['전체'])
+                    x1data.push(data.curioussector[i]['지역'])
+                }
+              }            
+
+              //최대값 찾기
+              const max2 =Math.max.apply(null, Object.values(y1data))
+
+              const color_a1 = 'rgba(54, 162, 235, 0.8)'
+              const color_b1 = 'rgba(54, 162, 235, 1)'
+              const color_c1 =[color_a1,color_a1,color_a1,color_a1,
+              color_a1,color_a1,color_a1,color_a1,color_a1,
+              color_a1,color_a1,color_a1,color_a1,
+              color_a1,color_a1,color_a1,color_a1,
+              color_a1,color_a1,color_a1,color_a1,
+              color_a1,color_a1,color_a1,color_a1]               
+              const color_d1 =[color_b1,color_b1,color_b1,color_b1,
+              color_b1,color_b1,color_b1,color_b1,color_b1,
+              color_b1,color_b1,color_b1,color_b1,
+              color_b1,color_b1,color_b1,color_b1,
+              color_b1,color_b1,color_b1,color_b1,
+              color_b1,color_b1,color_b1,color_b1]
+              for(var i=0; i< 25;i++)
+                  if (max2==y1data[i]){
+                  color_c1[i]='rgba(255, 99, 132, 0.8)'
+                  color_d1[i]='rgba(255, 99, 132, 1)'
+              }
+
+              const ctx2 = document.getElementById('myChart3').getContext('2d');
+              const myChart2 = new Chart(ctx2, {
+                  type: 'bar',
+                  data: {
+                      labels: x1data,
+                      datasets: [{
+                          label: '{{request.session.session_CuriousSECTOR}} 지역별 매출',
+                          data: y1data,
+                          backgroundColor: color_c1,
+                          borderColor: color_d1,
+                          borderWidth: 1
+                      }]
+                  },
+                  options: {
+                      
+                      scales: {
+                          yAxes: [{
+                              ticks: {
+                                beginAtZero: true,
+                                callback: function(value, index) {
+                                  if(value.toString().length > 8) return (Math.floor(value / 100000000)).toLocaleString("ko-KR") + "억";
+                                  else if(value.toString().length > 4) return (Math.floor(value / 10000)).toLocaleString("ko-KR") + "만";
+                                  else return value.toLocaleString("ko-KR"); 
+                                }
+                              },
+                            }]
+                      }
+                  
+
+                  }//options
+              });//chart
+            
+
+            if ({{request.session.session_LEGION}}=='금천구'){
+
+            }else if({{request.session.session_LEGION}}=='강남구'){
+
+            }
+
+          
+
+
+
+
+          },//SUCCESS
+          error:function(){
+
+          }
+      })//ajax
+   
+  })//function
+</script>
+
+
+<title>상권에 진심, 부루주아</title>
+
+<meta name="viewport" content="width=device-width, user-scalable=no, width=1366">
+<meta property="og:type" content="website">
+<meta property="og:image" ogImage content="https://static/resource/MO/images/jejupass_new-logo_og.png">
+<meta property="og:site_name" siteName content="제주패스">
+<meta property="og:locale" content="ko_KR">
+<link rel="shortcut icon" href="{% static 'resource/PC/images/favicon/favicon6654.ico?v1' %}">
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/favicon-32x326654.png?v1' %}" sizes="32x32">
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/favicon-16x166654.png?v1' %}"  sizes="16x16">
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/favicon-96x966654.png?v1' %}" sizes="96x96">
+<link rel="apple-touch-icon-precomposed" href="{% static 'resource/PC/images/favicon/apple-icon-120x1206654.png?v1' %}" sizes="120x120">
+<link rel="apple-touch-icon-precomposed" href="{% static 'resource/PC/images/favicon/apple-icon-180x1806654.png?v1' %}" sizes="180x180">
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/android-icon-192x1926654.png?v1' %}" sizes="192x192">
+<link rel="shortcut icon" type="image/x-icon" href="{% static 'resource/PC/images/favicon/favicon.ico' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'resource/PC/css/p_common.min.css' %}" >
+<link rel="stylesheet" type="text/css" href="{% static 'resource/PC/css/p_contents.min.css' %}">
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=da00da7d30a63e675ee778813874e63b"></script>
+
+</head>
+
+<body class="wrapper mainWrapper">
+<p class="skip"><a href="#container">본문 바로가기</a></p>
+
+<section id="wrapper">
+
+  <header>
+    <h1 class="topLogo"><a href="{% url 'web'%}">bourgeois</a></h1>
+  <nav>
+    <div class="navList">
+      <h2><a href="{% url 'analytics:inner' %}">지역별 분석</a></h2>
+      <h2><a href="{% url 'navertrend:search_page' %}">네이버 트렌드</a></h2>
+      <h2><a href="{% url 'adminpage:fList' nowpage=1 nowpage=1 category='first' searchword='first' %}">Q&A게시판</a></h2>
+      {% if request.session.session_ID == "반갑습니다" %}
+      
+      {% elif request.session.session_ID %}
+      <h2><a href="{% url 'membership:myApageopen' %}">MY분석</a></h2>
+      {% else %}
+      <h2><a href="{% url 'membership:signup' %}">가입하여 MY분석보기</a></h2>
+      {% endif %}
+    </div>
+
+  </nav>
+  <div class="topUtil">
+    {% if request.session.session_ID == "반갑습니다" %}
+     <a href="{% url 'membership:logout' %}" class="logout">로그아웃</a>
+     <a href="{% url "adminpage:list"  nowpage=1 category='first' searchword='first'  %}" class="mypage">회원관리</a>
+    {% elif request.session.session_ID %}
+      <a href="{% url 'membership:logout' %}" class="logout">로그아웃</a>
+      <a href="{% url 'membership:mypage' %}" class="mypage">마이페이지</a>
+    {% else %}
+      <a href="{% url 'membership:login' %}" class="login">로그인</a>
+    {% endif %}
+    <ul class="navEtc">
+    </ul>
+  </div>
+  <style>
+    .area {
+      position: absolute;
+      background: #fff;
+      border: 1px solid #888;
+      border-radius: 3px;
+      font-size: 20px;
+      top: -5px;
+      left: 15px;
+      padding:2px;
+  }
+  
+  </style>
+</header>
+<style>
+  .k1_flight_panel{width: 340%;}
+  #tit_area,#area{border: none; height: 27px;}
+  .content_box{ border-radius: 0.7em;  box-shadow: 0 8px 16px 0 rgba(35, 0, 104, 0.16)}
+  td{text-align:center;}
+  #msg_1{text-align:center; height: 7;}
+  th{color: rgba(124, 159, 224); height: 40; font-weight: 700;}
+  .direction_box{margin-bottom: 20px; padding: 30;}
+  .bottom_h4 {color: gray; text-align: right;}
+</style>
+
+<!--검색 시작-->
+<div id="main_rentSearch" class="k1_section_multi section_rent sectionON">
+  <form name="search" method="post" id="search"> 
+  {% csrf_token %}
+
+        <div class="kf_innergray">
+
+          <div class="kf_flightInner" >
+            <ul class="k1_flight_panel" style="width: 100%">
+              <li class="k1_area ">
+                <p class="tit" id="tit_area">업종을 선택하세요.</p>
+                <select name="area" id="area" >
+                  <option value="한식">한식</option>
+                  <option value="중식">중식</option>
+                  <option value="일식">일식</option>
+                  <option value="양식">양식</option>
+                  <option value="제과점">제과점</option>
+                  <option value="패스트푸드">패스트푸드</option>
+                  <option value="치킨">치킨</option>
+                  <option value="분식">분식</option>
+                  <option value="호프-간이주점">호프-간이주점</option>
+                  <option value="커피-음료">커피-음료</option>
+               </select>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="kf_flightInner kf_rentcarCondition">
+              <ul class="k1_flight_panel">
+                  <li class="k1_area">
+                      <p class="tit" id="tit_area">지역과 업종을 분석해 최적의 매칭을 찾아냅니다. 분석을 원하시는 지역과 선택하세요.</p>
+                      <select name="area" id="area" >
+                        <option value="강남구">강남구</option>
+                        <option value="강동구">강동구</option>
+                        <option value="강북구">강북구</option>
+                        <option value="강서구">강서구</option>
+                        <option value="관악구">관악구</option>
+                        <option value="광진구">광진구</option>
+                        <option value="구로구">구로구</option>
+                        <option value="금천구">금천구</option>
+                        <option value="노원구">노원구</option>
+                        <option value="도봉구">도봉구</option>
+                        <option value="동대문구">동대문구</option>
+                        <option value="동작구">동작구</option>
+                        <option value="마포구">마포구</option>
+                        <option value="서대문구">서대문구</option>
+                        <option value="서초구">서초구</option>
+                        <option value="성동구">성동구</option>
+                        <option value="성북구">성북구</option>
+                        <option value="송파구">송파구</option>
+                        <option value="양천구">양천구</option>
+                        <option value="영등포구">영등포구</option>
+                        <option value="용산구">용산구</option>
+                        <option value="은평구">은평구</option>
+                        <option value="종로구">종로구</option>
+                        <option value="중구">중구</option>
+                        <option value="중랑구">중랑구</option>
+                     </select>
+
+                  </li>
+              </ul>
+        </div><!--kf_flightInner-->
+    
+          <style>#searchBtn:hover{font-size: 2rem; background:rgb(51, 51, 52);} </style>
+          <button type="button" class="k1_btn_price_search" id='searchBtn'  >검색</button>
+      </div>
+
+  </form> <!--search-->
+</div> <!--main_rentSearch-->
+<!-- 검색 섹션 끝 -->
+
+
+
+<div id="container" class="container" style="margin-top: -55px;">
+  <div class="direction_box content_box" style="background-color: #f8f8f8; text-align:center; width: 600px; margin: 0 auto; margin-top: 50px;" >
+    <br> <p><strong>관심 지역 : 금천구🤩</strong></p>
+    <br>금천구는 <span style="color: #FC766AFF;">60대(24%)</span>가 가장 많으며, <span style="color: #FC766AFF;">남성(53%)</span>이 여성보다 많습니다. 
+    <br><span style="color: #FC766AFF;">주중 매출(77%)</span>이 주말 매출에 비해 높으며,  <span style="color: #FC766AFF;">프랜차이즈 점포 비중(19%)</span>이 서울시 평균 16%보다 높은편입니다.
+    <br>금천구 음식점 카테고리의 매출은 전분기 대비 <span style="color: #FC766AFF;">7%상승</span>하였고, <br>점포 수는 전분기 대비 <span style="color: #FC766AFF;">135개 상승</span>하였습니다.  
+    <br> 자세한분석은 <a href="{% url 'analytics:inner' %}"><span style="color: rgba(54, 162, 235, 0.8)">지역구분석</span></a>에서 확인하세요.
+
+    <br><br><p><strong>관심 업종 : 패스트푸드점🍔</strong></p>
+    <br>서울시 전체의 데이터를 바탕으로 분석한 결과
+    <br><span style="color: #FC766AFF;">20대 남성</span>의 매출이 가장 높으며, <span style="color: #FC766AFF;">금요일, 17~21시</span>의 매출이 가장 높습니다.  
+
+    <br><br><p><strong>🧐업종 x 지역 매칭결과</strong></p>
+    <br>금천구는 패스트푸드점 창업에 <span style="color: #FC766AFF;">적합하지 않습니다 </span> <br>
+    <table>
+      <tr>
+        <td></td>
+        <td>관심 지역</td>
+        <td>관심 업종</td>
+      </tr>
+      <tr>
+        <td>❌인구분포</td>
+        <td>60대</td>
+        <td>20대</td>
+      </tr>
+      <tr>
+        <td>⭕성별매출</td>
+        <td>남성</td>
+        <td>남성</td>
+      </tr>
+      <tr>
+        <td>⭕주말/주중</td>
+        <td>주중</td>
+        <td>주중</td>
+      </tr>
+
+    </table>
+
+
+  </div>
+
+
+  <div id="contents" class="contents rentcarMainContests">
+            
+
+            <h3 class="titDep2" id="ch1">최근 3년 {{request.session.session_CuriousLEGION}}/{{request.session.session_LEGION}} {{request.session.session_CuriousSECTOR}} 점포 수 변화</h3>
+            <div class="direction_box content_box" id="ch001" style="text-align:left;" >{{request.session.session_CuriousLEGION}}의 경우 {{request.session.session_CuriousSECTOR}} 전체 점포의 수가 <span style="color: #FC766AFF;">증가</span>하고 있으며, {{request.session.session_LEGION}}의 경우 <span style="color: #FC766AFF;">정체</span>하고 있습니다.
+              <br>관심지역과 생활권의 상황을 비교하여 출점할 곳을 고려하시기 바랍니다. 
+              <br>전체 점포 수의 경우 지난 4분기 동안 {{request.session.session_CuriousLEGION}}가 <span style="color: #FC766AFF;">상승</span>하는 추세이며, {{request.session.session_LEGION}}의 경우 <span style="color: #FC766AFF;">정체</span>하고 있으니 출점에 신중하시기 바랍니다.
+            </div>
+            <br>
+            <div class="content_box">
+                {% comment %} <h4 class="" id="ch1">최근 {{request.session.session_CuriousLEGION}} {{request.session.session_CuriousSECTOR}} 점포 수 변화</h4> {% endcomment %}
+                <canvas id="myChart1" width="560" height="567" style="display: block; float: left;">
+                </canvas>
+                {% comment %} <h4 class="" id="ch1_1" style="margin-top:30px;">최근 {{request.session.session_LEGION}} {{request.session.session_CuriousSECTOR}} 점포 수 변화</h4> {% endcomment %}
+                <canvas id="myChart1_1" width="560" height="567" style="display: block;">
+                </canvas>
+            </div>
+            <h4 style="color: gray; text-align: right;">점포 추이분석</h4>
+            
+            <!-- 차트 끝 -->
+
+            
+            <h3 class="titDep2" id="ch2">최근 {{request.session.session_CuriousLEGION}}/{{request.session.session_LEGION}} 업종별 매출</h3>
+            <div class="direction_box content_box" id="ch002" style="text-align:left;" >최근 {{request.session.session_CuriousLEGION}}에서 가장 높은 매출을 보이는 업종은 <span style="color: #FC766AFF;">한식</span>입니다.
+              <br>{{request.session.session_LEGION}}의 경우에는 가장 높은 매출을 보이는 업종은 <span style="color: #FC766AFF;">한식</span>이며, 관심업종인 {{request.session.session_CuriousSECTOR}}의 경우 {{request.session.session_CuriousLEGION}}에서 <span style="color: #FC766AFF;">9번째</span>, {{request.session.session_LEGION}}에서의 경우 <span style="color: #FC766AFF;">7번째</span>로 높습니다.
+              <br>{{request.session.session_CuriousLEGION}}에서 보다 {{request.session.session_LEGION}}에서 절대 매출이 높으므로 출점을 고려해보시기 바랍니다.</div>
+            <br>
+            <div class="content_box">
+
+              <canvas id="myChart2" width="560" height="567"  style="display: block; float: left;">
+              </canvas>
+             
+              <canvas id="myChart2_1" width="560" height="567" style="display: block;">
+              </canvas>
+            </div>
+            <h4 style="color: gray; text-align: right;">최고매출 업종 분석</h4>
+            
+            <!-- 차트 끝 -->
+
+
+            <!-- 차트 끝 -->
+
+
+            <h3 class="titDep2" id="ch3" >최근 {{request.session.session_CuriousSECTOR}} 지역별 매출 비교</h3>
+            <div class="direction_box content_box" id="ch003" style="text-align: left;" >{{request.session.session_CuriousSECTOR}}의 매출은 현재 <span style="color: #FC766AFF;">영등포구</span>가 가장 높습니다.
+              <br>해당업종에 대한 특성을 파악하여 관심지역 또는 생활권 보다 높은 곳에 출점을 고려하시기 바랍니다.
+              <br>이미 {{request.session.session_CuriousSECTOR}}을 출점하셨을 경우에는 가장 높은 매출을 보이는 구의 지역분석을 참고하시어, 마케팅 및 판매를 강화하시기 바랍니다.</div>
+            <br>
+            <div class="content_box">
+              <canvas id="myChart3" >
+              </canvas>
+            </div>
+            <h4 style="color: gray; text-align: right;">최근 관심업종 지역별 매출비교</h4>
+            
+            <!-- 차트 끝 -->
+            <h3 class="titDep2"  style="margin-bottom: 80px; ">🧐멤버십 회원에게는 더 고도화된 데이터, 다양한 부가 기능, 더 쾌적한 서비스 환경 등의 혜택이 제공됩니다.</h3>
+            <div class="container"  style="margin-bottom: -500px; ">
+                <style>
+
+                    .box_l{    
+                        font-size: 10px;
+                        font-family: "Noto Sans KR", sans-serif;
+                        line-height: normal;
+                        word-break: keep-all;
+                        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                        touch-action: manipulation;
+                        text-align: ceneter;
+                    
+                        margin-bottom: 6rem;
+                        display: flex;
+                        flex-wrap: wrap;
+                        position: relative;
+                        padding-bottom: 20px;
+                    }
+
+                    .inner_l{
+                    
+                        width: 100%;
+                        max-width: 120rem;
+                        margin: auto;
+                        display: flex;
+                        flex-wrap: wrap;
+                        }
+
+                    .pricecard_1,.pricecard_2,.pricecard_3{
+                        margin: 0% 1.5%;
+                        padding: 3rem;
+                        box-sizing: border-box;
+                        background-color: rgb(255, 255, 255);
+                        border-radius: 1.6rem;
+                        box-shadow: rgb(0 0 0 / 15%) 0rem 0.8rem 2rem 0rem;
+                        transition: all 0.3s ease 0s;
+                        position: relative;
+                        overflow: hidden;
+                        max-width: 30.333%;
+                        flex: 0 0 30.333%;
+                    }
+                    .ribbon {
+                        width: 10rem;
+                        height: 2.5rem;
+                        padding-bottom: 0.2rem;
+                        background-color: rgb(54, 149, 255);
+                        color: rgb(255, 255, 255);
+                        font-size: 1.4rem;
+                        font-weight: 600;
+                        cursor: default;
+                        display: flex;
+                        -webkit-box-pack: center;
+                        justify-content: center;
+                        -webkit-box-align: center;
+                        align-items: center;
+                        position: absolute;
+                        top: 0px;
+                        right: 0px;
+                        transform: translateY(-100%) rotate(90deg) translateX(70.7107%) rotate(-45deg);
+                        transform-origin: right bottom;
+                    }
+
+                    .top_section{ margin-bottom: 2rem; text-align: center;}
+                    .word_1 {
+                        width: 0.6rem;
+                        height: 0.6rem;
+                        display: inline-block;
+                        border-radius: 0.8rem;
+                    }
+                    
+                    #word_1_dot1{background-color: rgb(51, 51, 52);}
+                    #word_1_dot2{background-color: rgb(0, 198, 133);}
+                    #word_1_dot3{background-color: rgb(255, 109, 110);}
+
+                    .word_2 {
+                        font-size: 1.8rem;
+                        font-weight: 500;
+                        margin-bottom: 2rem;
+                        text-align: center;
+                    }
+
+                    .mid_section {
+                        margin-bottom: 2.5rem;
+                        text-align: center;
+                    }
+
+                    .price_word {
+                        position: relative;
+                        font-weight: 600;
+                        font-size: 3.6rem;
+                        box-sizing: border-box;
+                        font-family: sans-serif;
+                        color: rgb(51, 51, 52);
+                    }
+
+                    .date_word {
+                        font-size: 1.6rem;
+                        font-weight: 300;
+                        color: rgb(134, 134, 136);
+                    }
+
+                    .bot_section {
+                        margin-bottom: 1rem;
+                        text-align: center;
+                    }
+
+                    .action_btn_1{
+                        padding: 1rem 2.4rem;
+                        font-size: 1.4rem;
+                        font-weight: 400;
+                        color: rgb(255, 255, 255);
+                        background-color: rgb(54, 149, 255);
+                        border: 0.1rem solid rgb(54, 149, 255);
+                        border-radius: 0.6rem;
+                        white-space: nowrap;
+                        transition: all 0.3s ease 0s;
+                    }
+
+                    .action_btn_1:hover{font-size: 1.8rem; font-weight: 500;}
+
+                    .action_btn_2{
+                        padding: 1rem 2.4rem;
+                        font-size: 1.4rem;
+                        font-weight: 400;
+                        color: rgb(84, 84, 86);
+                        background-color: rgb(255, 255, 255);
+                        border: 0.1rem solid rgb(134, 134, 136);
+                        border-radius: 0.6rem;
+                        white-space: nowrap;
+                        transition: all 0.3s ease 0s;
+                    }
+                    .action_btn_2:hover{background-color: rgb(51, 51, 52); color: rgb(255, 255, 255); font-size: 1.8rem; font-weight: 500;}
+
+                    #plan_link{
+                        margin-bottom: 8rem;
+                        display: flex;
+                        -webkit-box-pack: center;
+                        justify-content: center;
+                    }
+                    #plan_link_btn{
+                        margin: 0rem 0.6rem;
+                        padding: 1.4rem 3.2rem;
+                        font-size: 1.8rem;
+                        font-weight: 600;
+                        white-space: nowrap;
+                        border-radius: 1rem;
+                        cursor: pointer;
+                        transition: all 0.5s ease 0s;
+                    }
+                            
+                    #plan_link_btn:hover{ font-size: 2rem; font-weight: 700;}
+                </style>
+
+                <!--플랜 섹션 시작-->
+                <div class="box_l">
+                    <div class="inner_l">
+                        <div class="pricecard_1">
+                            <div class="ribbon">FREE</div>
+                            <div class="top_section">
+                                <div class="word_1" id="word_1_dot1" ></div>
+                                <div class="word_2">베이직</div>
+                            </div>
+                            <div class="mid_section">
+                                <span class="price_word">₩ 12,000</span>
+                                <br>
+                                <span class="date_word" >/ 30일</span>
+                            </div>
+                            <div class="bot_section">
+                                <button class="action_btn_1">14일 무료체험</button>
+                            </div>
+                        </div>
+                        <div class="pricecard_2">
+                            <div class="top_section">
+                                <div class="word_1" id="word_1_dot2"></div>
+                                <div class="word_2">스탠다드</div>
+                            </div>
+                            <div class="mid_section">
+                                <span class="price_word">₩ 27,000</span>
+                                <br>
+                                <span class="date_word" >/ 30일</span>
+                            </div>
+                            <div class="bot_section">
+                                <button class="action_btn_2">구독하기</button>
+                            </div>
+                        </div>
+                        <div class="pricecard_3">
+                            <div class="top_section">
+                                <div class="word_1" id="word_1_dot3"></div>
+                                <div class="word_2">프리미엄</div>
+                            </div>
+                            <div class="mid_section">
+                                <span class="price_word">₩ 81,000</span>
+                                <br>
+                                <span class="date_word" >/ 30일</span>
+                            </div>
+                            <div class="bot_section">
+                                <button class="action_btn_2">구독하기</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                </div>
+                <div id="plan_link">
+                    <button id="plan_link_btn" style="color: rgb(247, 247, 248); background-color: rgb(35, 35, 36); border: 0.2rem solid rgb(35, 35, 36);">플랜별 기능 비교하기</button>
+                </div>
+                <!--플랜 섹션 끝-->
+            
+     
+            
+            
+            
+            
+              </div>
+
+
+
+            
+
+            {% comment %} 
+			<h3 class="titDep2">테마스토리</h3>
+			<div class="swiperWrap swiperDefault swiperMain" data-options='{"loop": true, "Spacebetween": 16, "view" : 3, "group" :3}'>
+				<div class="swiper-container">
+					<ul class="swiper-wrapper" id="storyList">
+					</ul>
+				</div>
+			</div>
+			
+			<ul class="mainTag" id="keywordList" storyTags>
+			</ul>
+			 {% endcomment %}
+
+            <!--데이터 세부분석 레퍼-->
+            <!--데이터 세부분석 레퍼끝-->
+
+
+
+        
+
+            {% comment %}             
+			<div class="mainCont">
+
+				<div class="mainCont">
+					<h3 class="titDep2">서비스 이용안내</h3>
+					<ul class="mainIcon">
+						<li class="reservation"><a href="../help.jejupass.com/web/help/notice/RENTCAR/2249a4.html?tabCode=RENTCAR"><span>렌터카 예약안내</span></a></li>
+		                <li class="insurance"><a href="../help.jejupass.com/web/help/notice/RENTCAR/2149a4.html?tabCode=RENTCAR"><span>렌터카 보험안내</span></a></li>
+		                <li class="return"><a href="../help.jejupass.com/web/help/notice/RENTCAR/349a4.html?tabCode=RENTCAR"><span>렌터카 인수반납</span></a></li>
+		                <li class="info"><a href="../cafe.jejupass.com/web/buyGuide.html"><span>카페패스 이용안내</span></a></li>
+		                <li class="cancellation"><a href="../help.jejupass.com/web/help/notice/COMMON/25e22c.html?tabCode=AIR"><span>결항안내</span></a></li>
+		                <li class="refund"><a href="../help.jejupass.com/web/help/notice/COMMON/26849c.html?tabCode=ALL"><span>취소/환불 안내</span></a></li>
+					</ul>
+					<div class="mainNews">
+						<div class="txt">
+							<h4 class="titDep3">제주패스 뉴스레터 구독하기</h4>
+							<p class="desc">매주 제주의 속깊은 이야기를 받아보세요!</p>
+						</div>
+						<div class="email">
+							<input type="text" placeholder="구독신청 이메일을 입력해주세요." subscriptionsInp>
+							<button type="button" class="btnDefault btnL action" subscriptionsBtn>신청</button>
+						</div>
+					</div>
+				</div>
+			</div> 
+            {% endcomment %}
+			<!-- //컨텐츠 영역 -->
+    </div>
+    </div>
+</div>
+
+  
+
+</section><!-- //wrapper -->
+
+
+<footer>
+  <div class="footTop">
+    <div class="footInner">
+      <ul class="footMenu">
+        <li><strong class="tit">부르주아</strong><a href="#" role="button">회사소개</a><a href="#" role="button">회원혜택 안내</a></li>
+        <li><strong class="tit">고객센터</strong><a href="#" role="button">공지사항</a><a href="#" role="button">자주찾는질문</a><a href="#" role="button">예약확인</a></li>
+        <li><strong class="tit">ESG</strong><a href="#" role="button">그린 앰버서더</a><a href="#" role="button">캠페인 기부</a></li>
+      </ul>
+      <div class="footAppDown">
+        <h5>App 다운로드</h5>
+        <span class="txt">부르주아 앱 설치하고 <br>더 편리하게 이용하세요.</span>
+        <ul class="appLink">
+          <li><button type="button" class="google" onclick="location.href='#';">구글플레이</button></li>
+          <li><button type="button" class="ios" onclick="location.href='#';">앱스토어</button></li>
+        </ul>
+      </div>
+      <div class="footCenter">
+        <h5>전화예약 / 고객상담</h5>
+        <span class="txt">이용에 궁금하신 점이 <br>있으신가요?</span>
+        <div class="callInfo">
+          <p class="callNum">1544-0445</p>
+          <ul class="callTime">
+            <li><span class="tit">평일</span>09:00 ~ 18:00</li>
+            <li><span class="tit">점심시간</span>12:00 ~ 13:00</li>
+          </ul>
+        </div>
+        <div class="snsList">
+          <a href="#" role="button" target="_blank" class="insta">인스타그램</a>
+          <a href="#" role="button" target="_blank" class="blog">네이버 블로그</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footBtm">
+    <div class="footInner">
+      <ul class="footMenu">
+        <li><a href="web/policy/privacy.html" role="button">개인정보처리방침</a></li>
+        <li><a href="web/policy/use.html" role="button">이용약관</a></li>
+      </ul>
+      <p class="txtFoot">
+        <span>(주)부르주아 대표이사 : 이현창</span>
+        <span>사업자등록번호 : 105-87-76000 <a class="btns" href="../www.ftc.go.kr/bizCommPop64eb.html?wrkr_no=1058776000" target="_blank">사업자정보조회</a>
+				</span>
+        <span>
+					통신판매신고 제2015-제주연동-43호
+				</span>
+        <span>관광사업자 등록번호 : 제2021-08호</span>
+      </p>
+      <p class="txtFoot" style="margin:0">
+        <span>제주특별자치도 제주시 신광로 21, 4층 (우)63125</span>
+      </p>
+      <p class="txtFoot02">
+        (주)부르주아는 개별 분석 및 상품에 대하여 정보제공자로서 판매의 당사자가 아니며 해당상품의 거래정보 및 거래 등에 대해 책임을 지지 않습니다.
+        <br/>
+        (주)부르주아는 정보제공 파트너사가 제공하는 정보에 대하여 정보중개자의 지위를 가지며, 해당 상품, 해당 정보, 거래에 관한 의무와 책임은 판매자에게 있습니다.
+      </p>
+
+      <p class="txtCopy">
+        <span>Copyright ⓒ BOURGEOIS All Rights Reserved</span>
+      </p>
+      <div class="footEtc">
+        <span>SECURED BY RapidSSL</span>
+        <span>WEB AWARD 수상</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<div class="dimmed"></div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원상세페이지</title>
+    <style>
+        table,th,td{border:1px solid black; border-collapse:collapse;
+        text-align:center;}
+        table{width:600px; }
+        th{width:300px; height:40px; background:#eee;}
+        td{height:30px;}
+        button{width:100px; height:30px; cursor:pointer;}
+        article{width:600px; text-align:right;}
+    </style>
+    <script>
+        function deleteBtn(){
+            if(confirm('정말 삭제하시겠습니까? 삭제시 복구가 안됩니다.')){
+                location.href="{% url 'adminpage:memberDelete' member.ID %}"
+            }else{
+                return false
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>회원 상세 페이지</h2>
+    <table>
+        <tr>
+            <th>제목</th>
+            <th>내용</th>
+        </tr>
+        <tr>
+            <td>아이디</td>
+            <td>{{ member.ID }}</td>
+        </tr>
+        <tr>
+            <td>이름</td>
+            <td>{{ member.NAME }}</td>
+        </tr>
+        <tr>
+            <td>성별</td>
+            <td>{{ member.GENDER }}</td>
+        </tr>
+        <tr>
+            <td>나이</td>
+            <td>{{ member.AGE }}</td>
+        </tr>
+        <tr>
+            <td>지역</td>
+            <td>{{ member.LEGION }}</td>
+        </tr>
+        <tr>
+            <td>관심지역</td>
+            <td>{{ member.CuriousLEGION }}</td>
+        </tr>
+        <tr>
+            <td>관심업종</td>
+            <td>{{ member.CuriousSECTOR }}</td>
+        </tr>
+    </table>
+    <br>
+    <article>
+        {% comment %} <a href="{% url 'membership:Update' stu.s_no %}"><button>수정</button></a> {% endcomment %}
+        <button onclick="deleteBtn()">삭제</button>
+        <a href="{% url 'adminpage:list' nowpage=1 category='first' searchword='first' %}"><button>목록</button></a>
+    </article>
+    
+</body>
+</html>

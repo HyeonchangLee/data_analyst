@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+    {% block content-block  %}
+<style>
+
+
+  table {
+    width: 100%;
+  }
+  
+  tr {
+    height: 50px;
+  }
+  
+  th {
+    font-weight: normal;
+    font-size: 20px;
+  }
+  
+  select,
+  input,
+  textarea {
+    width: 100%;
+    border: 2px solid #ccc;
+  }
+  
+  .category-wrapper {
+    width: 100%;
+    border: 2px solid #ccc;
+  
+  }
+  
+  select {
+    padding: 5px 0px 5px 10px;
+    background: url(https://www.midashotel.co.kr/Midas_common/images/homepage/board/search-box-select.png) no-repeat 98% 50%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+  }
+  
+  select::-ms-expand {
+    display: none;
+  }
+  
+  input {
+    height: 30px;
+    font-size: 16px;
+  }
+  
+  textarea {
+    resize: none;
+  }
+  
+  #file {
+    border: none;
+  }
+  
+  .button-wrapper {
+    padding-top: 20px;
+    width: 285px;
+    margin: auto;
+  }
+  
+  button {
+    width: 130px;
+    height: 45px;
+  
+    font-size: 18px;
+  }
+  
+  .write {
+    color: white;
+    background: #3d3d3d;
+    border: none;
+    margin-right: 15px;
+  }
+  
+  .cancel {
+    color: black;
+    background: white;
+    border: 2px solid #3d3d3d;
+  }
+  
+</style>
+    <h1 class="titDep2">글쓰기</h1>
+    
+    <form action="{% url 'qnaboard:fWrite'  nowpage category searchword  %}" name="write" method="post" enctype="multipart/form-data">
+      <hr>
+      {% csrf_token %}
+      <table stylesheet>
+        <colgroup>
+          <col width="15%">
+          <col width="85%">
+        </colgroup>
+        <tr>
+          <th>분류</th>
+          <td>
+            <div class="category-wrapper">
+              <select name="category" id="category">
+                <option value="notice">공지</option>
+                <option value="answer">답변</option>
+              </select>  
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th>제목</th>
+          <td>
+            <input type="text" name="title" style= 'border: 2px solid #ccc;'>
+          </td>
+        </tr>
+        <tr>
+          <th>아이디</th>
+          <td>{{request.session.session_ID}}</td>
+          <input type='hidden' name='id' value="{{request.session.session_ID}}">
+        </tr>
+        <tr>
+          <th>내용</th>
+          <td>
+            <textarea name="content" id="text" cols="50" rows="10"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <th>이미지 표시</th>
+          <td>
+            <input type="file" name="file" id="file">
+          </td>
+        </tr>
+      </table>
+      <hr>
+      <div class="button-wrapper">
+        <button type="submit" class="write">작성완료</button>
+        <button type="button" onclick="cancelBtn()" class="cancel">취소</button>
+      </div>
+    </form>
+    {% endblock content-block  %}

@@ -1,0 +1,2372 @@
+{% load static %}
+<!doctype html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml">
+      <head>
+        <!-- Google Tag Manager -->
+      <script>
+      var gtmId = location.href.startsWith('../../d/index.html') ? 'GTM-P9NT8ML' : 'GTM-KXVKM3C';
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      '../../www.googletagmanager.com/gtm5445.html?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer', gtmId);
+      </script>
+      <script>
+      window.dataLayer = window.dataLayer || [];
+      </script>
+      <!-- End Google Tag Manager -->
+        <meta name="viewport" content="width=device-width, user-scalable=no, width=1366"><!-- 10.29 추가 -->
+      <meta property="og:type" content="website">
+      <meta property="og:image" ogImage content="https://static/resource/MO/images/jejupass_new-logo_og.png">
+      <meta property="og:site_name" siteName content="제주패스">
+      <meta property="og:locale" content="ko_KR">
+      
+      <link rel="shortcut icon" href="../../static/resource/PC/images/favicon/favicon6654.ico?v1">
+      <link rel="icon" type="image/png" href="../../static/resource/PC/images/favicon/favicon-32x326654.png?v1" sizes="32x32">
+      <link rel="icon" type="image/png" href="../../static/resource/PC/images/favicon/favicon-16x166654.png?v1" sizes="16x16">
+      <link rel="icon" type="image/png" href="../../static/resource/PC/images/favicon/favicon-96x966654.png?v1" sizes="96x96">
+      <link rel="apple-touch-icon-precomposed" href="../../static/resource/PC/images/favicon/apple-icon-120x1206654.png?v1" sizes="120x120">
+      <link rel="apple-touch-icon-precomposed" href="../../static/resource/PC/images/favicon/apple-icon-180x1806654.png?v1" sizes="180x180">
+      <link rel="icon" type="image/png" href="../../static/resource/PC/images/favicon/android-icon-192x1926654.png?v1" sizes="192x192">
+      <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+      
+      <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+      <link rel="shortcut icon" type="image/x-icon" href="../../static/resource/PC/images/favicon/favicon.ico">
+      <link href="../../static/resource/PC/css/p_common.min.css" rel="stylesheet" type="text/css">
+      <link href="../../static/resource/PC/css/p_contents.min.css" rel="stylesheet" type="text/css">
+      <script type="text/javascript" src="https://static-www.jejupass.com/resource/PC/js/jquery-ui.min.js"></script>
+      <script type="text/javascript" src="https://static-www.jejupass.com/resource/PC/js/swiper.min.js"></script>
+      <script type="text/javascript" src="https://static-www.jejupass.com/resource/PC/js/p_selectbox.js"></script>
+      <script type="text/javascript" src="https://static-www.jejupass.com/resource/PC/js/jquery.scrollbar.min.js"></script>
+      <script type="text/javascript" src="https://static-www.jejupass.com/resource/PC/js/p_common.js"></script>
+      <script type="text/javascript" src="https://static-www.jejupass.com/resource/PC/js/moment.min.js"></script>
+      <script type="text/javascript" src="https://static-www.jejupass.com/resource/js/jquery.cookie.js"></script>
+      <script type="text/javascript" src="https://static-www.jejupass.com/resource/js/store.modern.min.js"></script>
+      <script type="text/javascript" src="https://api.jejupass.com/display/js/jpp.js"></script>
+      <script type="text/javascript" src="https://api.jejupass.com/display/js/jpp.extend.js"></script>
+      <script type="text/javascript" src="https://api.jejupass.com/display/js/jpp.sso.js"></script>
+      
+        <!-- 컨텐츠페이지의 CSS 영역이 들어감 -->
+        
+        <!-- 컨텐츠페이지의 스크립트 영역이 들어감 -->
+
+      </head>
+
+<body class="wrapper memberWrapper">
+<p class="skip"><a href="#container">본문 바로가기</a></p>
+
+<section id="wrapper">
+
+  <header>
+    <h1 class="topLogo"><a href="{% url 'web'%}">bourgeois</a></h1>
+  <nav>
+    <div class="navList">
+      <h2><a href="{% url 'analytics:inner' %}">지역별 분석</a></h2>
+      <h2><a href="{% url 'navertrend:search_page' %}">네이버 트렌드</a></h2>
+      <h2><a href="{% url 'adminpage:fList' nowpage=1  category='first' searchword='first' %}">Q&A게시판</a></h2>
+      {% if request.session.session_ID %}
+      <h2><a href="{% url 'membership:myApageopen' %}">MY분석</a></h2>
+      {% else %}
+      <h2><a href="{% url 'membership:signup' %}">가입하여 MY분석보기</a></h2>
+      {% endif %}
+    </div>
+
+  </nav>
+  <div class="topUtil">
+    {% if request.session.session_ID %}
+        <a href="{% url 'membership:logout' %}" class="logout">로그아웃</a>
+        <a href="{% url 'membership:mypage' %}" class="mypage">마이페이지</a>
+    {% else %}
+        <a href="{% url 'membership:login' %}" class="login">로그인</a>
+    {% endif %}
+    <ul class="navEtc">
+    </ul>
+  </div>
+</header>
+  <!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@회원 가입 script 시작@@@@@@@@@@@@@@@@@@@@@@@@@-->
+  <script>
+    function btnSignup(){
+      if($("#inp_id").val()==''){
+        alert('아이디가 입력되지 않았습니다. 아이디를 입력해주세요.')
+        $("#inp_id").focus()
+        return false
+      }
+      if($("#inp_pwd").val()==''){
+        alert('패스워드가 입력되지 않았습니다. 패스워드를 입력해주세요.')
+        $("#inp_id").focus()
+        return false
+      }
+
+      if($("#inp_name").val()==''){
+        alert('이름이 입력되지 않았습니다. 이름을 입력해주세요.')
+        $("#inp_name").focus()
+        return false
+      }
+  
+      return $("#signFrm").submit()
+
+    }
+
+
+    // 비밀번호 확인 유효성검사
+
+  var password = document.getElementById("inp_pwd")
+    , confirm_password = document.getElementById("inp_repwd");
+  
+  function validatePassword(){
+    if(password.value != confirm_password.value) {
+      confirm_password.setCustomValidity("패스워드가 올바르지 않습니다.");
+    } else {
+      confirm_password.setCustomValidity(''); // 오류가 없으면 메시지를 빈 문자열로 설정해야한다. 오류 메시지가 비어 있지 않은 한 양식은 유효성 검사를 통과하지 않고 제출되지 않는다.
+    }
+  }
+  
+  password.onchange = validatePassword;
+  confirm_password.onkeyup = validatePassword;
+    
+  </script>
+  <!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@회원 가입 script 끝@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+  
+  <!--비밀번호와 비밀번호 확인이 일치하지 않을 시 msg 출력 시작-->
+  {% if msg %}
+    <script>alert('{{ msg }}')</script>
+  {% endif %}
+  <!--비밀번호와 비밀번호 확인이 일치하지 않을 시 msg 출력 끝-->
+  <div id="container" class="container">
+    <div id="contents" class="contents">
+            <!-- 컨텐츠 영역  -->
+            <p class="titDep2 titDepC">회원가입</p>
+            <form class="signFrm" action="{% url 'membership:signup' %}"  id='signFrm' name='signFrm' method='POST' name="signFrm">
+              {% csrf_token %}
+                <legend>회원가입 정보입력</legend>
+                <div class="inpFrm inpDeleteAni"><!-- input value값 있을 때 삭제버튼 출력 -->
+                    <label for="inp_id" class="titLab">아이디</label>
+                    <div class="inpA inpBtns">
+                        <input type="text" class="inpL" id="inp_id" name="inp_id" placeholder="가입할 아이디를 입력하세요." title="가입할 아이디를 입력하세요." >
+                        <button type="button" class="btIco icDel" id="btnDelId">삭제</button>
+                        {% comment %} <a href="javascript:;" role="button" class="btnDefault btnL btnLineP" id="btnDubCheck" disabled>중복확인</a> {% endcomment %}
+                    </div>
+                    {% comment %} <p class="txtErr" id="txtErrEmail" style="display:none">이메일 형식이 맞지 않습니다. 다시 입력해 주세요.</p> {% endcomment %}
+                </div>
+                <div class="inpFrm inpDeleteAni"><!-- input value값 있을 때 삭제버튼 출력 -->
+                    <label for="inp_pwd" class="titLab">비밀번호</label>
+                    <div class="inpA">
+                        <input type="password" class="inpL" id="inp_pwd" name="inp_pwd" placeholder="사용할 비밀번호를 입력하세요." title="사용할 비밀번호를 입력하세요." required><!-- 20211130 : 문구(변경) -->
+                        <button type="button" class="btIco icDel" id="btnDelPwd">삭제</button>
+                    </div>
+                    <!--<p class="txtInfo">비밀번호를 입력해주세요.</p>-->
+                    {% comment %} <p class="txtErr" id="txtErrPwd">최소 8자 이상 입력해주세요.</p><!-- 20211130 : 문구(변경) --> {% endcomment %}
+                </div>
+                <div class="inpFrm inpDeleteAni"><!-- input data 오류시 inpError 클래스 추가 -->
+                    <label for="inp_repwd" class="titLab">비밀번호 확인</label>
+                    <div class="inpA">
+                        <input type="password" class="inpL" id="inp_repwd" name="inp_repwd" placeholder="확인을 위해 한번 더 입력해주세요." title="확인을 위해 한번 더 입력해주세요." required>
+                        <button type="button" class="btIco icDel" id="btnDelRepwd">삭제</button>
+                    </div>
+                    {% comment %} <p class="txtErr" id="txtErrPwdCheck" style="display: none">비밀번호가 서로 맞지 않습니다. 다시 입력해주세요.</p> {% endcomment %}
+                </div>
+                <div class="inpFrm">
+                    <label for="inp_name" class="titLab">이름</label>
+                    <span class="inpA">
+                        <input type="text" class="inpL" id="inp_name" name="inp_name" placeholder="이름을 입력하세요.">
+                    </span>
+                </div>
+                <div class="inpFrm">
+                    <label for="inp_AGE" class="titLab">나이</label>
+                    <span class="inpA">
+                        <input type="text" class="inpL" id="inp_AGE" name="inp_AGE" placeholder="숫자만 기입해 주세요.">
+                    </span>
+                </div>
+                {% comment %} <div class="inpFrm">
+                  <label for="inp_phnum" class="titLab">휴대전화번호</label>
+                  <span class="inpA">
+                    <input type="text" id="inp_phnum" class="inpL" placeholder="-없이 붙여서 써주세요.">
+                  </span>
+                </div> {% endcomment %}
+                <div class="inpFrm">
+                  <span class="titLab">성별</span>
+                  <ul class="frmBox frmTog">
+                    <li><input type="radio" id="남자" name="inp_gender" checked value="M"><label for="남자">남자</label></li>
+                    <li><input type="radio" id="여자" name="inp_gender"value="F"><label for="여자">여자</label></li>
+                  </ul>
+                </div>
+                <div class="inpFrm">
+                  <span class="titLab">생활권</span>
+                  <ul class="frmBox">
+                    <li><input type="radio" id="LEGION종로구" name="inp_LEGION" checked value="종로구"><label for="LEGION종로구">종로구</label></li>
+                    <li><input type="radio" id="LEGION중구" name="inp_LEGION" value="중구"><label for="LEGION중구">중구</label></li>
+                    <li><input type="radio" id="LEGION성북구" name="inp_LEGION" value="성북구"><label for="LEGION성북구">성북구</label></li>
+                    <li><input type="radio" id="LEGION용산구" name="inp_LEGION" value="용산구"><label for="LEGION용산구">용산구</label></li>
+                    <li><input type="radio" id="LEGION성동구" name="inp_LEGION" value="성동구"><label for="LEGION성동구">성동구</label></li>
+                    <li><input type="radio" id="LEGION광진구" name="inp_LEGION" value="광진구"><label for="LEGION광진구">광진구</label></li>
+                    <li><input type="radio" id="LEGION동대문구" name="inp_LEGION" value="동대문구"><label for="LEGION동대문구">동대문구</label></li>
+                    <li><input type="radio" id="LEGION중량구" name="inp_LEGION" value="중량구"><label for="LEGION중량구">중량구</label></li>
+                    <li><input type="radio" id="LEGION성북구" name="inp_LEGION" value="성북구"><label for="LEGION성북구">성북구</label></li>
+                    <li><input type="radio" id="LEGION강북구" name="inp_LEGION" value="강북구"><label for="LEGION강북구">강북구</label></li>
+                    <li><input type="radio" id="LEGION도봉구" name="inp_LEGION" value="도봉구"><label for="LEGION도봉구">도봉구</label></li>
+                    <li><input type="radio" id="LEGION노원구" name="inp_LEGION" value="노원구"><label for="LEGION노원구">노원구</label></li>
+                    <li><input type="radio" id="LEGION은평구" name="inp_LEGION" value="은평구"><label for="LEGION은평구">은평구</label></li>
+                    <li><input type="radio" id="LEGION서대문구" name="inp_LEGION" value="서대문구"><label for="LEGION서대문구">서대문구</label></li>
+                    <li><input type="radio" id="LEGION마포구" name="inp_LEGION" value="마포구"><label for="LEGION마포구">마포구</label></li>
+                    <li><input type="radio" id="LEGION양천구" name="inp_LEGION" value="양천구"><label for="LEGION양천구">양천구</label></li>
+                    <li><input type="radio" id="LEGION강서구" name="inp_LEGION" value="강서구"><label for="LEGION강서구">강서구</label></li>
+                    <li><input type="radio" id="LEGION구로구" name="inp_LEGION" value="구로구"><label for="LEGION구로구">구로구</label></li>
+                    <li><input type="radio" id="LEGION금천구" name="inp_LEGION" value="금천구"><label for="LEGION금천구">금천구</label></li>
+                    <li><input type="radio" id="LEGION영등포구" name="inp_LEGION" value="영등포구"><label for="LEGION영등포구">영등포구</label></li>
+                    <li><input type="radio" id="LEGION동작구" name="inp_LEGION" value="동작구"><label for="LEGION동작구">동작구</label></li>
+                    <li><input type="radio" id="LEGION관악구" name="inp_LEGION" value="관악구"><label for="LEGION관악구">관악구</label></li>
+                    <li><input type="radio" id="LEGION서초구" name="inp_LEGION" value="서초구"><label for="LEGION서초구">서초구</label></li>
+                    <li><input type="radio" id="LEGION강남구" name="inp_LEGION" value="강남구"><label for="LEGION강남구">강남구</label></li>
+                    <li><input type="radio" id="LEGION송파구" name="inp_LEGION" value="송파구"><label for="LEGION송파구">송파구</label></li>
+                    <li><input type="radio" id="LEGION강동구" name="inp_LEGION" value="강동구"><label for="LEGION강동구">강동구</label></li>
+
+                  </ul>
+                </div>
+                
+                {% comment %} <div class="inpFrm">
+                  <label for="inp_LEGION" class="titLab">생활권</label>
+                  <span class="inpA">
+                      <input type="text" class="inpL" id="inp_LEGION" name="inp_LEGION" placeholder="구를 입력해주세요.(예:OO구)">
+                  </span>
+                </div> {% endcomment %}
+                <div class="inpFrm">
+                  <span class="titLab">관심지역</span>
+                  <ul class="frmBox">
+                    <li><input type="radio" id="종로구" name="inp_CuriousLEGION" checked value="종로구"><label for="종로구">종로구</label></li>
+                    <li><input type="radio" id="중구" name="inp_CuriousLEGION" value="중구"><label for="중구">중구</label></li>
+                    <li><input type="radio" id="성북구" name="inp_CuriousLEGION" value="성북구"><label for="성북구">성북구</label></li>
+                    <li><input type="radio" id="용산구" name="inp_CuriousLEGION" value="용산구"><label for="용산구">용산구</label></li>
+                    <li><input type="radio" id="성동구" name="inp_CuriousLEGION" value="성동구"><label for="성동구">성동구</label></li>
+                    <li><input type="radio" id="광진구" name="inp_CuriousLEGION" value="광진구"><label for="광진구">광진구</label></li>
+                    <li><input type="radio" id="동대문구" name="inp_CuriousLEGION" value="동대문구"><label for="동대문구">동대문구</label></li>
+                    <li><input type="radio" id="중량구" name="inp_CuriousLEGION" value="중량구"><label for="중량구">중량구</label></li>
+                    <li><input type="radio" id="성북구" name="inp_CuriousLEGION" value="성북구"><label for="성북구">성북구</label></li>
+                    <li><input type="radio" id="강북구" name="inp_CuriousLEGION" value="강북구"><label for="강북구">강북구</label></li>
+                    <li><input type="radio" id="도봉구" name="inp_CuriousLEGION" value="도봉구"><label for="도봉구">도봉구</label></li>
+                    <li><input type="radio" id="노원구" name="inp_CuriousLEGION" value="노원구"><label for="노원구">노원구</label></li>
+                    <li><input type="radio" id="은평구" name="inp_CuriousLEGION" value="은평구"><label for="은평구">은평구</label></li>
+                    <li><input type="radio" id="서대문구" name="inp_CuriousLEGION" value="서대문구"><label for="서대문구">서대문구</label></li>
+                    <li><input type="radio" id="마포구" name="inp_CuriousLEGION" value="마포구"><label for="마포구">마포구</label></li>
+                    <li><input type="radio" id="양천구" name="inp_CuriousLEGION" value="양천구"><label for="양천구">양천구</label></li>
+                    <li><input type="radio" id="강서구" name="inp_CuriousLEGION" value="강서구"><label for="강서구">강서구</label></li>
+                    <li><input type="radio" id="구로구" name="inp_CuriousLEGION" value="구로구"><label for="구로구">구로구</label></li>
+                    <li><input type="radio" id="금천구" name="inp_CuriousLEGION" value="금천구"><label for="금천구">금천구</label></li>
+                    <li><input type="radio" id="영등포구" name="inp_CuriousLEGION" value="영등포구"><label for="영등포구">영등포구</label></li>
+                    <li><input type="radio" id="동작구" name="inp_CuriousLEGION" value="동작구"><label for="동작구">동작구</label></li>
+                    <li><input type="radio" id="관악구" name="inp_CuriousLEGION" value="관악구"><label for="관악구">관악구</label></li>
+                    <li><input type="radio" id="서초구" name="inp_CuriousLEGION" value="서초구"><label for="서초구">서초구</label></li>
+                    <li><input type="radio" id="강남구" name="inp_CuriousLEGION" value="강남구"><label for="강남구">강남구</label></li>
+                    <li><input type="radio" id="송파구" name="inp_CuriousLEGION" value="송파구"><label for="송파구">송파구</label></li>
+                    <li><input type="radio" id="강동구" name="inp_CuriousLEGION" value="강동구"><label for="강동구">강동구</label></li>
+
+                  </ul>
+                </div>
+                {% comment %} <div class="inpFrm">
+                  <label for="inp_CuriousLEGION" class="titLab">관심지역</label>
+                  <span class="inpA">
+                      <input type="text" class="inpL" id="inp_CuriousLEGION" name="inp_CuriousLEGION" placeholder="관심있는 구를 입력해주세요.(예:OO구)">
+                  </span> 
+                </div>{% endcomment %}
+                  <div class="inpFrm">
+                    <span class="titLab">관심업종</span>
+                    <ul class="frmBox">
+                      <li><input type="radio" id="한식" name="inp_CuriousSECTOR" checked value="한식"><label for="한식">한식</label></li>
+                      <li><input type="radio" id="중식" name="inp_CuriousSECTOR" value="중식"><label for="중식">중식</label></li>
+                      <li><input type="radio" id="일식" name="inp_CuriousSECTOR" value="일식"><label for="일식">일식</label></li>
+                      <li><input type="radio" id="양식" name="inp_CuriousSECTOR" value="양식"><label for="양식">양식</label></li>
+                      <li><input type="radio" id="제과점" name="inp_CuriousSECTOR" value="제과점"><label for="제과점">제과점</label></li>
+                      <li><input type="radio" id="패스트푸드점" name="inp_CuriousSECTOR" value="패스트푸드점"><label for="패스트푸드점">패스트푸드점</label></li>
+                      <li><input type="radio" id="치킨" name="inp_CuriousSECTOR" value="치킨"><label for="치킨">치킨</label></li>
+                      <li><input type="radio" id="분식" name="inp_CuriousSECTOR" value="분식"><label for="분식">분식</label></li>
+                      <li><input type="radio" id="호프-간이주점" name="inp_CuriousSECTOR" value="호프-간이주점"><label for="호프-간이주점">호프-간이주점</label></li>
+                      <li><input type="radio" id="커피-음료" name="inp_CuriousSECTOR" value="커피-음료"><label for="커피-음료">커피-음료</label></li>
+                    </ul>
+                  </div>
+                <div class="btnArea">
+                    <button type="button" class="btnDefault btnL action" id="" onclick="btnSignup()" >확인</button>
+                </div>
+            </form>
+
+            {% comment %} 1차 확인 후 넘오는 정보 이름, 전화번호, 생년월일 시작 {% endcomment %}
+            <form id="frmSignup">
+                {% comment %} <input type="hidden" id="sendEmail" name="email"/> {% endcomment %}
+                {% comment %} <input type="hidden" id="sendGender" name="gender"/> {% endcomment %}
+
+                {% comment %} <input type="hidden" name="resultCode" id="resultCode" value="0000"/> {% endcomment %}
+                {% comment %} <input type="hidden" name="userName" id="userName" value="검색해서수정"/> {% endcomment %}
+                {% comment %} <input type="hidden" name="userPhone" id="userPhone" value="00000000000"/> {% endcomment %}
+                {% comment %} <input type="hidden" name="userBirthday" id="userBirthday" value="00000000"/> {% endcomment %}
+                {% comment %} <input type="hidden" name="userCi" id="userCi" value=""/> {% endcomment %}
+            </form>
+            {% comment %} 1차 확인 후 넘오는 정보 이름, 전화번호, 생년월일 끝 {% endcomment %}
+
+
+            <form id="frmAgreement">
+                <input type="hidden" id="sendUseAgree" name="inp_use" value="true"/>
+                <input type="hidden" id="sendPrivacyAgree" name="inp_privacy" value="true"/>
+                <input type="hidden" id="sendEcommerceAgree" name="inp_ecommerce" value="false"/>
+                <input type="hidden" id="sendEmailAgree" name="inp_email" value="false"/>
+                <input type="hidden" id="sendSmsAgree" name="inp_sms" value="false"/>
+            </form>
+            <!-- //컨텐츠 영역 -->
+        </div>
+  </div>
+
+  
+
+</section><!-- //wrapper -->
+
+<div class="alertBox" id="alertBox" style="display: none">
+    <div class="alertInner">
+        <p class="titAlert">회원가입</p>
+        <span class="txtAlert" id="txtAlert" data-option></span>
+        <div class="alertBtns">
+            <button type="button" class="btnDefault btnL action" id="btnOk">확인</button>
+        </div>
+        <button type="button" class="closeA" id="btnClose">닫기</button>
+    </div>
+</div>
+
+<footer>
+  <div class="footTop">
+    <div class="footInner">
+      <ul class="footMenu">
+        <li><strong class="tit">부르주아</strong><a href="#" role="button">회사소개</a><a href="#" role="button">회원혜택 안내</a></li>
+        <li><strong class="tit">고객센터</strong><a href="#" role="button">공지사항</a><a href="#" role="button">자주찾는질문</a><a href="#" role="button">예약확인</a></li>
+        <li><strong class="tit">ESG</strong><a href="#" role="button">그린 앰버서더</a><a href="#" role="button">캠페인 기부</a></li>
+      </ul>
+      <div class="footAppDown">
+        <h5>App 다운로드</h5>
+        <span class="txt">부르주아 앱 설치하고 <br>더 편리하게 이용하세요.</span>
+        <ul class="appLink">
+          <li><button type="button" class="google" onclick="location.href='#';">구글플레이</button></li>
+          <li><button type="button" class="ios" onclick="location.href='#';">앱스토어</button></li>
+        </ul>
+      </div>
+      <div class="footCenter">
+        <h5>전화예약 / 고객상담</h5>
+        <span class="txt">이용에 궁금하신 점이 <br>있으신가요?</span>
+        <div class="callInfo">
+          <p class="callNum">1544-0445</p>
+          <ul class="callTime">
+            <li><span class="tit">평일</span>09:00 ~ 18:00</li>
+            <li><span class="tit">점심시간</span>12:00 ~ 13:00</li>
+          </ul>
+        </div>
+        <div class="snsList">
+          <a href="#" role="button" target="_blank" class="insta">인스타그램</a>
+          <a href="#" role="button" target="_blank" class="blog">네이버 블로그</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footBtm">
+    <div class="footInner">
+      <ul class="footMenu">
+        <li><a href="web/policy/privacy.html" role="button">개인정보처리방침</a></li>
+        <li><a href="web/policy/use.html" role="button">이용약관</a></li>
+      </ul>
+      <p class="txtFoot">
+        <span>(주)부르주아 대표이사 : 이현창</span>
+        <span>사업자등록번호 : 105-87-76000 <a class="btns" href="../www.ftc.go.kr/bizCommPop64eb.html?wrkr_no=1058776000" target="_blank">사업자정보조회</a>
+				</span>
+        <span>
+					통신판매신고 제2015-제주연동-43호
+				</span>
+        <span>관광사업자 등록번호 : 제2021-08호</span>
+      </p>
+      <p class="txtFoot" style="margin:0">
+        <span>제주특별자치도 제주시 신광로 21, 4층 (우)63125</span>
+      </p>
+      <p class="txtFoot02">
+        (주)(주)부르주아는 개별 분석 및 상품에 대하여 정보제공자로서 판매의 당사자가 아니며 해당상품의 거래정보 및 거래 등에 대해 책임을 지지 않습니다.
+        <br/>
+        (주)부르주아는 정보제공 파트너사가 제공하는 정보에 대하여 정보중개자의 지위를 가지며, 해당 상품, 해당 정보, 거래에 관한 의무와 책임은 판매자에게 있습니다.
+      </p>
+
+      <p class="txtCopy">
+        <span>Copyright ⓒ BOURGEOIS All Rights Reserved</span>
+      </p>
+      <div class="footEtc">
+        <span>SECURED BY RapidSSL</span>
+        <span>WEB AWARD 수상</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+
+<aside>
+    <button type="button" class="btTop" onclick="location.href='#'">페이지 상단으로 이동</button>
+</aside>
+
+<div id="jppAlertBox" class="alertBox" style="z-index: 1050; display:none;">
+    <div class="alertInner">
+        <p class="titAlert">오류 안내</p>
+        <span class="txtAlert">알 수 없는 오류가 발생했습니다.</span>
+        <div class="alertBtns">
+            <button type="button" class="btnDefault btnL action">확인</button>
+        </div>
+<!--        <button type="button" class="closeA" onclick="$('#jjpAlertBox').hide()">닫기</button>-->
+    </div>
+</div>
+
+<div id="jppConfirmBox" class="alertBox" style="z-index: 1050; display:none;">
+    <div class="alertInner">
+        <p class="titAlert">오류 안내</p>
+        <span class="txtAlert">알 수 없는 오류가 발생했습니다.</span>
+        <div class="alertBtns">
+            <button type="button" class="btnDefault btnL btnCancel">취소</button>
+            <button type="button" class="btnDefault btnL action btnConfirm">확인</button>
+        </div>
+<!--        <button type="button" class="closeA" onclick="$('#jjpAlertBox').hide()">닫기</button>-->
+    </div>
+</div>
+
+<!-- 텀블러 시작 -->
+{% comment %} <section id="tumbler_layer_pop" class="layPop layerM" tabindex="0">
+    <header>
+        <h2 class="titLay">텀블러 등급</h2>
+    </header>
+    <div class="layContainer scriptScroll" tabindex="0">
+        <div class="layContent">
+            <div class="tumblerGradeWrap">
+                <div class="tumblerUser">
+                    <figure><img id="tumblerPorifleImg" src="" alt=""></figure>
+                    <span class="col01" tumblertitle>-</span><strong class="name" tumblerUser>-</strong>
+                    <span class="grade" tumblerRanking>텀블러 랭킹 -위</span><span class="grade" tumblerSum>누적 커피 -회 사용</span>
+                </div>
+                <div class="tumblerGrade">
+                    <div class="scoreBar">
+                        <span class="icons"></span>
+                        <p class="graph">
+                            <span class="bar" tumblerBar style="width:0%"></span>
+                        </p>
+                        <span class="total" tumblerTotal><strong>-</strong> / -</span>
+                    </div>
+                    <p class="gradeTxt" tumblerGrade>다음 등급까지 <strong>0회</strong> 남았어요!</p>
+                </div>
+                <ul class="tumblerList">
+                    <!-- 211230 수정 -->
+                    <!-- 각 등급에 따른 클래스값
+                    챌린저 : challenger
+                    비기너 : beginner
+                    팔로워 : follower
+                    프로 : pro
+                    마스터 : master
+                    레전드 : legend
+                    갓 : god
+                    등급을 획득하지 못했을 때에는 위 클래스값에 "_lock" 추가됨 -->
+                    <li>
+                        <button type="button" class="tumblerUserBadge"><span class="iconBadge challenger_lock"></span><span>텀블러 챌린저</span></button>
+                        <button type="button" class="tumblerUserBadge"><span class="iconBadge beginner_lock"></span><span>텀블러 비기너</span></button>
+                    </li>
+                    <li>
+                        <button type="button" class="tumblerUserBadge"><span class="iconBadge follower_lock"></span><span>텀블러 팔로워</span></button>
+                        <button type="button" class="tumblerUserBadge"><span class="iconBadge pro_lock"></span><span>텀블러 프로</span></button>
+                        <button type="button" class="tumblerUserBadge"><span class="iconBadge master_lock"></span><span>텀블러 마스터</span></button>
+                    </li>
+                    <li>
+                        <button type="button" class="tumblerUserBadge"><span class="iconBadge legend_lock"></span><span>텀블러 레전드</span></button>
+                        <button type="button" class="tumblerUserBadge"><span class="iconBadge god_lock"></span><span>텀블러 갓</span></button>
+                    </li>
+                    <!-- //211230 수정 -->
+                </ul>
+            </div>
+            <h2 class="titDep4">텀블러 사용 내역</h2>
+            <dl class="temblerUseInfo" tumblerUsedList>
+                <!--<dt>라블라주</dt>
+                <dd>2020.02.02 23:59</dd>
+                <dt>스타벅스 제주공항점</dt>
+                <dd>2020.02.02 23:59</dd>
+                <dt>섭지코지로</dt>
+                <dd>2020.02.02 23:59</dd>-->
+            </dl>
+        </div>
+    </div><!-- //layCont-->
+    <div class="btnBtm">
+        <div class="btnArea">
+            <button type="button" class="btnDefault btnL action" onclick="$fn_tumblerClose();">완료</button>
+        </div>
+    </div>
+    <button type="button" class="closeL" onclick="$fn_tumblerClose();">팝업 닫기</button>
+</section> {% endcomment %}
+<!-- 텀블러 종료 -->
+
+<div class="dimmed"></div>
+<script type="text/javascript" src="https://static-www.jejupass.com/resource/PC/js/jquery-3.6.0.min.js"></script>
+
+
+
+<script>
+    {% comment %} (function() {
+        let $topUtil = $('header .topUtil');
+        let $loginBtn = $topUtil.find('.login');
+        let $logoutBtn = $topUtil.find('.logout');
+        let $mypageBtn = $topUtil.find('.mypage');
+        let $orderBtn = $topUtil.find('.order');
+        let $noticeBox = $topUtil.find('.noticeBox');
+        function viewLoginOrLogout() {
+            if(jppJs.isLogin()) {
+                $loginBtn.hide();
+                $logoutBtn.show();
+                $mypageBtn.show();
+                $orderBtn.hide();
+                // $noticeBox.show();
+            } else {
+                $loginBtn.show();
+                $logoutBtn.hide();
+                $mypageBtn.hide();
+                $orderBtn.show();
+                $noticeBox.hide();
+            }
+        }
+        viewLoginOrLogout();
+        $topUtil.find(".logout").click(function() {
+            jppJs.ssoLogout();
+        });
+
+        jppJs.setSsoCallback(function(token) {
+            viewLoginOrLogout();
+        });
+    })(); {% endcomment %}
+</script>
+
+<!--공통스크립트 jquery 필수-->
+<script>
+    {% comment %} (function () {
+        var order = jppJs.order = {
+            categorys: ['cafe:pass', 'cafe:glass', 'rentcar', 'stay', 'trip'],
+            prod: null,
+
+            init: function () {
+                order.prod = JSON.parse(localStorage.getItem('JPP_ORDER')) || {};
+                this.addCategory();
+            },
+
+            valid: function (category, data) {
+                if (order.categorys.indexOf(category) < 0) {
+                    console.error('category가 올바르지 않습니다. ex) ' + categorys.toString());
+                    return false;
+                }
+
+                if (data === 'undefiend' || data === null || Object.prototype.toString.call(data) !== '[object Object]' || data.length === 0) {
+                    console.error('상품정보가 없습니다.');
+                    return false;
+                }
+
+                return true;
+            },
+            addCategory: function () {
+                order.categorys.forEach(o => {
+                    if (o.includes(':')) {
+                        const first = o.split(':')[0];
+                        const second = o.split(':')[1];
+
+                        order.prod[first] = order.prod[first] || {};
+                        order.prod[first][second] = order.prod[first][second] || {};
+
+                    } else {
+                        order.prod[o] = order.prod[o] || {};
+                    }
+                })
+
+            },
+
+            get: function (category) {
+                if (category.includes(':')) {
+                    const first = category.split(':')[0];
+                    const second = category.split(':')[1];
+
+                    return order.prod[first][second];
+
+                } else {
+                    return order.prod[category];
+                }
+
+            },
+
+            add: function (category, data) {
+                const isValid = this.valid(category, data);
+
+                if (isValid) {
+                    if (category.includes(':')) {
+                        const first = category.split(':')[0];
+                        const second = category.split(':')[1];
+
+                        order.prod[first][second] = data;
+                    } else {
+                        order.prod[category] = data;
+                    }
+
+                    localStorage.setItem('JPP_ORDER', JSON.stringify(order.prod));
+                }
+            },
+
+            remove: function (category) {
+                if (category.includes(':')) {
+                    const first = category.split(':')[0];
+                    const second = category.split(':')[1];
+                    order.prod[first][second] = {};
+                } else {
+                    order.prod[category] = {};
+                }
+
+                localStorage.setItem('JPP_ORDER', JSON.stringify(order.prod));
+            },
+
+            clear: function() {
+                order.prod = {};
+                localStorage.removeItem('JPP_ORDER');
+            }
+        }
+
+        jppJs.order.init();
+
+    })(); {% endcomment %}
+
+    // mypage common
+    {% comment %} (function() {
+        /*
+		<h1 class="mainLogo"><a href="#" goMainBtn>제주패스 메인으로 이동</a></h1>
+		<button type="button" class="btClose subMain" mypageCloseBtn>닫기</button>
+		<button type="button" class="btSetting" mypageSettingBtn>설정</button>
+         */
+        // 제주패스 메인으로 이동 버튼 정의
+        $("header a[goMainBtn]").click(function() {
+            jppJs.go("", "www");
+        });
+
+        // 마이페이지 닫기 버튼
+        $("header button[mypageCloseBtn]").click(function() {
+            history.back();
+        });
+
+        // 마이페이지 설정 버튼
+        $("header button[mypageSettingBtn]").click(function() {
+            jppJs.go("/mobile/mypage/push","member");
+        });
+    })();
+
+    function setAppCookie( name, value, expiredays ) {
+        var todayDate = new Date();
+        todayDate.setDate( todayDate.getDate() + expiredays );
+        var domain = "jejupass.com";
+        document.cookie = name + "=" + escape( value ) + "; path=/; expires=" + todayDate.toGMTString() + "; " + "domain=" + domain + ";"
+    }
+
+    function getAppCookie(cookieName){
+        var cookieValue=null;
+        if(document.cookie){
+            var array=document.cookie.split((escape(cookieName)+'='));
+            if(array.length >= 2){
+                var arraySub=array[1].split(';');
+                cookieValue=unescape(arraySub[0]);
+            }
+        }
+        return cookieValue;
+    }
+
+    function appJsInterface(funNm, param) {
+        var userAgent = navigator.userAgent.toLowerCase();
+        if(userAgent.indexOf("android") !== -1){
+            // android 일 때
+            if(param == "") {
+                eval("Android."+funNm + "()");
+            } else {
+                eval("Android."+funNm + "('"+JSON.stringify(param)+"')");
+            }
+        } else if(userAgent.indexOf("iphone") !== -1){
+            // iphone 일 때
+
+            var iosParam = {
+                "action": funNm,
+                "data" : param
+            }
+
+            if(param == "") {
+                eval("webkit.messageHandlers.IOS.postMessage('"+JSON.stringify(iosParam)+"')");
+            } else {
+                eval("webkit.messageHandlers.IOS.postMessage('"+JSON.stringify(iosParam)+"')");
+            }
+
+        }
+    }
+
+    (function() {
+        let ckName = getAppCookie("appSeCode");
+        if(ckName == "I" || ckName == "A") {   //앱 일 경우
+            $('footer .snsList .downList').empty();
+        }
+    })(); {% endcomment %}
+
+</script>
+
+
+<!-- 텀블러 관련 팝업 스크립트 start -->
+<script>
+    {% comment %} (function() {
+        $fn_tumblerOpen = function() {
+            let tumbler_layerpopup = $("#tumbler_layer_pop");
+            tumbler_layerpopup.show();
+            mvJs.utils.dimmedShow();
+
+            if (jppJs.isLogin()) {
+                const apiDomain = jppJs.getServiceDomain('api');
+                jppJs.call('GET', apiDomain + "/member/me?simple=N", null, (response) => {
+                        const data = response.data;
+
+                        $("[tumblerUser]").html(data.name + " 님");
+
+                        // 프로필 사진 불러오기
+                        jppJs.call('GET', '/file/api/files/' + data.memberId, {"targetId":data.memberId, "targetCode":"USER_PROFILE", "ownerId":data.memberId, "fileType":"IMAGE"}, function(file){
+                            var result = file.data;
+                            if (result.length > 0) {
+                                $("#tumblerPorifleImg").attr("src", result[0].url);
+                            }
+                        }, function(data){});
+
+                        // 텀블러 정보 불러오기
+                        jppJs.call('GET', '/cafe/api/cafepass/me/tumblerInfo', null,
+                            (response) => {
+                                if (response.data) {
+                                    const data = response.data;
+                                    const cafepassIssuedUseHistorys = data.cafepassIssuedUseHistorys;
+                                    const cafepassTumblerGradeMap = data.cafepassTumblerGradeMap;
+                                    const cafepassTumblerGradeElements = $('button.tumblerUserBadge');
+
+                                    $("[tumblerTitle]").html(data.myTumblerGradeName);
+                                    $("[tumblerRanking]").html(`텀블러 랭킹 ${data.ranking}위`);
+                                    $("[tumblerSum]").html(`누적 커피 ${data.tumblerCount}회 사용`);
+                                    $("[tumblerBar]").css("width", `${data.percent}%`);
+
+                                    $("[tumblerTotal]").html(`<strong>${data.tumblerCount}</strong> / ${data.goalCount}`);
+                                    $("[tumblerGrade]").html(`다음 등급까지 <strong>${data.remainCount}회</strong> 남았어요!`);
+
+                                    if (cafepassIssuedUseHistorys && cafepassIssuedUseHistorys.length > 0) {
+                                        $("[tumblerUsedList]").html("");
+
+                                        for(item of cafepassIssuedUseHistorys){
+                                            let usedDate = moment(item.useDate).format('YYYY.MM.DD HH:mm');
+                                            let html = `
+                                                    <dt>${item.cafeName}</dt>
+                                                    <dd>${usedDate}</dd>
+                                            `;
+
+                                            $("[tumblerUsedList]").append(html);
+                                        }
+                                    }
+
+                                    $.each(cafepassTumblerGradeElements, function (i, x) {
+                                        const iconBadge = $(x).find('span:eq(0)');
+                                        const myGradeIndex = cafepassTumblerGradeMap[data.myTumblerGradeName];
+                                        if (i <= myGradeIndex) {
+                                            $(iconBadge).removeClass(function (index, className) {
+                                                return (className.match(/([A-z]+)([\_]+)([lock])+/g) || []).join(' ');
+                                            });
+                                        }
+                                    })
+                                } else {
+                                    //사용내역이 없음
+                                    $("[tumblerTitle]").html(data.myTumblerGradeName);
+                                    $("[tumblerRanking]").html(`텀블러 랭킹 ${data.ranking}위`);
+                                    $("[tumblerSum]").html(`누적 커피 ${data.useCount}회 사용`);
+                                    $("[tumblerBar]").css("width", `${data.percent}%`);
+
+                                    $("[tumblerTotal]").html(`<strong>${data.tumblerCount}</strong> / ${data.goalCount}`);
+                                    $("[tumblerGrade]").html(`다음 등급까지 <strong>${data.remainCount}회</strong> 남았어요!`);
+                                    $("[tumblerusedlist]").remove();
+                                }
+                            },
+                            (error) => {
+
+                            }
+                        );
+                    },
+                    (error) => {
+                        // 오류
+                    });
+            } else {
+                // 로그아웃시 확인
+            }
+        };
+
+        $fn_tumblerClose = function() {
+            let tumbler_layerpopup = $("#tumbler_layer_pop");
+            tumbler_layerpopup.hide();
+            mvJs.utils.dimmedHide();
+        };
+    })(); {% endcomment %}
+
+
+</script>
+<!-- 텀블러 관련 팝업 스크립트 end -->
+
+<script type="text/javascript" src="https://api.jejupass.com/display/js/jpp.quickSearch.js"></script>
+
+<script>
+
+    {% comment %} var dubCheckCode = "false"; // 아이디 중복확인 체크코드
+    var pwdCheckCode = "false"; // 비밀번호 형식 체크 코드
+    var repwdCheckCode = "false"; // 비밀번호 확인 체크 코드
+    var checkedId; // 중복확인된 아이디
+    var click = true; // 더블클릭 방지
+
+    $(document).ready(function() {
+
+        $(".txtErr").hide();
+        $("#alertBox").hide();
+        getId($("#inp_id").val());
+        fnCheckAll(); // 전체 유효성 검사
+        fncSetData(); // 가져온 이름, 전화번호, 생일 넣기
+    }); {% endcomment %}
+
+    // 가져온 이름, 전화번호, 생일 넣기
+    {% comment %} function fncSetData() {
+
+        $("#inp_name").val($("#userName").val());
+        $("#inp_phnum").val($("#userPhone").val());
+        var birthday = $("#userBirthday").val();
+
+        var numYear = birthday.substring(0,4);
+        var numMonth = birthday.substring(4,6);
+        var numDay = birthday.substring(6,8);
+
+        let option_year = `<option value="${numYear}">${numYear}</option>`;
+        $("#year").append(option_year);
+        $("#year").next("button").find("span.ui-selectmenu-text").text(numYear);
+        $("#year").val(numYear).prop("selected", true);
+
+        let option_month = `<option value="${numMonth}">${numMonth}</option>`;
+        $("#month").append(option_month);
+        $("#month").next("button").find("span.ui-selectmenu-text").text(numMonth);
+        $("#month").val(numMonth).prop("selected", true);
+
+        let option_day = `<option value="${numDay}">${numDay}</option>`;
+        $("#day").append(option_day);
+        $("#day").next("button").find("span.ui-selectmenu-text").text(numDay);
+        $("#day").val(numDay).prop("selected", true);
+    } {% endcomment %}
+
+    // 아이디 유효성 검사
+    {% comment %} function getId(e) {
+        var txtId = document.getElementById("inp_id").value;
+        var regExp = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+        var sliceId = e.slice(0, 320);
+        if (e.length > 320) {
+            document.getElementById("inp_id").value = sliceId;
+        }
+        if (checkedId != e) {
+            dubCheckCode = "false";
+        }
+        if (regExp.test(txtId) === true) {
+            $("#txtErrEmail").hide();
+            document.getElementById("btnDubCheck").removeAttribute("disabled");
+        } else {
+            $("#txtErrEmail").show();
+            document.getElementById("btnDubCheck").setAttribute("disabled", "true");
+        }
+    } {% endcomment %}
+
+    {% comment %} $("#inp_id").focusout(function() {
+        var txtId = document.getElementById("inp_id").value;
+        var regExp = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+
+        if (regExp.test(txtId) === true) {
+            $("#txtErrEmail").hide();
+            document.getElementById("btnDubCheck").removeAttribute("disabled");
+        } else {
+            $("#txtErrEmail").show();
+            document.getElementById("btnDubCheck").setAttribute("disabled", "true");
+        }
+    }); {% endcomment %}
+
+
+
+    {% comment %} $("inp_id").change(function() {
+
+        if (checkedId != $("#inp_id").val()) { dubCheckCode = "false"; }
+        else { dubCheckCode = "true"; }
+    }); {% endcomment %}
+
+
+
+    {% comment %} // 아이디 중복체크
+    $("#btnDubCheck").click(function() {
+        var txtAlert = document.getElementById("txtAlert");
+
+        var email = document.getElementById("inp_id").value;
+
+        if($("#btnDubCheck").attr("disabled") == "disabled") {
+            getId(email);
+            return false;
+        }
+
+        if (email != "") {
+            var url = "/auth/api/auth/checkDubId?email="+email;
+            jppJs.call('POST', url, "", function (dataS) {
+                if (dataS && dataS.data) {
+                    $("#alertBox").show();
+                    txtAlert.innerText = "사용 가능한 이메일 입니다.";
+                    txtAlert.setAttribute("data-option", "true");
+                    dubCheckCode = "true";
+                    checkedId = email;
+                    fnCheckAll();
+                    return false;
+                } else {
+                    $("#alertBox").show();
+                    txtAlert.innerText = "등록된 이메일 정보가 있습니다. 로그인하고 이용해주세요.";
+                    txtAlert.setAttribute("data-option", "false");
+                    dubCheckCode = "false";
+                    return false;
+                }
+            }, function(dataS) {
+            });
+        }
+    }); {% endcomment %}
+
+    // 비밀번호 유효성 검사
+    {% comment %} function getPwd(e) {
+        var txtPwd = $("#inp_pwd").val();
+        var slicePwd = e.slice(0, 16);
+
+        if (e.length > 16) {
+            $("#inp_pwd").val(slicePwd);
+        }
+        fnCheckPwd();
+    }
+
+    $("#inp_pwd").focus(function() {
+        fnCheckPwd();
+    });
+
+    $("#inp_pwd").focusout(function() {
+        fnCheckAll();
+        var txtPwd = document.getElementById("inp_pwd").value;
+        var num = txtPwd.search(/[0-9]/g);
+        var eng = txtPwd.search(/[a-z]/ig);
+        var spe = txtPwd.search(/[`~!@#$%^&*()_=+{}₩;:'",<.>/?|\[\]\-\\]/gi);
+        var msg = "입력하신 비밀번호는 올바른 형식이 아닙니다.";
+
+        if (txtPwd.length < 8) {
+            $("#txtErrPwd").text(msg);
+            $("#txtErrPwd").show();
+            pwdCheckCode = "false";
+        } else if (txtPwd.length >= 8) {
+            /*if (num > 0 || eng > 0){ $("#txtErrPwd").hide(); pwdCheckCode = "true";}
+           else if (eng > 0 || spe > 0) { $("#txtErrPwd").hide(); pwdCheckCode = "true";}
+           else if (num > 0 || spe > 0) { $("#txtErrPwd").hide(); pwdCheckCode = "true";}
+           else {
+               $("#txtErrPwd").text(숫자, 영문, 특수문자를 조합해 8~16자리로 생성해 주세요.);
+               $("#txtErrPwd").show();
+               pwdCheckCode = "false";
+           }*/
+
+            if(num < 0 || eng < 0 || spe < 0) {
+                $("#txtErrPwd").text("숫자, 영문, 특수문자를 조합해 8~16자리로 생성해 주세요.");
+                $("#txtErrPwd").show();
+                pwdCheckCode = "false";
+            } else {
+                $("#txtErrPwd").hide();
+                pwdCheckCode = "true";
+            }
+        }
+    }); {% endcomment %}
+
+    // 비밀번호 유효성검사 function
+    {% comment %} function fnCheckPwd() {
+        var txtPwd = document.getElementById("inp_pwd").value;
+        var txtRePwd = $("#inp_repwd").val();
+        var num = txtPwd.search(/[0-9]/g);
+        var eng = txtPwd.search(/[a-z]/ig);
+        var spe = txtPwd.search(/[`~!@#$%^&*()_=+{}₩;:'",<.>/?|\[\]\-\\]/gi);
+
+        if (txtPwd.length < 8) {
+            $("#txtErrPwd").text("최소 8자 이상 입력해주세요.");
+            $("#txtErrPwd").show();
+            pwdCheckCode = "false";
+        } else if (txtPwd.length >= 8) {
+            /*if (num > 0 || eng > 0){ $("#txtErrPwd").hide(); pwdCheckCode = "true";}
+            else if (eng > 0 || spe > 0) { $("#txtErrPwd").hide(); pwdCheckCode = "true";}
+            else if (num > 0 || spe > 0) { $("#txtErrPwd").hide(); pwdCheckCode = "true";}
+            else {
+                $("#txtErrPwd").text("숫자, 영문, 특수문자를 2가지 이상 조합해 8~16자리로 생성해 주세요.");
+                $("#txtErrPwd").show();
+                pwdCheckCode = "false";
+            }*/
+
+            if(num < 0 || eng < 0 || spe < 0) {
+                $("#txtErrPwd").text("숫자, 영문, 특수문자를 조합해 8~16자리로 생성해 주세요.");
+                $("#txtErrPwd").show();
+                pwdCheckCode = "false";
+            } else {
+                $("#txtErrPwd").hide();
+                pwdCheckCode = "true";
+            }
+
+        }
+
+        if (txtPwd != txtRePwd) {
+            repwdCheckCode = "false";
+        } else {
+            repwdCheckCode = "true";
+        }
+    }
+
+    // 비밀번호 확인 유효성검사
+    function getPwdCheck(e) {
+        var txtPwd = $("#inp_pwd").val();
+        var txtPwdCheck = $("#inp_repwd").val();
+        var slicePwdCheck = e.slice(0, 16);
+        if (e.length > 16) {
+            $("#inp_repwd").val(slicePwdCheck);
+        }
+        if (txtPwdCheck == txtPwd) {
+            $("#txtErrPwdCheck").hide();
+            repwdCheckCode = "true";
+        }
+    }
+
+    $("#inp_repwd").focusout(function() {
+        fnCheckAll();
+        var txtPwd = $("#inp_pwd").val();
+        var txtPwdCheck = $("#inp_repwd").val();
+
+        if (txtPwdCheck != txtPwd) {
+            $("#txtErrPwdCheck").show();
+            repwdCheckCode = "false";
+        } else {
+            $("#txtErrPwdCheck").hide();
+            repwdCheckCode = "true";
+        }
+    });
+
+    $("#year").change(function() {
+        fnCheckAll();
+    });
+    $("#month").change(function() {
+        fnCheckAll();
+    });
+    $("#day").change(function() {
+        fnCheckAll();
+    }); {% endcomment %}
+
+    // input del버튼 클릭시 포커스
+    {% comment %} $("#btnDelId").click(function() {
+        $("#btnDubCheck").prop("disabled", "true");
+        $("#inp_id").focus();
+    });
+    $("#btnDelPwd").click(function() {
+        $("#inp_pwd").focus();
+    });
+    $("#btnDelRepwd").click(function() {
+        $("#inp_repwd").focus();
+    });
+
+    // alert창 버튼 이벤트
+    $("#btnOk").click(function() {
+        var dataOption = $("#txtAlert").prop("data-option");
+        $("#alertBox").hide();
+        if (dataOption == "false") {
+            location.href = "mobile/signup" //로그인 페이지로 설정
+        }
+    });
+    $("#btnClose").click(function() {
+        $("#alertBox").hide();
+    });
+
+    // 폼 전송 전 전체 유효성 검사
+    $("#btnSignup").click(function() {
+        var year = $("#year").val();
+        var month = $("#month").val();
+        var date = $("#day").val();
+
+        var email = $("#inp_id").val();
+        var password = $("#inp_pwd").val();
+        var name = $("#inp_name").val();
+        var birthday = year + "-" + month + "-" + date;
+        var mobile = $("#inp_phnum").val();
+        var gender;
+        var frmSignup = document.getElementById("frmSignup");
+
+        var useAgree = $("#sendUseAgree").val();
+        var privacyAgree = $("#sendPrivacyAgree").val();
+        var ecommerceAgree = $("#sendEcommerceAgree").val();
+        var emailAgree = $("#sendEmailAgree").val();
+        var smsAgree = $("#sendSmsAgree").val();
+        var frmAgreement = $("#frmAgreement");
+
+        if ($("#radMale").is(":checked")) {
+            gender = "MALE";
+        } else {
+            gender = "FEMALE";
+        }
+
+        if (email == "" || email == null) {
+            jppJs.alert("회원가입", "아이디(이메일)를 입력해주세요.");
+            return false;
+        } else if (password == "" || password == null) {
+            jppJs.alert("회원가입", "비밀번호를 입력해주세요.");
+            return false;
+        } else if (year == "" || year == null || month == "" || month == null || date == "" || date == null) {
+            jppJs.alert("회원가입", "생년월일을 선택해주세요.");
+            return false;
+        } else if (dubCheckCode == "false") {
+            jppJs.alert("회원가입", "아이디 중복확인을 진행해주세요.");
+            return false;
+        } else if (pwdCheckCode == "false") {
+            jppJs.alert("회원가입", "패스워드는 숫자, 영문, 특수문자를 조합해 8~16자리로 생성해 주세요.");
+            return false;
+        } else if (repwdCheckCode == "false") {
+            jppJs.alert("회원가입", "비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+            return false;
+        } else {
+            if (click == true) {
+                click = false; // 중복클릭
+                document.getElementById("btnSignup").removeAttribute("disabled");
+                $("#sendEmail").val(email);
+                $("#sendName").val(name);
+                $("#sendBirthday").val(birthday);
+                $("#sendMobile").val(mobile);
+                $("#sendGender").val(gender);
+                click = false;
+                jppJs.call('POST', '/api/signup', {
+                    "password": password,
+                    "useAgreeYn": useAgree,
+                    "privacyAgreeYn": privacyAgree,
+                    "ecommerceAgreeYn": ecommerceAgree,
+                    "emailAgreeYn": emailAgree,
+                    "smsAgreeYn": smsAgree,
+                    "email": email,
+                    "name": name,
+                    "mobile": mobile,
+                    "birthday": birthday,
+                    "gender": gender,
+                    "userCi": $("#userCi").val()
+                }, function (data) {
+
+                    const memberId = data;
+                    jppJs.go("/web/signup/complete?result=success");
+                    // jppJs.call('POST', '/api/auth', {"memberId":memberId, "email":email, "password":password}, function(data){
+                    //     console.log(data.data);
+                    //     var resultId = data.data;
+                    //     var result = "";
+                    //     if (resultId != null) {
+                    //         result = "success";
+                    //     }
+                    //     location.href = "/mobile/signup/complete?result="+result;
+                    // }, function(data) {
+                    // });
+
+                    // jppJs.call('GET', '/api/agreement/USE', {"id":memberId, "termsCode":"USE", "agreeYn":useAgree}, function(data){
+                    //     console.log(data.data);
+                    // }, function(data){});
+                    // jppJs.call('GET', '/api/agreement/PRIVACY', {"id":memberId, "termsCode":"PRIVACY", "agreeYn":privacyAgree}, function(data){
+                    //     console.log(data.data);
+                    // }, function(data){});
+                    // jppJs.call('GET', '/api/agreement/ECOMMERCE', {"id":memberId, "termsCode":"ECOMMERCE", "agreeYn":ecommerceAgree}, function(data){
+                    //     console.log(data.data);
+                    // }, function(data){});
+                    // jppJs.call('GET', '/api/agreement/EMAIL', {"id":memberId, "termsCode":"EMAIL", "agreeYn":emailAgree}, function(data){
+                    //     console.log(data.data);
+                    // }, function(data){});
+                    // jppJs.call('GET', '/api/agreement/SMS', {"id":memberId,  "termsCode":"SMS","agreeYn":smsAgree}, function(data){
+                    //     console.log(data.data);
+                    // }, function(data){});
+                }, function (data) {
+                });
+            } else {
+                return false;
+            }
+        }
+    }); {% endcomment %}
+
+
+    {% comment %} function fnCheckAll() {
+        var year = $("#year").val();
+        var month = $("#month").val();
+        var date = $("#day").val();
+        var email = $("#inp_id").val();
+        var password = $("#inp_pwd").val();
+
+        if (email == "" || email == null) {
+            return false;
+        } else if (password == "" || password == null) {
+            return false;
+        } else if (year == "" || year == null || month == "" || month == null || date == "" || date == null) {
+            return false;
+        } else if (dubCheckCode == "false") {
+            return false;
+        } else if (pwdCheckCode == "false") {
+            return false;
+        } else if (repwdCheckCode == "false") {
+            return false;
+        } else {
+            document.getElementById("btnSignup").removeAttribute("disabled");
+        }
+    } {% endcomment %}
+
+    {% comment %} function fncDisabled() {
+        $("#btnSignup").addClass("btDisabled");
+        $("#btnSignup").removeClass("action");
+    }
+
+    function fncAction() {
+        $("#btnSignup").removeClass("btDisabled");
+        $("#btnSignup").addClass("action");
+    } {% endcomment %}
+
+
+</script>
+
+
+  
+<script>
+  {% comment %} let reviewWriterName = '';
+  let reviewWriterEmail = '';
+  let removeFileSet = new Set();
+  (function() {
+
+  })();
+
+  function setReview() {
+    let reviewCnt = 0;
+    let reviewTotalCnt = 1;
+
+    let $module = $('[jpp-module="review"]');
+    if($module.length) {
+      // 리뷰 샌드박스로 구현1
+      let categoryTargetCode = $('[category-target-code]').attr("category-target-code"); // 카테고리 코드
+      let reviewTargetCode = $('[category-target-code]').attr("category-target-code") + "_REVIEW"; // 리뷰에서 식별코드
+      let reviewTargetId = $('[review-target-id]').attr("review-target-id"); // 리뷰에서 식별 컨텐츠 아이디
+      let reviewTitle = $('[review-title]').attr("review-title"); // 업체 식별 이름
+      let writeYn = $('[review-target-id]').attr("review-write-yn"); // 리뷰 작성 가능 여부
+      let orderNo = $('[jpp-order]').attr('jpp-order');	// 주문번호
+      let reviewContentsId; // 리뷰 컨텐츠 식별 번호
+      let page = 0;
+      let $popup;
+      let reviewWritePopup, reviewHeader, reviewList;
+
+      if (categoryTargetCode === 'ESG') {
+        $('.scoreGroup').hide();
+      }
+
+      fncLoginCheck(categoryTargetCode);
+
+      reviewWritePopup = (function() {
+        let module = {};
+        let sel_files = [];
+        let fileIdx = 0;
+        let questions = [];
+
+
+        /*
+        conf.title
+        conf.questions
+         */
+        let _init = function(conf) {
+
+          // 리뷰 안내 멘트
+          let pointMent = ``;
+          let targetMent = ``;
+          let delMent = ``;
+
+          let detailDvnVal = '';
+
+          if (categoryTargetCode === 'STAY') {
+            detailDvnVal = 'STAY_NORMAL';
+            targetMent = `숙박 리뷰는 체크아웃 후 7일 이내에 작성 가능합니다.`;
+          } else if (categoryTargetCode === 'CAFE') {
+            targetMent = `카페 리뷰는 사용 후 7일 이내에 작성 가능합니다.`;
+          } else if (categoryTargetCode === 'RENTCAR') {
+            targetMent = `렌트카 리뷰는 반납 후 7일 이내에 작성 가능합니다.`;
+          } else if (categoryTargetCode === 'ESG') {
+            targetMent = `ESG 리뷰는 기부 후 7일 이내에 작성 가능합니다.`;
+          } else if (categoryTargetCode === 'RESTAURANT') {
+            targetMent = `맛집 리뷰는 하루 최대 5개까지 작성 가능합니다.`;
+          }
+
+          let condition = {
+            kind: 'TEXT_REVIEW',
+            category: categoryTargetCode,
+            detailDvn: detailDvnVal
+          }
+
+          jppJs.callSync('GET', '/etc/api/review/rewardPointMetaList', condition, function success(data) {
+            if (data.status == 200) {
+              let pitem = data.data;
+              let nomal = 0;
+              let mjb = 0;
+              for (let p in pitem) {
+                let pt = pitem[p];
+                if (pt.memberType === 'NORMAL') {
+                  nomal = pt.savePoint;
+                } else {
+                  mjb = pt.savePoint;
+                }
+              }
+              if (nomal > 0 && mjb > 0) {
+                pointMent = `리뷰 작성 시 일반 회원에게는 ${nomal}p, 그린 앰버서더에게는 ${mjb}p를 지급해 드립니다.`;
+                delMent = `리뷰 삭제 시 지급된 포인트는 회수됩니다.`;
+              }
+            }
+          });
+
+          let popup = `<section id="reviewWritePopup" class="layPop layerMType02" tabindex="0" style="display:block">
+                        <header>
+                          <h2 class="titLay">리뷰 남기기</h2>
+                        </header>
+                        <div class="layContainer scriptScroll" tabindex="0">
+                          <div class="layContent writeArea">
+                            <p class="pageTit" jpp-item="title">"${conf.title}"에서의 <br>경험 어떠셨나요?</p>
+                            <ul class="reviewStars">
+                              ${(function() {
+            let html = ``;
+            if (categoryTargetCode != 'ESG') {
+                html = `<ul class="reviewStars">`;
+              for(var k in conf.questions) {
+                questions.push(conf.questions[k]);
+                let question = `<li>
+                                                  <strong class="tit">${conf.questions[k].title}</strong>
+                                                  <div class="fp_slideArea slideReview">
+                                                    <div id="slider${k}" class="slider ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content" data-options='{"range": "min", "max": 5, "step": 0.5}'>
+                                                      <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min" style="width: 0%;"></div>
+                                                      <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" jpp-answer="${conf.questions[k].questionId}" style="left: 0%;"></span>
+                                                    </div>
+
+                                                </li>`;
+                html += question;
+              }
+              html += `</ul>`;
+            }
+            return html;
+          })()}
+                            <div class="commentGroup">
+                              <h3 class="titDep5">리뷰작성<small class="required">*필수</small></h3>
+                              <div class="inpFrm">
+                                <span class="inpA inpF inpText">
+                                    <textarea jpp-form="review" id="inpText" cols="10" rows="10" placeholder="리뷰를 남겨주세요. (15글자 이상)" title="리뷰를 남겨주세요. (15 글자 이상)"></textarea>
+                                    <p class="textNum" jpp-item="reviewCharCount">0/2,000</p>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="commentGroup">
+                              <h3 class="titDep5">사진 추가 (최대10장)</h3>
+                              <div class="photoUpload" jpp-item="photoUpload">
+                                <span class="fileView inpFrm" jpp-item="choiceFile">
+                                    <input type="file" id="rinpPhoto" jpp-form="file">
+                                    <label for="rinpPhoto" jpp-item="labelPhoto">사진 선택</label>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="guideInfo topLine">
+                              <h3 class="titGuide">리뷰작성 안내</h3>
+                              <ul class="listType01">
+                                <li>${pointMent}</li>
+                                <li>${targetMent}</li>
+                                <li>작성된 리뷰는 수정할 수 없으며, 삭제만 가능합니다.</li>
+                                <li>${delMent}</li>
+                                <li>리뷰 내용에 금지어(비속어, 욕설 등)가 포함된 경우 리뷰를 등록할 수 없습니다.</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div><!-- //layCont-->
+                        <div class="btnBtm">
+                          <div class="btnArea">
+                            <button type="button" class="btnDefault btnL action" jpp-btn="submit">완료</button>
+                          </div>
+                        </div>
+                        <button type="button" class="closeL" onclick="reviewPopupClose(); return false;">팝업 닫기</button>
+                      </section>`;
+
+          $popup = $(popup);
+
+          var $content = $popup.find('[jpp-form="review"]'); // 리뷰 내용 적는 텍스트 에어리어
+          var $contentCharCount = $popup.find('[jpp-item="reviewCharCount"]'); // 리뷰 내용 글자수
+          var $submitBtn = $popup.find('[jpp-btn="submit"]'); // 리뷰 저장 버튼
+          var $file = $popup.find('[jpp-form="file"]'); // 파일 선택 버튼
+          var $choiceFile = $popup.find('[jpp-item="choiceFile"]'); // 파일 선택
+
+          $content.keyup(function() {
+            let $this = $(this);
+            if ($this.val().length > 2000) {
+              alert('리뷰는 최대 2000글자 까지만 작성이 가능합니다.');
+              $this.val($this.val().substr(0, 2000))
+              return false;
+            }
+            $contentCharCount.text(`${$this.val().length}/2,000`);
+          });
+
+          $file.on("change", function handleImgFileSelect(e) {
+            var files = e.target.files;
+            var filesArr = Array.prototype.slice.call(files);
+
+            filesArr.forEach(function(f, index) {
+              if(!f.type.match("image.*")) {
+                return;
+              }
+
+              sel_files.push(f);
+              var reader = new FileReader();
+              reader.onload = function(e) {
+                var result = e.target.result;
+                var html = `<figure class="fileView" id="reviewFileView${fileIdx}">
+                              <img id="reviewImgArea${index}" src="${result}" alt="">
+                              <button type="button" class="btDel" jpp-btn="del" onclick="fncRemoveFile(${fileIdx})">삭제</button>
+                            </figure>`;
+                let $delBtn = $(html).find('[jpp-btn="del"]');
+                $delBtn.find('[jpp-btn="del"]').click((function(index, $delBtn) {
+                  // 이미지 삭제 버튼 이벤트
+                  return function() {
+                    sel_files.splice(index, 1);
+                    $delBtn.remove();
+                    if(sel_files.length < 10) {
+                      $choiceFile.show();
+                    } else {
+                      $choiceFile.hide();
+                    }
+                  }
+                })(index, $delBtn));
+                $popup.find('[jpp-item="photoUpload"]').append(html);
+                fileIdx++;
+                index = index + 1;
+              }
+              reader.readAsDataURL(f);
+              if(sel_files.length - removeFileSet.size > 9) {
+                $choiceFile.hide();
+              }else {
+                $choiceFile.show();
+              }
+            });
+          });
+
+          $submitBtn.click(function() {
+            //리뷰작성완료.
+
+            if (writeYn == 'false') {
+              alert("리뷰 작성이 불가능합니다.");
+              return false;
+            } else {
+              if (categoryTargetCode != 'RESTAURANT') {
+                if (orderNo == null) {
+                  alert("잘못된 접근방식 입니다.");
+                  return false;
+                }
+              }
+            }
+
+            if ($content.val().length < 15) {
+              alert("리뷰 작성은 최소 15글자 이상 작성하셔야 합니다.");
+              return false;
+            } else if ($content.val().length > 2000) {
+              alert('리뷰는 최대 2000글자 까지만 작성이 가능합니다.');
+              return false;
+            }
+
+            // 금칙어
+            jppJs.callSync("POST", "/review/api/forbidden/check", {"txt": $content.val()}, function success(data) {
+              let forbidden = data.data;
+              if (forbidden === true) {
+                alert('금칙어는 사용하실 수 없습니다.');
+                return false;
+              }
+
+              var photoYn = false; // 포토 YN 구분자
+              if (sel_files.length > 0) { // 이미지가 있으면 true
+                photoYn = true;
+              }
+
+              let rq = {
+                "target":{
+                  "targetCode": categoryTargetCode,
+                  "targetId":reviewTargetId,
+                  "ownerId":jppJs.isLogin() ? memberId : null
+                },
+                "contents":$content.val(),
+                "writerName":reviewWriterName,
+                "photoYn":photoYn,
+                "answers":[
+                  {
+                    "starPoint":4.0,
+                    "question":{
+                      "id":1
+                    }
+                  },
+                  {
+                    "starPoint":2.0,
+                    "question":{
+                      "id":2
+                    }
+                  }
+                ],
+                "reviewContents":{
+                  "id":reviewContentsId // TODO
+                },
+                "reviewTargetCode" : reviewTargetCode,
+                "accessInfo":{
+                  "regUserId": reviewWriterEmail,
+                  "regUserName": reviewWriterName
+                }
+              };
+
+              let answers = [];
+              for(let q in questions) {
+                let qt = questions[q];
+                let sp = $popup.find(`[jpp-answer="${qt.questionId}"]`).css('left').replace('px', '') / 40;
+                if (sp === 0) {
+                  alert('상품 후기 별점을 입력해주세요');
+                  return false;
+                }
+                answers.push({
+                  "starPoint":sp,
+                  "question":{
+                    "id":qt.questionId
+                  }
+                });
+              }
+              rq['answers'] = answers;
+
+              // 띄워쓰기
+              if (checkOverlap($content.val())) {
+                return false;
+              }
+
+              jppJs.call("POST", "/review/api/reviews", rq, function success(data) {
+                if(data.status === 200) {
+                  reviewHeader.update();
+                  reviewList.update();
+                  $popup.remove();
+
+                  let reviewId = data.data.reviewId;
+                  let ownerId = data.data.ownerId;
+
+                  // ORDER 테이블 REVIEW_ID, REVIEW_YN 저장
+
+                  var orderReviewReq = {
+                    'reviewId': reviewId
+                    , 'reviewWriteYn': true
+                    , 'targetId': reviewTargetId
+                  };
+
+                  if (orderNo != '') {
+
+                    if (categoryTargetCode === 'CAFE') {
+                      jppJs.call("POST", '/cafe/api/cafe/update/useHist/' + orderId, orderReviewReq, function success (data) {
+                        if (data.status == 200) {
+
+                        }
+                      }, function (data) {
+
+                      });
+
+                    } else {
+                      jppJs.call("GET", "/order/api/order/review/order", {"orderNo": orderNo}, function success(data) {
+                        if (data.status == 200) {
+                          var orderId = data.data;
+
+                          var putUrl = '';
+                          if (categoryTargetCode === 'RENTCAR') {
+                            putUrl = '/order/api/order/update/orderRentcar/';
+                          } else if (categoryTargetCode === 'STAY') {
+                            putUrl = '/order/api/order/update/orderStay/';
+                          } else if (categoryTargetCode === 'ESG') {
+                            putUrl = '/order/api/order/update/orderEsg/';
+                          }
+
+                          jppJs.call("PUT", putUrl + orderId, orderReviewReq, function success (data) {
+                            if (data.status == 200) {
+
+                            }
+                          }, function (data) {
+
+                          });
+
+                        }
+                      }, function (data) {
+
+                      });
+                    }
+
+                  }
+
+                  if (photoYn === true) { // 이미지가 있으면 등록
+
+                    var form = $('#filesUpLoadSendReq')[0];
+                    var formData = new FormData(form);
+                    formData.append("targetCode", reviewTargetCode);
+                    formData.append("targetId", reviewId);
+                    formData.append("ownerId", ownerId);
+                    formData.append("description", "리뷰 이미지");
+                    for(var i=0; i<sel_files.length; i++) {
+                      if (!removeFileSet.has(i)) {
+                        formData.append("attachFiles", sel_files[i]);
+                      }
+                    }
+
+                    jppJs.callForm("POST", "/file/api/files", formData, function success (data) { // 리뷰 이미지 등록
+                      if (data.status === 200) {
+                        let id = data.data.id;
+
+
+                      }
+                    }, function (data) {
+
+                    });
+                  }
+
+                  // 작성 완료 후 작성버튼 없애기
+                  mvJs.utils.dimmedHide();
+                  $('[jpp-id="reviewRegistBox"]').hide();
+                  $('[jpp-btn="reviewResgist"]').attr('disabled', 'disabled');
+
+                }
+              }, function failure() {});
+
+            });
+
+
+          });
+
+          $('body').append($popup);
+          mvJs.init();
+          mvJs.utils.dimmedShow();
+        }; {% endcomment %}
+
+        // let _getQuestions = (function() {
+        //   let questions = [];
+        //
+        //   return function() {
+        //      if(questions.length > 0) {
+        //        return questions;
+        //      } else {
+        //       // TODO  jppJs.call 질문목록
+        //       jppJs.call("GET", "http://localhost:8035/api/reviewContents/questions", {"categoryCode":categoryTargetCode}, function success(data) {
+        //         if (data.status === 200) {
+        //           console.log("questions success")
+        //           console.log(data)
+        //           // let reviewContentsId = data.data.reviewContentsId;
+        //           // let reviewQuestion = data.data.reviewQuestion;
+        //           // return reviewQuestion;
+        //           console.log("data : " + data.data.reviewQuestion);
+        //           questions = data.data.reviewQuestion;
+        //         }
+        //       }, function (data) {
+        //         console.log("questions fail")
+        //         console.log(data)
+        //       });
+        //       return questions;
+        //     }
+        //   };
+        // })();
+
+
+        {% comment %} module.popup = function (companyName) {
+
+          if ($popup != null) {
+            $popup.remove();
+          }
+
+          let conf = {title : companyName};
+
+          jppJs.call("GET", "/review/api/reviewContents/questions", {"categoryCode":categoryTargetCode}, function success(data) {
+            if (data.status === 200) {
+              conf.questions = data.data.reviewQuestion;
+              reviewContentsId = data.data.reviewContentsId;
+              _init(conf);
+            }
+          }, function (data) {
+
+          });
+
+        };
+
+        return module;
+      })();
+
+      // 리뷰 해더1
+      reviewHeader = (function() {
+        let module = {};
+        let $totalPercent = $module.find('[jpp-item="totalPercent"]'); // style="width:80%"
+        let $totalPointString = $module.find('[jpp-item="totalPointString"]'); // 5점 중 4.5점 (text)
+        let $totalPoint = $module.find('[jpp-item="totalPoint"]'); // 4.5 (text)
+        let $5pointPercent = $module.find('[jpp-item="5pointPercent"]'); // 5점 퍼센트 style="width:80%"
+        let $5pointCount = $module.find('[jpp-item="5pointCount"]'); // 4 (text)
+        let $4pointPercent = $module.find('[jpp-item="4pointPercent"]'); // 4점 퍼센트 style="width:80%"
+        let $4pointCount = $module.find('[jpp-item="4pointCount"]'); // 4 (text)
+        let $3pointPercent = $module.find('[jpp-item="3pointPercent"]'); // 3점 퍼센트 style="width:80%"
+        let $3pointCount = $module.find('[jpp-item="3pointCount"]'); // 4 (text)
+        let $2pointPercent = $module.find('[jpp-item="2pointPercent"]'); // 2점 퍼센트 style="width:80%"
+        let $2pointCount = $module.find('[jpp-item="2pointCount"]'); // 4 (text)
+        let $1pointPercent = $module.find('[jpp-item="1pointPercent"]'); // 1점 퍼센트 style="width:80%"
+        let $1pointCount = $module.find('[jpp-item="1pointCount"]'); // 4 (text)
+        let $headerPoints = $module.find('[jpp-list="headerPoints"]');
+        let $photoReviewCount = $module.find('[jpp-item="photoReviewCount"]'); //포토 리뷰(5) TODO 전체 포토리뷰 갯수 필요
+
+        // 작성 가능 여부에 따라 아래 영역과 버튼 상태가 달라진다.
+        let $description = $module.find('[jpp-item="description"]'); // 작성기한 : 체크아웃 후 7일 이내 , 리뷰 작성 기한이 지났습니다.
+        let $reviewRegistBtn = $module.find('[jpp-btn="reviewResgist"]'); // 리뷰남기기 버튼, 작성볼가능하면 disabled 처리
+        let descTxt = '';
+        if(writeYn === "true") {
+          if (categoryTargetCode === 'RESTAURANT') {
+            descTxt = '하루 최대 5개. 중복 불가.';
+          } else if (categoryTargetCode === 'STAY') {
+            descTxt = '작성기한: 체크아웃 후 7일 이내';
+          } else if (categoryTargetCode === 'RENTCAR') {
+            descTxt = '작성기한: 반납 후 7일 이내';
+          } else if (categoryTargetCode === 'CAFE') {
+            descTxt = '작성기한: 카페패스 사용 후 7일 이내';
+          } else if (categoryTargetCode === 'ESG') {
+            descTxt = '작성기한: 기부 후 7일 이내';
+          }
+          $description.text(descTxt);
+          $reviewRegistBtn.prop('disabled', false);
+        } else {
+            $('[jpp-id="reviewRegistBox"]').hide();
+            $('[jpp-btn="reviewResgist"]').attr('disabled', 'disabled');
+          if (categoryTargetCode === 'CAFE') {
+            $('[jpp-id="noRoginRegistBox"]').show();
+          }
+        }
+        $reviewRegistBtn.click(function() {
+          if (!jppJs.isLogin() && categoryTargetCode === 'RESTAURANT') {
+            let domainNm = jppJs.getServiceDomain('restaurant') + "/web/restaurants/" + reviewTargetId;
+            jppJs.go("/web/auth/login" + "?callbackUrl=" + encodeURIComponent(domainNm), 'auth');
+          } else {
+            reviewWritePopup.popup($('.titDep1').text());
+          }
+        });
+
+        let _render = function () {
+          let params = {
+            'categoryTargetCode' : categoryTargetCode
+          };
+          if(reviewTargetId) {
+            params['targetId'] = reviewTargetId;
+          }
+          if (categoryTargetCode != 'ESG') {
+            jppJs.call('get', '/review/api/review/header', params,
+                    function (data) {
+                      if (data.status === 200) {
+
+                        let totalStarPoint = data.data.totalStarPoint;
+                        let totalStarPointPercent = Math.ceil(totalStarPoint / 5 * 100);
+                        let answers = data.data.answers;
+                        let scope = data.data.scope;
+                        if (scope != null) {
+                          let fiveScopeCnt = scope.fiveScopeCnt;
+                          let fourScopeCnt = scope.fourScopeCnt;
+                          let threeScopeCnt = scope.threeScopeCnt;
+                          let twoScopeCnt = scope.twoScopeCnt;
+                          let oneScopeCnt = scope.oneScopeCnt;
+                          let totalScopeCnt = fiveScopeCnt + fourScopeCnt + threeScopeCnt + twoScopeCnt + oneScopeCnt;
+                          let fiveScopePercent = totalScopeCnt < 1 ? 0 : Math.ceil((fiveScopeCnt / totalScopeCnt) * 100);
+                          let fourScopePercent = totalScopeCnt < 1 ? 0 : Math.ceil((fourScopeCnt / totalScopeCnt) * 100);
+                          let threeScopePercent = totalScopeCnt < 1 ? 0 : Math.ceil((threeScopeCnt / totalScopeCnt) * 100);
+                          let twoScopePercent = totalScopeCnt < 1 ? 0 : Math.ceil((twoScopeCnt / totalScopeCnt) * 100);
+                          let oneScopePercent = totalScopeCnt < 1 ? 0 : Math.ceil((oneScopeCnt / totalScopeCnt) * 100);
+
+                          $totalPercent.css('width', `${totalStarPointPercent}%`);
+                          $totalPointString.text(`5점 중 ${totalStarPoint}점`);
+                          $totalPoint.text(totalStarPoint);
+                          $5pointPercent.css('width', `${fiveScopePercent}%`);
+                          $4pointPercent.css('width', `${fourScopePercent}%`);
+                          $3pointPercent.css('width', `${threeScopePercent}%`);
+                          $2pointPercent.css('width', `${twoScopePercent}%`);
+                          $1pointPercent.css('width', `${oneScopePercent}%`);
+                          $5pointCount.text(fiveScopeCnt);
+                          $4pointCount.text(fourScopeCnt);
+                          $3pointCount.text(threeScopeCnt);
+                          $2pointCount.text(twoScopeCnt);
+                          $1pointCount.text(oneScopeCnt);
+                        }
+
+                        if (answers) {
+                          if (answers.length > 0) {
+                            $headerPoints.empty();
+                            for (let k in answers) {
+                              let item = `<li>
+                                  <span class="tit">${answers[k].shortTitle}</span>
+                                  <em class="score" title="별점 평균">${answers[k].average}</em>
+                                </li>`;
+                              $headerPoints.append(item);
+                            }
+                          } else {
+                            $headerPoints.hide();
+                          }
+                        }
+                      }
+
+                    },
+                    function (data) {
+
+                    }
+            );
+          }
+        }
+        _render();
+
+        module.update = function() {
+          _render();
+        }
+
+        return module;
+      })();
+
+      // 리뷰 목록
+      reviewList = (function () {
+        let module = {};
+        let $reviews = $module.find('[jpp-list="reviews"]'); // 리뷰 목록
+        let $moreBtn = $module.find('[jpp-btn="more"]'); // 더보기 버튼
+        let $sortOrder = $module.find('[jpp-item="sortOrder"]'); // 정렬 순서
+        let $photoOnOff = $module.find('[jpp-form="photoOnOff"]'); // 포토 온오프
+        let $photoReviewCount = $module.find('[jpp-item="photoReviewCount"]'); //포토 리뷰(5)
+        let _render = function () {
+          let params = {
+            "categoryTargetCode": categoryTargetCode,
+            "reviewTargetCode": reviewTargetCode,
+            "targetId" : reviewTargetId,
+            "photoYn": $photoOnOff.is(":checked"),
+            "orderBy": $sortOrder.find("option:selected").val(),
+            "size": 10,
+            "page": page++,
+          };
+          if(reviewTargetId) {
+            params['targetId'] = reviewTargetId;
+          }
+          jppJs.call('get', '/review/api/reviews', params,
+                  function (data) {
+                    if(data.status === 200) {
+
+                      let reviewCount = data.pageInfo.totalCount;
+                      reviewTotalCnt = reviewCount;
+
+                      if (reviewCount === 0) {
+                        $('.reviewList').hide();
+                      } else {
+                        $('.reviewList').show();
+                      }
+
+                      let photoCount = data.data.photoCount;
+                      $photoReviewCount.text(`포토리뷰(${photoCount})`);
+
+                      let reviewList = data.data.reviewList;
+
+                      if (reviewList == null || reviewList == '') {
+                        $('[jpp-btn="more"]').hide();
+                        $('[noData]').show();
+                      } else {
+                        $('[jpp-btn="more"]').show();
+                        $('[noData]').hide();
+                      }
+
+                      for(let k in reviewList) {
+                        reviewCnt++;
+                        let review = reviewList[k];
+                        let reviewPhotos = [];
+
+						let imgUrl = review.profileImage || jppJs.getResourceUrl() + '/resource/PC/images/mypage/@default_img.png';
+                        let item = `<li class="photoY">
+                              <div class="reviewSet">
+                                <span class="thum"><img src="${imgUrl}" alt=""></span>
+                                <strong class="name">${review.writerName}</strong>
+                              </div>
+                              ${(function() {
+                                let htmlSp = ``;
+                                let lowerTarget = categoryTargetCode.toLowerCase();
+                                if (lowerTarget != 'esg') {
+                                    htmlSp = `<div class="reviewSet">
+                                              <div class="rating"><div class="ratingOn" style="width:${Math.ceil(review.totalStarPoint/5*100)}%"></div></div>
+                                              <em class="date">${review.regDate.substring(0,10)}</em>
+                                            </div>`;
+                                }
+                                return htmlSp;
+                              })()}
+                              <div class="txt">${review.contents}</div>
+                              <a class="frmLike"><input type="checkbox" id="chkLike${k}"
+                               ${(function() {
+                                  let subhtml = '';
+                                  if (review.reviewCount === 1) {
+                                      subhtml = 'checked';
+                                  }
+                                  return subhtml;
+                              })()}
+                               title="좋아요" onclick="fnAddReviewLike(${review.id}, '${review.targetCode}', ${k}, ${review.targetId});" href="javascript:;"><label for="chkLike${k}">${review.totalLike}</label></a>
+                                ${(function() {
+                          let html = ``;
+                          if (review.fileListSendRes.length > 0) {
+                              html += `<figure class="photoSet" data-count="${review.fileListSendRes.length}">`;
+                            for(let k in review.fileListSendRes) {
+                              html += `<a class="thum" onclick="photoPopup('${review.fileListSendRes[k].id}', this)" data-photoUrl="${review.fileListSendRes[k].url}" data-photoId="${review.fileListSendRes[k].id}" ><img src="${review.fileListSendRes[k].url}?width=97&height=97" alt="${review.fileListSendRes[k].description}"></a>`;
+                            }
+                            html += `</figure>`;
+                          }
+                          return html;
+                        })()}
+                            </li>`;
+                        $reviews.append(item);
+
+                        if (reviewCnt === reviewTotalCnt) {
+                          $('[jpp-btn="more"]').hide();
+                        }
+
+                      }
+                      mvJs.init();
+                    }
+                  },
+                  function (data) {
+
+                  });
+        }
+        $photoOnOff.click(function() {
+          $reviews.empty();
+          page = 0;
+          _render();
+        })
+        $sortOrder.change(function() {
+          $reviews.empty();
+          page = 0;
+          _render();
+        });
+        $moreBtn.click(_render);
+        $reviews.empty();
+        _render();
+
+        module.update = function() {
+          $reviews.empty();
+          page = 0;
+          _render();
+        }
+
+        return module;
+      })();
+    }
+  }
+
+  function reviewPopupClose() {
+    mvJs.utils.dimmedHide();
+    $("#reviewWritePopup").css("display", "none");
+  }
+
+  function fnAddReviewLike(reviewId, reviewTargetCode, idx, targetId) {
+    // 로그인 안되어 있을시, 로그인 화면으로
+    let tCode = reviewTargetCode+'_REVIEW';
+    let lowerTarget = reviewTargetCode.toLowerCase();
+    let middleLower = '';
+    if (lowerTarget === 'esg') {
+      middleLower = 'campaigns'
+    } else if (lowerTarget === 'restaurant') {
+      middleLower = lowerTarget + 's';
+    } else {
+      middleLower = lowerTarget;
+    }
+    let domainNm = jppJs.getServiceDomain(lowerTarget) + "/web/" + middleLower + "/" + targetId;
+    if (!jppJs.isLogin()) {
+      $('#chkLike'+idx).prop('checked', false);
+      // $(this).attr('checked', false);
+      let confirmTxt = '비회원은 좋아요를 누를 수 없습니다. 로그인 하시겠습니까?';
+
+      jppJs.confirm("로그인", confirmTxt,
+              (success) => {
+                jppJs.go("/web/auth/login" + "?callbackUrl=" + encodeURIComponent(domainNm), 'auth');
+              },
+              (fail) => {
+                $("#jppConfirmBox").hide();
+              }
+      )
+    } else {
+      let likeObj = {
+        'target' : {
+          'targetCode' : tCode,
+          'targetId' : reviewId,
+          'ownerId' : memberId
+        },
+        'accessInfo' : {
+          'regUserId' : memberId,
+          'regUserName' : reviewWriterName
+        }
+      };
+
+      jppJs.call('POST', '/review/api/like', likeObj,
+              (response) => {
+                const _data = response.data;
+                const status = response.status;
+
+                if (status === 200 && _data) {
+                  fnGetReviewLike(reviewId, tCode, idx);
+                }
+              },
+              (error) => {
+                jppJs.alert("좋아요 오류", "좋아요 오류입니다.");
+              }
+      );
+
+    }
+  }
+
+
+  // 좋아요 개수 가져오기
+  function fnGetReviewLike(reviewId, reviewTargetCode, idx) {
+    const apiDomain = jppJs.getServiceDomain('api');
+
+    jppJs.call('GET', apiDomain + '/cafe/api/likes/starPoints?targetCode='+ reviewTargetCode + "&targetId=" + reviewId, null,
+            (response) => {
+              const _data = response.data;
+              const status = response.status;
+
+              if (status === 200 && _data) {
+                $('label[for="chkLike' + idx + '"]').text(_data[0].likeCount);
+              }
+            },
+            (error) => {
+              jppJs.alert("좋아요 오류", "좋아요 오류입니다.");
+            }
+    );
+  }
+
+  //var photos = [];
+  function photoPopup (targetId, obj) { // 포토 리뷰
+    //mvJs.utils.dimmedShow();
+
+    let dataPhotoUrlObj =  $(obj).parent("figure").find("a[data-photoUrl]");
+
+    let paramArr = [];
+    for(let k=0; k < dataPhotoUrlObj.length; k++) {
+
+      let param = {};
+      param.id = $(dataPhotoUrlObj[k]).attr('data-photoId');
+      param.url = $(dataPhotoUrlObj[k]).attr('data-photoUrl');
+
+      paramArr.push(param);
+    }
+
+    localStorage.setItem("PHOTO", JSON.stringify(paramArr));
+    popPhotoJs.getPhotos(targetId, "포토리뷰");
+
+  }
+
+  function checkOverlap(str) {
+    const space_pattern = /[\s]{5}/g;
+    return str.match(space_pattern);
+  }
+
+  function fncRemoveFile(idx) {
+    $('#reviewFileView' + idx).remove();
+    removeFileSet.add(idx);
+    $('[jpp-item="choiceFile"]').show();
+  }
+
+  function fncLoginCheck(categoryTargetCode) {
+    // 로그인 안됫을 시 reviewRegistBox disable
+    if (jppJs.isLogin()) {
+
+      // 포인트 가져오기
+      const apiDomain = jppJs.getServiceDomain('api');
+      jppJs.call(
+              "GET", apiDomain + "/member/me?simple=N", null,
+              (response) => {
+                const _data = response.data;
+                const status = response.status;
+
+                if (status === 200 && _data.memberId) {
+                  memberId = _data.memberId;
+                  reviewWriterName = _data.name;
+                  reviewWriterEmail = _data.email;
+                  let memberType = _data.details.memberType;
+
+                  memberType = memberType || "NORMAL";
+                  fnRewardPointGuide(memberType, categoryTargetCode);
+                }
+              },
+              (error) => {
+                jppJs.alert('오류 안내', '회원 정보 조회 실패');
+              }
+      );
+    } else {
+      fnRewardPointGuide('NORMAL', categoryTargetCode);
+      if (categoryTargetCode != 'RESTAURANT') {
+        $('[jpp-id="reviewRegistBox"]').hide();
+        $('[jpp-btn="reviewResgist"]').attr('disabled', 'disabled');
+      } else if (categoryTargetCode === 'CAFE') {
+        $('[jpp-id="noRoginRegistBox"]').show();
+      }
+    }
+  }
+
+  // 등급별 작성 포인트
+  function fnRewardPointGuide(memberType, categoryTargetCode) {
+
+    if (memberType == 'AMBASSADOR') {
+      $('#reviewAtag').attr('href' , jppJs.getServiceDomain('esg') + '/web/index');
+      $('#reviewBanner').attr('src', jppJs.getResourceUrl() + '/resource/PC/images/esg/@esg_banner_member_1136.png');
+    }
+
+    let condition = {
+      kind: 'TEXT_REVIEW',
+      memberType: memberType,
+      category: categoryTargetCode
+    }
+
+    if (categoryTargetCode === 'STAY') {
+      condition = {
+        kind: 'TEXT_REVIEW',
+        memberType: memberType,
+        category: categoryTargetCode,
+        detailDvn: 'STAY_NORMAL'
+      }
+    }
+
+    jppJs.call('GET', '/etc/api/rewardPointMeta', condition,
+            (response) => {
+              const _data = response.data;
+              const status = response.status;
+
+              if (status === 200 && _data) {
+                let reviewPoint = ``;
+                if (_data.rateDvnType === 'FIXED_AMOUNT' && _data.savePoint > 0) {
+                  $('[reviewPointGuide]').text('리뷰 작성 시 포인트 ' + _data.savePoint + 'P를 적립해드려요!');
+                  reviewPoint = `
+								리뷰 작성 시 <em class="pur" jpp-item="reviewPoint">${_data.savePoint}p</em>를 적립해드려요!
+							`;
+                } else if (_data.rateDvnType === 'FIXED_RATE' && _data.saveRate > 0) {
+                  $('[reviewPointGuide]').text('리뷰 작성 시 포인트 ' + _data.saveRate + '%를 적립해드려요!');
+                  reviewPoint = `
+								리뷰 작성 시 <em class="pur" jpp-item="reviewPoint">${_data.saveRate}%</em>를 적립해드려요!
+							`;
+                } else {
+                  $('.descBox.col03').hide();
+                }
+                $('[jpp-item="reviewPoint"]').append(reviewPoint);
+
+              } // 200
+
+            }
+    ),
+            (error) => {
+              jppJs.alert("오류 안내", error.errorCodeMessage);
+            }
+
+  } {% endcomment %}
+
+</script>
+
+
+{% comment %} <section id="pop_mobile_photoView" class="layPop layFull layPhotoView" tabIndex="0">
+    <header>
+        <h2 class="titLay"></h2>
+    </header>
+    <div class="layContainer" tabIndex="0">
+        <div class="layContent">
+            <div class="mobile swiperGallery">
+
+            </div>
+
+        </div>
+    </div>
+    <!-- //layContainer-->
+    <button type="button" class="closeL" onClick="javascript:popPhotoClose();">팝업 닫기</button>
+</section>
+<!--<div class="pop_photo dimmed" style="display:none;"></div>-->
+<section id="pop_web_photoView" class="layPop layerMType02 layPhotoView" tabindex="0">
+
+    <header>
+        <h2 class="titLay"></h2>
+    </header>
+    <div class="scroll-wrapper layContainer scriptScroll" style="position: relative;">
+        <div class="scroll-content scroll-scrolly_visible" tabindex="0" style="height: auto; margin-bottom: 0px; margin-right: 0px; max-height: 676px; overflow: hidden;">
+            <div class="web swiperGallery">
+            </div>
+        </div>
+        <div class="scroll-element scroll-x scroll-scrolly_visible">
+            <div class="scroll-element_outer">
+                <div class="scroll-element_size"></div>
+                <div class="scroll-element_track"></div>
+                <div class="scroll-bar" style="width: 0px;"></div>
+            </div>
+        </div>
+
+        <div class="scroll-element scroll-y scroll-scrolly_visible">
+            <div class="scroll-element_outer">
+                <div class="scroll-element_size"></div>
+                <div class="scroll-element_track"></div>
+                <div class="scroll-bar" style="height: 645px; top: 0px;"></div>
+            </div>
+        </div>
+    </div><!-- //layContainer-->
+    <button type="button" class="closeL" onClick="javascript:popPhotoClose();">팝업 닫기</button>
+</section> {% endcomment %}
+
+{% comment %} <script>
+
+    const isMobile = () => {return jppJs.getDeviceType() == 'mobile' ? true :  false};
+
+
+    popPhotoClose = function () {
+
+
+
+        if(isMobile()){
+            $('#pop_mobile_photoView').hide();
+            //mvJs.popup.hide($('#pop_mobile_photoView'));
+        }else{
+           // $('.pop_photo.dimmed').hide();
+            $('#pop_web_photoView').hide();
+            mvJs.utils.dimmedHide();
+            //mvJs.popup.hide($('#pop_web_photoView'));
+        }
+
+        localStorage.removeItem("PHOTO");
+        return;
+    }
+
+    var popPhotoJs = popPhotoJs || (function () {
+        var module = {};
+
+        function fncGetPhotos(targetCode, title) {
+            let item = JSON.parse(localStorage.getItem("PHOTO"));
+            let type = (isMobile()) ? 'M' : 'W';
+            let cnt = 0;
+            $(".swiperGallery").empty();
+
+            if (item.length != 0) {
+
+                $('.layPhotoView .titLay').text(title + " (" + item.length + ")");
+
+                let aTag = ''
+                    , htmlTag=''
+                    , htmlThumbTag=''
+                    , beforeBtnTag = ''
+                    , nextBtnTag = ''
+                    , swiperPagingTag = '';
+
+                for (let i in item) {
+                    if (item[i].url != null) {
+                        let activeThumbClass = ""
+                            , activeClass = "";
+
+                        if (targetCode == item[i].id) {
+                            cnt =  i;
+                            activeThumbClass += "swiper-slide-active swiper-slide-thumb-active";
+                        }
+
+                        htmlTag += `<li id="swiper-` + item[i].id + `" class="swiper-slide ` + activeClass + `" aria-hidden="true" style="width: 358px;"><img src="${item[i].url}?width=592&height=473" alt=""></li>`;
+                        htmlThumbTag += `<li id="swiper-thumb-` + item[i].id + `" class="swiper-slide ` + activeThumbClass + `" style="width: 65.4px; margin-right: 8px;"><figure><a href="#"><img src="${item[i].url}?width=112&height=112" alt=""></a></figure></li>`;
+
+                    }else{
+                        console.log("null");
+                    }
+                }
+
+                if(type == 'W'){
+                    beforeBtnTag = '<button type="button" class="swiper-button-prev" tabindex="0" role="button" aria-label="Previous slide" aria-disabled="false">이전</button>';
+                    nextBtnTag = '<button type="button" class="swiper-button-next" tabindex="0" role="button" aria-label="Next slide" aria-disabled="false">다음</button>';
+                    swiperPagingTag = '<div class="swiper-pagination"><div class="swiper-paging"><div class="paging"></div></div></div>'
+                }
+
+                aTag += `
+                    <div class="swiperWrap swiperImgBig swiper-container-initialized swiper-container-horizontal swiper-container-free-mode swiper-container-thumbs">
+                        ${beforeBtnTag}
+                        <div class="swiper-container swiper-container-initialized swiper-container-horizontal">
+                            <ul class="swiper-wrapper" style="transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;">
+                                ${htmlTag}
+                            </ul>
+                            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                        </div>
+                        ${nextBtnTag}
+                        ${swiperPagingTag}
+                        <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                    </div>
+
+                    <div thumbsslider="" class="swiperWrap swiperThumb swiper-container-initialized swiper-container-horizontal">
+                        <div class="swiper-container swiper-container-initialized swiper-container-horizontal swiper-container-free-mode swiper-container-thumbs">
+                            <ul class="swiper-wrapper" style="transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;">
+                                ${htmlThumbTag}
+                            </ul>
+                            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                        </div>
+                        <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                    </div>
+                `
+                //'[{"id":7,"url":"https://dapi.jejupass.com/file/api/download/69"},{"id":8,"url":"https://dapi.jejupass.com/file/api/download/73"}]'
+                $(".swiperGallery").append(aTag);
+
+                if(type == 'M'){
+                    let swiper = "", swiper2 = "";
+
+                    setTimeout(function(){
+
+                        swiper2 = new Swiper(".mobile .swiperThumb .swiper-container", {
+                            freeMode: true,
+                            watchSlidesVisibility: true,
+                            watchSlidesProgress: true,
+                            spaceBetween: 8,
+                            slidesPerView: 5
+                        });
+                        swiper = new Swiper(".mobile .swiperImgBig .swiper-container", {
+                            watchSlidesProgress: true,
+                            slideToClickedSlide: true,
+                            //initialSlide : cnt,
+                            thumbs: {
+                                swiper: swiper2
+                            }
+                        });
+                        //mvJs.init();
+                        swiper.slideTo(cnt, 1000);
+                        //mvJs.popup.show($('#pop_mobile_photoView'));
+
+                    }, 100);
+                    //mvJs.utils.dimmedShow();
+                    $('#pop_mobile_photoView').show();
+
+                }else{
+                    let swiper = "", swiper2 = "";
+
+                    setTimeout(function(){
+
+                        swiper2 = new Swiper(".web .swiperThumb .swiper-container", {
+                            freeMode: true,
+                            watchSlidesVisibility: true,
+                            watchSlidesProgress: true,
+                            spaceBetween: 8,
+                            slidesPerView: 5
+                        });
+                        swiper = new Swiper(".web .swiperImgBig .swiper-container", {
+                            watchSlidesProgress: true,
+                            slideToClickedSlide: true,
+                            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                            pagination: {
+                                el: ".layerMType02 .swiper-paging .paging",
+                                type: "fraction"
+                            },
+                            //initialSlide : cnt,
+                            thumbs: {
+                                swiper: swiper2
+                            }
+                        });
+                        swiper.slideTo(cnt, 1000);
+                    }, 100);
+
+                    let maxIndex = 999;
+                    $('.layPop:visible').each(function() {
+                        let $this = $(this);
+                        let zIndex = parseInt($this.css('z-index'));
+                        maxIndex = maxIndex < zIndex ? zIndex : maxIndex;
+                    });
+
+                    $('#pop_web_photoView').css('z-index', maxIndex + 2);
+                    $('#pop_web_photoView').show();
+                    mvJs.utils.dimmedShow();
+                }
+
+            }else{
+                //alert("localStorage('PHOTO') value is null");
+            }
+        }
+        module.getPhotos = fncGetPhotos;
+        return module;
+    })(); 
+</script> {% endcomment %}
+
+</body>
+</html>

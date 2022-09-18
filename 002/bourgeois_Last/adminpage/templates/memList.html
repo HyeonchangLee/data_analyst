@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+{% load static %}
+    {% block content-block  %}
+
+    
+
+<style>
+  select {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80px;
+    height: 40px;
+    margin-left: -185px;
+    margin-top: -20px;
+    padding: 5px;
+    font-family: inherit;
+    background: url(https://www.midashotel.co.kr/Midas_common/images/homepage/board/search-box-select.png) no-repeat 95% 50%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+input:active,
+input:focus,
+input:hover {
+  outline: none;
+}
+  select::-ms-expand {
+    display: none;
+  }
+table {
+  border-collapse: collapse;
+  width: 96%;
+  margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 40px;
+  text-align: center;
+
+}
+
+th {
+  border: 1px solid silver;
+  border-top: 2px solid black;
+}
+
+td {
+  border: 1px solid silver;
+}
+th,
+td {
+  border-left: hidden;
+  border-right: hidden;
+}
+
+form > div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 38px;
+  margin-left: -100px;
+  margin-top: -20px;
+
+  display: inline-block;
+  border: 1px solid #666666;
+}
+.qna {
+  position: relative;
+  width:1200px;
+  margin: auto;
+}
+.page-num {
+  margin-top: 15px;
+}
+
+.page-num li {
+  width: 36px;
+  height: 35px;
+  padding: 0;
+
+}
+
+.first {
+  background: url(https://www.midashotel.co.kr/Midas_common/images/homepage/board/paging_first.png) no-repeat;
+}
+
+.prev {
+  background: url(https://www.midashotel.co.kr/Midas_common/images/homepage/board/paging_prev.png) no-repeat;
+}
+
+.num {
+  position: relative;
+  top: -15px;
+  height: 33px !important;
+  margin-left: 15px;
+  margin-right: 15px;
+  border: 1px #989898 solid;
+}
+
+.num > div {
+  position: relative;
+  top: 2px;
+}
+
+.next {
+  background: url(https://www.midashotel.co.kr/Midas_common/images/homepage/board/paging_next.png) no-repeat;
+}
+
+.last {
+  background: url(https://www.midashotel.co.kr/Midas_common/images/homepage/board/paging_last.png) no-repeat;
+}
+.qnawrite{
+      width: 120px;
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+      margin: 0 30px 50px 0;
+      border: 2px black solid;
+      float:right;
+
+}
+
+
+</style>
+    <h1 class="titDep2">Q&A 게시판</h1>
+    <div class="qna">
+    <form action="/search" name="search" method="post" style="float:right;">
+        {% csrf_token %}
+        <select name="category" id="category">
+          <option value="0">전체</option>
+          <option value="title">제목</option>
+          <option value="content">내용</option>
+        </select>
+
+        <div style='height:40px;'>
+        <input style=   'border:none; height: 36px;
+        padding: 0 26px;' type="text" size="16">
+        </div>
+        <button style='  position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 40px;
+        height: 40px;
+        margin-left: 106px;
+        margin-top: -20px;
+        background: #666666;
+        color: white;
+        border: none;' type="submit"><i class="fas fa-search"></i></button>
+      </form>
+    </div>
+<div id='container'>
+  <colgroup>
+    <col width="13%">
+    <col width="3%">
+    <col width="13%">
+    <col width="13%">
+    <col width="13%">
+    <col width="13%">
+  </colgroup>
+  <!-- 제목부분 -->
+  <tr>
+    <th></th>
+    <th>아이디</th>
+    <th>이름</th>
+    <th>나이</th>
+    <th>성별</th>
+    <th>지역</th>
+    <th>관심지역</th>
+  </tr>
+      {% if memberList %}
+        {% for member in memberList %}
+        <tr>
+          <td>{{member.ID}}</td>
+          <td class="table-title">
+            
+              {{member.NAME}}
+           
+          </td>
+          <td>{{member.AGE}}</td>
+          <td>{{member.GENDER}}</td>
+          <td>{{member.LEGION}}</td>
+          <td>{{member.CuriousLEGION}}</td>
+          <td>{{member.CuriousSECTOR}}</td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan='5'>데이터가 없습니다.</td>
+        </tr>
+      {% endif %}
+    </table>
+
+    <!-- 페이징 처리 -->
+    <!-- 이전페이지 처리 -->
+    <ul class="page-num" style='text-align: center;'>
+      {% if fList.has_previous %}
+        <a href="{% url 'qnaboard:fList' nowpage=1  %}"><li class="first" style='display: inline-block; font-size: 13px;'></li></a>
+        <a href="{% url 'qnaboard:fList' nowpage=fList.previous_page_number %}"><li class="prev" style='display: inline-block; font-size: 13px;'></li></a>
+      {%else%}
+        <li class="first" style='display: inline-block; font-size: 13px;'></li>
+        <li class="prev" style='display: inline-block; font-size: 13px;'></li>
+      {%endif%}
+      <!-- 페이지순서 처리 -->
+      {% for page in fList.paginator.page_range %}
+        {% if page != nowpage %}
+          <a href="{% url 'qnaboard:fList' nowpage=page  %}">
+            <li class="num" style='display: inline-block; font-size: 13px;'><div>{{page}}</div></li>
+          </a>
+        {% else %}
+          <li class="num on" style='display: inline-block; font-size: 13px;'><div>{{page}}</div></li>
+        {% endif %}
+      {% endfor %}  
+      
+      <!-- 다음페이지 처리 -->
+      {% if fList.has_next %}
+        <a href="{% url 'qnaboard:fList' nowpage=fList.next_page_number %}"><li class="next" style='display: inline-block; font-size: 13px;'></li></a>
+        <a href="{% url 'qnaboard:fList' nowpage=fList.paginator.num_pages %}"><li class="last" style='display: inline-block; font-size: 13px;'></li></a>
+        {% else %}
+        <li class="next" style='display: inline-block; font-size: 13px;'></li>
+        <li class="last" style='display: inline-block; font-size: 13px;'></li>
+      {% endif %}
+    
+    </ul>
+
+    <div class="qnawrite" onclick="writeBtn()">쓰기</div>
+  </div>
+
+
+  {% endblock content-block  %}
+
+  

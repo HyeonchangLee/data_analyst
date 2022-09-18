@@ -1,0 +1,244 @@
+{% load static %}
+<!doctype html>
+<html lang="ko"
+      xmlns="../../www.w3.org/1999/xhtml/index.html">
+
+<!-- Mirrored from auth.jejupass.com/web/login by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 28 May 2022 06:30:28 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+  <!-- Google Tag Manager -->
+{% comment %} <script>
+var gtmId = location.href.startsWith('../../d/index.html') ? 'GTM-P9NT8ML' : 'GTM-KXVKM3C';
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'../../www.googletagmanager.com/gtm5445.html?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer', gtmId);
+</script> {% endcomment %}
+<script>
+window.dataLayer = window.dataLayer || [];
+</script>
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="../../static/resource/PC/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="../../static/resource/PC/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../../static/resource/PC/js/swiper.min.js"></script>
+<script type="text/javascript" src="../../static/resource/PC/js/p_selectbox.js"></script>
+<script type="text/javascript" src="../../static/resource/PC/js/jquery.scrollbar.min.js"></script>
+<script type="text/javascript" src="../../static/resource/PC/js/p_common.js"></script>
+<script type="text/javascript" src="../../static/resource/PC/js/moment.min.js"></script>
+<script type="text/javascript" src="../../static/resource/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../../static/resource/js/store.modern.min.js"></script>
+<script type="text/javascript" src="../../api.jejupass.com/display/js/jpp.js"></script>
+<script type="text/javascript" src="../../api.jejupass.com/display/js/jpp.extend.js"></script>
+<script type="text/javascript" src="../../api.jejupass.com/display/js/jpp.sso.js"></script>
+
+
+<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+<!--부루주아 로그인 스크립트 시작-->
+<script>
+  function loginBtn(){
+    if($("#inp_id").val()==''){
+      alert('아이디가 입력되지 않았습니다. 아이디를 입력해주세요.')
+      $("#inp_id").focus()
+      return false
+    }
+    if($("#inp_pwd").val()==''){
+      alert('패스워드가 입력되지 않았습니다. 패스워드를 입력해주세요.')
+      $("#inp_pwd").focus()
+      return false
+    }
+
+    return $("#login").submit()
+  }
+</script>
+<!--부루주아 로그인 스크립트 끝-->
+<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+<!-- End Google Tag Manager -->
+  <meta name="viewport" content="width=device-width, user-scalable=no, width=1366"><!-- 10.29 추가 -->
+<meta property="og:type" content="website">
+<meta property="og:image" ogImage content="https://static/resource/MO/images/jejupass_new-logo_og.png">
+<meta property="og:site_name" siteName content="제주패스">
+<meta property="og:locale" content="ko_KR">
+
+<link rel="shortcut icon" href="../../static/resource/PC/images/favicon/favicon6654.ico?v1">
+<link rel="icon" type="image/png" href="{% static 'resource/PC/images/favicon/favicon-32x326654.png?v1'%}" sizes="32x32">
+<link rel="icon" type="image/png" href="../../static/resource/PC/images/favicon/favicon-16x166654.png?v1" sizes="16x16">
+<link rel="icon" type="image/png" href="../../static/resource/PC/images/favicon/favicon-96x966654.png?v1" sizes="96x96">
+<link rel="apple-touch-icon-precomposed" href="../../static/resource/PC/images/favicon/apple-icon-120x1206654.png?v1" sizes="120x120">
+<link rel="apple-touch-icon-precomposed" href="../../static/resource/PC/images/favicon/apple-icon-180x1806654.png?v1" sizes="180x180">
+<link rel="icon" type="image/png" href="../../static/resource/PC/images/favicon/android-icon-192x1926654.png?v1" sizes="192x192">
+
+
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<link rel="shortcut icon" type="image/x-icon" href="../../static/resource/PC/images/favicon/favicon.ico">
+<link href="../../static/resource/PC/css/p_common.min.css" rel="stylesheet" type="text/css">
+<link href="../../static/resource/PC/css/p_contents.min.css" rel="stylesheet" type="text/css">
+
+  <!-- 컨텐츠페이지의 CSS 영역이 들어감 -->
+  
+  <!-- 컨텐츠페이지의 스크립트 영역이 들어감 -->
+</head>
+<!--아이디 또는 비밀번호가 틀릴 시 msg 출력 시작-->
+{% if msg %}
+    <script>alert('{{ msg }}')</script>
+{% endif %}
+<!--아이디 또는 비밀번호가 틀릴 시 msg 출력 시작-->
+<body class="wrapper memberWrapper">
+<p class="skip"><a href="#container">본문 바로가기</a></p>
+
+<section id="wrapper">
+
+  <header>
+    <h1 class="topLogo"><a href="{% url 'web'%}">bourgeois</a></h1>
+  <nav>
+    <div class="navList">
+      <h2><a href="{% url 'analytics:inner' %}">지역별 분석</a></h2>
+      <h2><a href="{% url 'navertrend:search_page' %}">네이버 트렌드</a></h2>
+      <h2><a href="{% url 'adminpage:fList' nowpage=1  category='first' searchword='first' %}">Q&A게시판</a></h2>
+      {% if request.session.session_ID %}
+      <h2><a href="{% url 'membership:myApageopen' %}">MY분석</a></h2>
+      {% else %}
+      <h2><a href="{% url 'membership:signup' %}">가입하여 MY분석보기</a></h2>
+      {% endif %}
+    </div>
+
+  </nav>
+  <div class="topUtil">
+    {% if request.session.session_ID %}
+        <a href="{% url 'membership:logout' %}" class="logout">로그아웃</a>
+        <a href="{% url 'membership:mypage' %}" class="mypage">마이페이지</a>
+    {% else %}
+        <a href="{% url 'membership:login' %}" class="login">로그인</a>
+    {% endif %}
+    <ul class="navEtc">
+    </ul>
+  </div>
+  </header>
+  <div id="container" class="container">
+    <div id="contents" class="contents">
+      <!-- 컨텐츠 영역  -->
+			<p class="pageTit pageTitC">똑똑한 상권분석, <br>부루주아로 시작하세요</p>
+			<ul class="tabType01">
+        <li><a href="#" role="button" aria-selected="true" data-controls="tabContents01">회원</a></li>
+			</ul>
+			<div id="tabContents01" class="tabContentWrap tabON">
+        <h2 class="hidden">회원 로그인</h2>
+				<form class="signFrm" action="{% url 'membership:login' %}" id='login', name='login', method='post'>
+            {% csrf_token %}
+            
+            <div class="inpFrm inpDeleteAni"><!-- input value값 있을 때 삭제버튼 출력 -->
+              <label for="inp_id" class="titLab">아이디(미풍양속에 맞게)</label>
+              <div class="inpA">	<!-- value="croh@jejupass.co.kr" -->
+                <input type="text" class="inpL" id="inp_id"  name="inp_id" maxlength="320" placeholder="ID을 입력해주세요." title="ID을 입력해주세요." >
+                <button type="button" class="btIco icDel" style="display: none;">삭제</button>
+              </div>
+            </div>
+            <div class="inpFrm inpDeleteAni">
+              <label for="inp_pwd" class="titLab">비밀번호</label>
+              <div class="inpA">	<!-- value="Abc12#$!A" -->
+                <input type="password" class="inpL" id="inp_pwd" name="inp_pwd" maxlength="30" placeholder="비밀번호를 입력해주세요." title="비밀번호를 입력해주세요.">
+                <button type="button" class="btIco icDel" style="display: none;">삭제</button>
+              </div>
+            </div>
+            <div class="btnArea">
+              <button type="button" class="btnDefault btnL action" id="login" onclick='loginBtn()'>로그인</button>
+            </div>
+            <div class="loginBtns">
+        </form>
+			
+					<a href="{% url 'membership:signup' %}" class="btLink btLine colPur" onclick="">회원가입</a>
+				</div>
+        
+			</div>
+			
+				</fieldset>
+			
+				</form>
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+  </div>
+
+  
+
+</section><!-- //wrapper -->
+
+
+
+<footer>
+  <div class="footTop">
+    <div class="footInner">
+      <ul class="footMenu">
+        <li><strong class="tit">부르주아</strong><a href="#" role="button">회사소개</a><a href="#" role="button">회원혜택 안내</a></li>
+        <li><strong class="tit">고객센터</strong><a href="#" role="button">공지사항</a><a href="#" role="button">자주찾는질문</a><a href="#" role="button">예약확인</a></li>
+        <li><strong class="tit">ESG</strong><a href="#" role="button">그린 앰버서더</a><a href="#" role="button">캠페인 기부</a></li>
+      </ul>
+      <div class="footAppDown">
+        <h5>App 다운로드</h5>
+        <span class="txt">부르주아 앱 설치하고 <br>더 편리하게 이용하세요.</span>
+        <ul class="appLink">
+          <li><button type="button" class="google" onclick="location.href='#';">구글플레이</button></li>
+          <li><button type="button" class="ios" onclick="location.href='#';">앱스토어</button></li>
+        </ul>
+      </div>
+      <div class="footCenter">
+        <h5>전화예약 / 고객상담</h5>
+        <span class="txt">이용에 궁금하신 점이 <br>있으신가요?</span>
+        <div class="callInfo">
+          <p class="callNum">1544-0445</p>
+          <ul class="callTime">
+            <li><span class="tit">평일</span>09:00 ~ 18:00</li>
+            <li><span class="tit">점심시간</span>12:00 ~ 13:00</li>
+          </ul>
+        </div>
+        <div class="snsList">
+          <a href="#" role="button" target="_blank" class="insta">인스타그램</a>
+          <a href="#" role="button" target="_blank" class="blog">네이버 블로그</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footBtm">
+    <div class="footInner">
+      <ul class="footMenu">
+        <li><a href="web/policy/privacy.html" role="button">개인정보처리방침</a></li>
+        <li><a href="web/policy/use.html" role="button">이용약관</a></li>
+      </ul>
+      <p class="txtFoot">
+        <span>(주)부르주아 대표이사 : 이현창</span>
+        <span>사업자등록번호 : 105-87-76000 <a class="btns" href="../www.ftc.go.kr/bizCommPop64eb.html?wrkr_no=1058776000" target="_blank">사업자정보조회</a>
+				</span>
+        <span>
+					통신판매신고 제2015-제주연동-43호
+				</span>
+        <span>관광사업자 등록번호 : 제2021-08호</span>
+      </p>
+      <p class="txtFoot" style="margin:0">
+        <span>제주특별자치도 제주시 신광로 21, 4층 (우)63125</span>
+      </p>
+      <p class="txtFoot02">
+        (주)(주)부르주아는 개별 분석 및 상품에 대하여 정보제공자로서 판매의 당사자가 아니며 해당상품의 거래정보 및 거래 등에 대해 책임을 지지 않습니다.
+        <br/>
+        (주)부르주아는 정보제공 파트너사가 제공하는 정보에 대하여 정보중개자의 지위를 가지며, 해당 상품, 해당 정보, 거래에 관한 의무와 책임은 판매자에게 있습니다.
+      </p>
+
+      <p class="txtCopy">
+        <span>Copyright ⓒ BOURGEOIS All Rights Reserved</span>
+      </p>
+      <div class="footEtc">
+        <span>SECURED BY RapidSSL</span>
+        <span>WEB AWARD 수상</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<div class="dimmed"></div>
+
+
+</body>
+
+
+</html>
