@@ -5,7 +5,6 @@
 # 이커머스 전체의 데이터셋이 있고 이를 어떻게 가공하여 분석할 것인지 가이드를 확인
 
 
-
 # 데이터 집합 정보
 # 올리스트별 마케팅 퍼널  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # 어서오세요! 이것은 올리스트 스토어에서 제품을 판매하기 위해 연락 요청을 작성한 셀러들의 마케팅 퍼널 데이터 세트입니다. 
@@ -65,5 +64,21 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df = pd.read_csv('/Users/hyeonchanglee/Documents/data_analyst/004마케팅_퍼널/Marketing_Funnel_by_Olist/olist_marketing_qualified_leads_dataset.csv')
-print(df)
+# df = pd.read_csv('/Users/hyeonchanglee/Documents/data_analyst/004마케팅_퍼널/Marketing_Funnel_by_Olist/olist_marketing_qualified_leads_dataset.csv')
+# print(df)
+
+# df2 = pd.read_csv('/Users/hyeonchanglee/Documents/data_analyst/004마케팅_퍼널/Marketing_Funnel_by_Olist/olist_closed_deals_dataset.csv')
+# print(df2.iloc[0])
+# print(df2.iloc[1])
+
+
+
+crm_dataset = pd.read_csv('/Users/hyeonchanglee/Documents/data_analyst/004마케팅_퍼널/CRM_dataset/CRM_dataset.csv', encoding = 'unicode_escape')
+
+print(crm_dataset)
+print(crm_dataset.info())
+
+
+
+# to_mysql 
+
